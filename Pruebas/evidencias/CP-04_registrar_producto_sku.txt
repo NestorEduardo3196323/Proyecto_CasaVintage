@@ -1,0 +1,6 @@
+CP-04 Registrar producto y SKU (RF-01, RF-03)
+
+Resultado observado (mensaje del sistema):
+'Producto "Articulo de prueba RF01" registrado con SKU VIN-0008.'
+Inventario: VIN-0008, $100.00, stock 5, DISPONIBLE.
+Estado: PASO

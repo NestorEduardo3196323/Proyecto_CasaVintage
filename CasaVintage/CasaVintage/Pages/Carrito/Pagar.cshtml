@@ -1,0 +1,213 @@
+@page
+@model CasaVintage.Pages.Carrito.PagarModel
+@{
+    ViewData["Title"] = "Cobro";
+    Layout = "_Layout";
+    var carrito = Model.Carrito;
+}
+
+<a asp-page="Index" class="volver-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+    Volver al carrito
+</a>
+
+<div class="mb-4">
+    <span class="kicker">Ventas</span>
+    <h1 class="mb-1">Cobro</h1>
+    <p class="text-muted mb-0">Captura los datos del cliente y el metodo de pago para registrar la venta.</p>
+</div>
+
+<form method="post" id="form-cobro">
+    <div asp-validation-summary="ModelOnly" class="alerta-vintage alerta-error mb-4" role="alert"></div>
+
+    <div class="carrito-grid">
+        <div class="tarjeta-vintage p-4">
+            <h2 class="h6 mb-3">Datos del cliente</h2>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Entrada.ClienteNombre" class="form-label"></label>
+                    <input asp-for="Entrada.ClienteNombre" class="form-control" autocomplete="name" autofocus />
+                    <span asp-validation-for="Entrada.ClienteNombre" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Entrada.ClienteCorreo" class="form-label"></label>
+                    <input asp-for="Entrada.ClienteCorreo" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Entrada.ClienteCorreo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <h2 class="h6 mt-4 mb-3">Metodo de pago</h2>
+            <div class="pago-opciones">
+                <label class="pago-opcion">
+                    <input type="radio" asp-for="Entrada.MetodoPago" value="Efectivo" />
+                    <span class="pago-cara">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /></svg>
+                        Efectivo
+                    </span>
+                </label>
+                <label class="pago-opcion">
+                    <input type="radio" asp-for="Entrada.MetodoPago" value="Tarjeta" />
+                    <span class="pago-cara">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+                        Tarjeta
+                    </span>
+                </label>
+            </div>
+            <span asp-validation-for="Entrada.MetodoPago" class="text-danger d-block mt-1"></span>
+
+            <div id="tarjeta-datos" class="tarjeta-datos-pago" @(Model.Entrada.EsTarjeta ? null : "hidden")>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label asp-for="Entrada.NumeroTarjeta" class="form-label"></label>
+                        <input asp-for="Entrada.NumeroTarjeta" class="form-control" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="0000 0000 0000 0000" data-tarjeta-numero />
+                        <span asp-validation-for="Entrada.NumeroTarjeta" class="text-danger"></span>
+                        <span class="text-danger" id="err-t-numero"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Entrada.TitularTarjeta" class="form-label"></label>
+                        <input asp-for="Entrada.TitularTarjeta" class="form-control" autocomplete="cc-name" />
+                        <span asp-validation-for="Entrada.TitularTarjeta" class="text-danger"></span>
+                        <span class="text-danger" id="err-t-titular"></span>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Entrada.VencimientoTarjeta" class="form-label"></label>
+                        <input asp-for="Entrada.VencimientoTarjeta" class="form-control" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA" data-tarjeta-venc />
+                        <span asp-validation-for="Entrada.VencimientoTarjeta" class="text-danger"></span>
+                        <span class="text-danger" id="err-t-venc"></span>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Entrada.CvvTarjeta" class="form-label"></label>
+                        <input asp-for="Entrada.CvvTarjeta" class="form-control" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" data-tarjeta-cvv />
+                        <span asp-validation-for="Entrada.CvvTarjeta" class="text-danger"></span>
+                        <span class="text-danger" id="err-t-cvv"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="carrito-resumen tarjeta-vintage">
+            <h2 class="h6 mb-3">Resumen de la venta</h2>
+            <ul class="resumen-items">
+                @foreach (var item in carrito.Items)
+                {
+                    <li>
+                        <span>@item.Cantidad &times; @item.Nombre</span>
+                        <span>$@item.Subtotal.ToString("N2")</span>
+                    </li>
+                }
+            </ul>
+            <div class="resumen-linea total">
+                <span>Total</span>
+                <span class="producto-precio">$@carrito.TotalPrecio.ToString("N2")</span>
+            </div>
+            <button type="submit" class="btn-vintage w-100 mt-3">Confirmar venta</button>
+        </aside>
+    </div>
+</form>
+
+<div id="pago-overlay" class="pago-overlay" hidden>
+    <div class="pago-overlay-caja">
+        <div class="pago-spinner" aria-hidden="true"></div>
+        <p id="pago-overlay-texto">Procesando pago...</p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Pago con tarjeta (simulado): muestra/oculta el formulario segun el metodo, da formato a los
+        // campos, valida en el cliente y simula la aprobacion (Procesando -> Aprobado) antes de enviar.
+        (function () {
+            var form = document.getElementById("form-cobro");
+            if (!form) { return; }
+            var cont = document.getElementById("tarjeta-datos");
+            var num = form.querySelector("[data-tarjeta-numero]");
+            var venc = form.querySelector("[data-tarjeta-venc]");
+            var cvv = form.querySelector("[data-tarjeta-cvv]");
+            var titular = document.getElementById("Entrada_TitularTarjeta");
+            var overlay = document.getElementById("pago-overlay");
+            var overlayTexto = document.getElementById("pago-overlay-texto");
+
+            function esTarjeta() {
+                var r = form.querySelector('input[name="Entrada.MetodoPago"]:checked');
+                return !!r && r.value === "Tarjeta";
+            }
+            function alternar() { if (cont) { cont.hidden = !esTarjeta(); } }
+            form.querySelectorAll('input[name="Entrada.MetodoPago"]').forEach(function (r) {
+                r.addEventListener("change", alternar);
+            });
+
+            // Formato de los campos mientras se escribe.
+            if (num) num.addEventListener("input", function () {
+                var d = num.value.replace(/\D/g, "").slice(0, 16);
+                num.value = d.replace(/(.{4})/g, "$1 ").trim();
+            });
+            if (venc) venc.addEventListener("input", function () {
+                var d = venc.value.replace(/\D/g, "").slice(0, 4);
+                venc.value = d.length > 2 ? d.slice(0, 2) + "/" + d.slice(2) : d;
+            });
+            if (cvv) cvv.addEventListener("input", function () {
+                cvv.value = cvv.value.replace(/\D/g, "").slice(0, 4);
+            });
+
+            // Escribe el mensaje en el span propio del campo (no en el de asp-validation-for, que
+            // jQuery reinicia al revalidar el formulario).
+            function ponerError(clave, msg) {
+                var span = document.getElementById("err-t-" + clave);
+                if (span) { span.textContent = msg || ""; }
+            }
+            function luhn(n) {
+                var s = 0, alterna = false;
+                for (var i = n.length - 1; i >= 0; i--) {
+                    var d = +n[i];
+                    if (alterna) { d *= 2; if (d > 9) { d -= 9; } }
+                    s += d; alterna = !alterna;
+                }
+                return s % 10 === 0;
+            }
+            function vencOk(v) {
+                var m = /^(\d{2})\/(\d{2})$/.exec((v || "").trim());
+                if (!m) { return false; }
+                var mes = +m[1], anio = 2000 + (+m[2]);
+                if (mes < 1 || mes > 12) { return false; }
+                var hoy = new Date();
+                var ultimo = new Date(anio, mes, 0);
+                return ultimo >= new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            }
+            function validarTarjeta() {
+                var ok = true;
+                var n = (num.value || "").replace(/\D/g, "");
+                if (n.length !== 16) { ponerError("numero", "El numero de tarjeta debe tener 16 digitos."); ok = false; }
+                else if (!luhn(n)) { ponerError("numero", "El numero de tarjeta no es valido."); ok = false; }
+                else { ponerError("numero", ""); }
+                if (!titular.value.trim()) { ponerError("titular", "El titular de la tarjeta es obligatorio."); ok = false; }
+                else { ponerError("titular", ""); }
+                if (!vencOk(venc.value)) { ponerError("venc", "El vencimiento debe tener formato MM/AA y no estar vencido."); ok = false; }
+                else { ponerError("venc", ""); }
+                var c = (cvv.value || "").replace(/\D/g, "");
+                if (c.length !== 3 && c.length !== 4) { ponerError("cvv", "El CVV debe tener 3 o 4 digitos."); ok = false; }
+                else { ponerError("cvv", ""); }
+                return ok;
+            }
+
+            form.addEventListener("submit", function (e) {
+                if (!esTarjeta()) { return; } // Efectivo: flujo normal.
+                e.preventDefault();
+                // Se valida primero el resto (jQuery) y despues la tarjeta, para que jQuery no borre
+                // los mensajes de la tarjeta al revalidar el formulario.
+                var restoOk = !(window.jQuery && window.jQuery.fn.valid) || window.jQuery(form).valid();
+                var tarjetaOk = validarTarjeta();
+                if (!tarjetaOk || !restoOk) { return; }
+                // Simulacion de aprobacion antes de enviar la venta.
+                overlay.hidden = false;
+                overlayTexto.textContent = "Procesando pago...";
+                setTimeout(function () {
+                    overlayTexto.textContent = "Pago aprobado";
+                    setTimeout(function () { form.submit(); }, 700);
+                }, 1300);
+            });
+
+            alternar();
+        })();
+    </script>
+}

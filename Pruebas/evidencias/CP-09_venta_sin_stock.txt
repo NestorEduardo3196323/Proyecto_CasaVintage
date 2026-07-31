@@ -1,0 +1,8 @@
+CP-09 Venta sin stock suficiente
+
+Cantidad 10 con stock 4.
+- Interfaz: campo cantidad con max=4 (bloquea el envio).
+- Carrito (forzando cantidad 10 por POST directo): 'Supera el stock disponible' y aviso general.
+- Cobro forzado: 'Hay productos con mas cantidad que el stock disponible. Ajusta el carrito.'
+No se registro la venta.
+Estado: PASO

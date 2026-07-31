@@ -1,0 +1,9 @@
+CP-01 Login valido (Administrador)
+URL: /Cuenta/Login -> (tras Ingresar) panel del rol
+Usuario: admin@casavintage.local
+
+Resultado observado (texto de la pagina):
+Titulo: Personal de la empresa - La Casa Vintage
+GESTION > Personal de la empresa
+Usuario en sesion: Carlos Hernandez (Administrador)
+Estado: PASO

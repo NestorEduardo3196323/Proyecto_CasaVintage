@@ -1,0 +1,6 @@
+CP-07 Busqueda con filtros (RF-04)
+Busqueda: 'moneda'
+
+Resultado observado (cuadricula):
+Total de tarjetas: 1 -> 'Moneda Peace Dollar'
+Estado: PASO

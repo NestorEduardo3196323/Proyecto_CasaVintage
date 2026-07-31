@@ -1,0 +1,7 @@
+CP-10 Producto agotado (stock 0)
+Producto: VIN-0001 (Reloj de pared Art Deco), stock 0.
+
+Resultado observado:
+Tarjeta: clase 'agotado', badge 'Sin stock', boton 'Agotado' deshabilitado, sin opcion de agregar.
+Servidor (handler Agregar): {exito:false, mensaje:'Ese producto esta sin stock.'}
+Estado: PASO

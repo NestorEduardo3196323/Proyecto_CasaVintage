@@ -1,0 +1,9 @@
+CP-13 Reporte con rentabilidad (RF-07)
+
+Resultado observado (pantalla de Reportes):
+Ventas registradas 10 (13 unidades)
+Ingresos $3,190.00
+Ganancia (rentabilidad) $1,515.00
+Ticket promedio $319.00
+Verificacion en base: ingresos=3190.00, unidades=13, ganancia=1515.00, ticket=319.00 (coinciden).
+Estado: PASO

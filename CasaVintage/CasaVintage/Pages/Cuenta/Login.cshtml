@@ -1,0 +1,60 @@
+@page
+@model CasaVintage.Pages.Cuenta.LoginModel
+@inject CasaVintage.Services.IMarcaService Marca
+@{
+    ViewData["Title"] = "Iniciar sesion";
+    Layout = "_Layout";
+    var logoLogin = Marca.RutaLogo();
+}
+
+<video class="login-video-fondo" autoplay muted loop playsinline preload="auto">
+    <source src="@Url.Content("~/media/Video.mp4")" type="video/mp4" />
+</video>
+<div class="login-video-overlay"></div>
+
+<div class="tarjeta-vintage tarjeta-login">
+    <div class="p-4 p-md-5">
+        <div class="text-center mb-4">
+            @if (logoLogin is not null)
+            {
+                <img src="@logoLogin" alt="La Casa Vintage" class="marca-logo-img marca-logo-login" />
+            }
+            else
+            {
+                <span class="marca-logo mx-auto d-inline-flex" style="width:64px;height:64px;font-size:2rem;">V</span>
+            }
+            <h1 class="h3 mt-3 mb-1">La Casa Vintage</h1>
+            <p class="text-muted mb-0">Sistema interno de inventario y ventas</p>
+        </div>
+
+        <form method="post">
+            <div asp-validation-summary="All" class="alerta-vintage alerta-error mb-3" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="Entrada.Correo" class="form-label"></label>
+                <input asp-for="Entrada.Correo" class="form-control" autocomplete="username" autofocus />
+                <span asp-validation-for="Entrada.Correo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Entrada.Password" class="form-label"></label>
+                <input asp-for="Entrada.Password" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="Entrada.Password" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+
+            <button type="submit" class="btn-vintage w-100 mt-2">Ingresar</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Al llegar al login (por ejemplo tras cerrar sesion) se limpia la preferencia
+        // del catalogo para que cada usuario arranque con los agotados visibles y no
+        // herede el estado del "ojito" de la sesion anterior.
+        try { localStorage.removeItem("catalogoOcultarAgotados"); } catch (e) { }
+    </script>
+}

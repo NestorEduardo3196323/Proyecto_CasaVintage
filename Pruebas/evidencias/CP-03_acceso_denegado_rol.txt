@@ -1,0 +1,9 @@
+CP-03 Acceso denegado por rol
+Sesion: Vendedor
+Accion: el menu de la seccion esta oculto para el rol, asi que se escribe la URL /Personal/Index directamente en la barra de direcciones del navegador (acceso por URL directa).
+
+Resultado observado:
+Titulo: Acceso denegado - La Casa Vintage
+'No tienes permiso para ver esta seccion con tu rol actual.'
+La autorizacion se aplica en el servidor (no basta con ocultar el menu).
+Estado: PASO

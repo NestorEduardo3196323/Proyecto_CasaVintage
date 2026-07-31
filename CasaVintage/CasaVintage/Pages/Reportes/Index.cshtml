@@ -1,0 +1,182 @@
+@page
+@model CasaVintage.Pages.Reportes.IndexModel
+@{
+    ViewData["Title"] = "Reportes";
+    Layout = "_Layout";
+    var r = Model.Resumen;
+}
+
+<div class="personal-cabecera">
+    <div>
+        <span class="kicker">Analisis</span>
+        <h1 class="mb-1">Reportes</h1>
+        <p class="text-muted mb-0">Resumen del negocio: ventas, rentabilidad y productos.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-start">
+        <a asp-page-handler="Pdf" asp-route-rango="@Model.Rango" asp-route-desde="@(Model.Filtro.Desde?.ToString("yyyy-MM-dd"))" asp-route-hasta="@(Model.Filtro.Hasta?.ToString("yyyy-MM-dd"))" asp-route-vendedor="@Model.Vendedor" asp-route-metodo="@Model.Metodo" asp-route-categoria="@Model.Categoria" class="btn-vintage-outline btn-sm">Exportar PDF</a>
+        <a asp-page-handler="Excel" asp-route-rango="@Model.Rango" asp-route-desde="@(Model.Filtro.Desde?.ToString("yyyy-MM-dd"))" asp-route-hasta="@(Model.Filtro.Hasta?.ToString("yyyy-MM-dd"))" asp-route-vendedor="@Model.Vendedor" asp-route-metodo="@Model.Metodo" asp-route-categoria="@Model.Categoria" class="btn-vintage-outline btn-sm">Exportar Excel</a>
+    </div>
+</div>
+
+<form method="get" class="reportes-filtros tarjeta-vintage">
+    <div class="filtro-rapidos">
+        <button type="submit" name="rango" value="hoy" class="pill @(Model.Rango == "hoy" ? "activo" : "")">Hoy</button>
+        <button type="submit" name="rango" value="semana" class="pill @(Model.Rango == "semana" ? "activo" : "")">Esta semana</button>
+        <button type="submit" name="rango" value="mes" class="pill @(Model.Rango == "mes" ? "activo" : "")">Este mes</button>
+        <button type="submit" name="rango" value="anio" class="pill @(Model.Rango == "anio" ? "activo" : "")">Este año</button>
+    </div>
+    <div class="filtro-campo">
+        <label for="fDesde">Desde</label>
+        <input type="date" id="fDesde" name="desde" class="form-control form-control-sm" value="@(Model.Filtro.Desde?.ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="filtro-campo">
+        <label for="fHasta">Hasta</label>
+        <input type="date" id="fHasta" name="hasta" class="form-control form-control-sm" value="@(Model.Filtro.Hasta?.ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="filtro-campo">
+        <label for="fVendedor">Vendedor</label>
+        <select id="fVendedor" name="vendedor" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            @foreach (var v in Model.Vendedores)
+            {
+                <option value="@v.Id" selected="@(Model.Vendedor == v.Id)">@v.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="filtro-campo">
+        <label for="fMetodo">Metodo de pago</label>
+        <select id="fMetodo" name="metodo" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <option value="Efectivo" selected="@(Model.Metodo == "Efectivo")">Efectivo</option>
+            <option value="Tarjeta" selected="@(Model.Metodo == "Tarjeta")">Tarjeta</option>
+        </select>
+    </div>
+    <div class="filtro-campo">
+        <label for="fCategoria">Categoria</label>
+        <select id="fCategoria" name="categoria" class="form-select form-select-sm">
+            <option value="">Todas</option>
+            @foreach (var c in Model.Categorias)
+            {
+                <option value="@c" selected="@(Model.Categoria == c)">@c</option>
+            }
+        </select>
+    </div>
+    <div class="filtro-acciones">
+        <button type="submit" name="rango" value="personalizado" class="btn-vintage btn-sm">Filtrar</button>
+        <a asp-page="Index" class="btn-vintage-outline btn-sm">Limpiar</a>
+    </div>
+</form>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <span class="icono">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+        </span>
+        <div>
+            <div class="etiqueta">Ventas registradas</div>
+            <div class="valor">@r.TotalVentas</div>
+            <div class="sub">@r.UnidadesVendidas unidades vendidas</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <span class="icono">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+        </span>
+        <div>
+            <div class="etiqueta">Ingresos</div>
+            <div class="valor">$@r.Ingresos.ToString("N2")</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <span class="icono">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
+        </span>
+        <div>
+            <div class="etiqueta">Ganancia (rentabilidad)</div>
+            <div class="valor">$@r.Ganancia.ToString("N2")</div>
+            <div class="sub">Precio menos costo</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <span class="icono">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+        </span>
+        <div>
+            <div class="etiqueta">Ticket promedio</div>
+            <div class="valor">$@r.TicketPromedio.ToString("N2")</div>
+        </div>
+    </div>
+</div>
+
+<div class="reportes-grid">
+    <div class="tarjeta-vintage">
+        <div class="tabla-toolbar"><strong>Productos mas vendidos</strong></div>
+        <div class="tabla-vintage-envoltura">
+            <table class="tabla-vintage">
+                <thead>
+                    <tr><th scope="col">Producto</th><th scope="col" class="col-numero">Vendidos</th><th scope="col" class="col-numero">Ingresos</th></tr>
+                </thead>
+                <tbody>
+                    @if (Model.MasVendidos.Count == 0)
+                    {
+                        <tr><td colspan="3" class="text-muted">Aun no hay ventas.</td></tr>
+                    }
+                    @foreach (var p in Model.MasVendidos)
+                    {
+                        <tr>
+                            <td data-etiqueta="Producto"><span class="celda-nombre">@p.Nombre</span><span class="celda-sub">@p.Sku</span></td>
+                            <td data-etiqueta="Vendidos" class="col-numero"><span class="chip-conteo">@p.CantidadVendida</span></td>
+                            <td data-etiqueta="Ingresos" class="col-numero">$@p.Ingresos.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tarjeta-vintage">
+        <div class="tabla-toolbar"><strong>Productos menos vendidos</strong></div>
+        <div class="tabla-vintage-envoltura">
+            <table class="tabla-vintage">
+                <thead>
+                    <tr><th scope="col">Producto</th><th scope="col" class="col-numero">Vendidos</th><th scope="col" class="col-numero">Ingresos</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.MenosVendidos)
+                    {
+                        <tr>
+                            <td data-etiqueta="Producto"><span class="celda-nombre">@p.Nombre</span><span class="celda-sub">@p.Sku</span></td>
+                            <td data-etiqueta="Vendidos" class="col-numero"><span class="chip-conteo">@p.CantidadVendida</span></td>
+                            <td data-etiqueta="Ingresos" class="col-numero">$@p.Ingresos.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="tarjeta-vintage mt-3">
+    <div class="tabla-toolbar"><strong>Ventas por vendedor</strong></div>
+    <div class="tabla-vintage-envoltura">
+        <table class="tabla-vintage">
+            <thead>
+                <tr><th scope="col">Vendedor</th><th scope="col" class="col-numero">Ventas</th><th scope="col" class="col-numero">Total</th></tr>
+            </thead>
+            <tbody>
+                @if (Model.PorVendedor.Count == 0)
+                {
+                    <tr><td colspan="3" class="text-muted">Aun no hay ventas.</td></tr>
+                }
+                @foreach (var v in Model.PorVendedor)
+                {
+                    <tr>
+                        <td data-etiqueta="Vendedor"><span class="celda-nombre">@v.Vendedor</span></td>
+                        <td data-etiqueta="Ventas" class="col-numero"><span class="chip-conteo">@v.NumeroVentas</span></td>
+                        <td data-etiqueta="Total" class="col-numero">$@v.Total.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

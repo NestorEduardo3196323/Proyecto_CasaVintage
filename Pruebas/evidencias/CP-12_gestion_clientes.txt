@@ -1,0 +1,6 @@
+CP-12 Gestion de clientes (RF-06)
+
+Resultado observado:
+Cliente 'Cliente Prueba Ventas' (cliente.prueba@correo.com) capturado en el cobro,
+registrado en la venta #11 y mostrado en el comprobante.
+Estado: PASO

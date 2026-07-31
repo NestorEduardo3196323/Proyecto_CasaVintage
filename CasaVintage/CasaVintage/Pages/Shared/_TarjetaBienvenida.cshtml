@@ -1,0 +1,45 @@
+@{
+    // Se muestra una sola vez, al aterrizar en el panel tras el login (flag puesto en el login).
+    var mostrar = TempData["MostrarBienvenida"] as string == "1";
+    if (!mostrar)
+    {
+        return;
+    }
+
+    var nombre = User.Identity?.Name ?? "";
+    var primerNombre = nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? nombre;
+    var rol = User.FindFirst(ClaimTypes.Role)?.Value;
+    var fecha = PerfilUsuario.FechaIngreso(User);
+    var foto = PerfilUsuario.Foto(User);
+}
+
+<div class="bienvenida-overlay" id="bienvenidaOverlay">
+    <div class="bienvenida-tarjeta">
+        <form method="post" asp-page="/Cuenta/Logout" class="m-0">
+            <button type="submit" class="bienvenida-cerrar" title="No entrar y salir" aria-label="No entrar y salir">&times;</button>
+        </form>
+
+        <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+            <div>
+                <span class="kicker">Bienvenido</span>
+                <h2 class="h4 mb-0">Hola, @primerNombre</h2>
+            </div>
+            @if (foto is not null)
+            {
+                <img src="@foto" alt="Foto de @nombre" class="avatar-foto grande" />
+            }
+            else
+            {
+                <span class="avatar-iniciales grande">@PerfilUsuario.Iniciales(nombre)</span>
+            }
+        </div>
+
+        <p class="bienvenida-dato mb-1"><strong>Cargo:</strong> @rol</p>
+        <p class="bienvenida-dato mb-4">
+            <strong>Fecha de ingreso:</strong>
+            @(fecha.HasValue ? fecha.Value.ToString("dd/MM/yyyy") : "No disponible")
+        </p>
+
+        <button type="button" class="btn-vintage w-100" id="btnIngresarBienvenida">Ingresar</button>
+    </div>
+</div>

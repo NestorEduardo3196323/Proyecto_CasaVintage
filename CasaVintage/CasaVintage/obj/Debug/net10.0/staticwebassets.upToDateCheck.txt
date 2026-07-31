@@ -1,0 +1,197 @@
+wwwroot\css\site.css
+wwwroot\favicon.ico
+wwwroot\js\catalogo.js
+wwwroot\js\personal.js
+wwwroot\js\site.js
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+wwwroot\lib\bootstrap\LICENSE
+wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+wwwroot\lib\jquery-validation\dist\additional-methods.js
+wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.js
+wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+wwwroot\lib\jquery-validation\LICENSE.md
+wwwroot\lib\jquery\dist\jquery.js
+wwwroot\lib\jquery\dist\jquery.min.js
+wwwroot\lib\jquery\dist\jquery.min.map
+wwwroot\lib\jquery\dist\jquery.slim.js
+wwwroot\lib\jquery\dist\jquery.slim.min.js
+wwwroot\lib\jquery\dist\jquery.slim.min.map
+wwwroot\lib\jquery\LICENSE.txt
+wwwroot\media\Video.mp4
+wwwroot\uploads\marca\logo.png
+wwwroot\uploads\productos\00533e2c5aa84b35b6c827beb971b29f.jpg
+wwwroot\uploads\productos\053b59e3482b4531b2f28f592ee14fd2.jpeg
+wwwroot\uploads\productos\0d8cd809520042ba90e775c87a7289b1.jpg
+wwwroot\uploads\productos\135871ec817546e9a50fb90c15fea800.jpg
+wwwroot\uploads\productos\149be803353547849f16b36f440f1204.jpeg
+wwwroot\uploads\productos\20230c14b61d4edf80804de9080e02b5.png
+wwwroot\uploads\productos\2166a59b52a54100a50e7e60e5f6d8a7.jpg
+wwwroot\uploads\productos\241e0c1ded624f2a8a46712bbaca6309.png
+wwwroot\uploads\productos\289c21271de14001aaa1bbdcfe324c86.png
+wwwroot\uploads\productos\2c8ab72fb5bf4e0d827f0710c98f7103.jpg
+wwwroot\uploads\productos\425eee29809a41d6b06e2a243fe698bb.jpg
+wwwroot\uploads\productos\42cfa7e941bc4ff1a81a4bcf8e736762.png
+wwwroot\uploads\productos\452cf79fcd8c463fb435e00934e0bf4f.png
+wwwroot\uploads\productos\47c49c4fbed64ff1828edb35e98a713e.jpg
+wwwroot\uploads\productos\4cfa464ca8324b47b4765b21472cb1ca.jpg
+wwwroot\uploads\productos\4d40426c02e54879af9a075380f9a84a.png
+wwwroot\uploads\productos\4e4ba5a724bb4b3491da88967eb924e6.png
+wwwroot\uploads\productos\5978719275484547ac070983583fa852.png
+wwwroot\uploads\productos\59d8428ae7a44b47800f6ae9c26dda9a.png
+wwwroot\uploads\productos\5c02b98e74eb4787aa6fb17331814bb8.jpg
+wwwroot\uploads\productos\5fe0b94a65e8436ab0b34b98c0d591fd.png
+wwwroot\uploads\productos\6549fc0dae3143c98c57727284ac9070.png
+wwwroot\uploads\productos\6ac51a26617e484fb2f1bb105324db33.png
+wwwroot\uploads\productos\6acaee8c24dd4eb3bdbbe18cf85f0936.png
+wwwroot\uploads\productos\7074d620752a4bf89b89dd5d110267b7.jpg
+wwwroot\uploads\productos\73a875f06b8844b2918fe7ea58edeb38.jpg
+wwwroot\uploads\productos\7a4a79e1a69c469e9f3c56ab88e29a94.jpeg
+wwwroot\uploads\productos\7ae32967e5b44f2cbea8bfeb7d8940b1.png
+wwwroot\uploads\productos\7c7b5d8241cf483db757061b237a3e75.png
+wwwroot\uploads\productos\7e8f9de5f281460388f77109b0caed26.png
+wwwroot\uploads\productos\83f6f316693e4d4b94b589178c43b6ec.jpg
+wwwroot\uploads\productos\8bc997e96fda430d9f53702aa7e2cccc.jpeg
+wwwroot\uploads\productos\90e65e347a7d41c58264a51dd9009f2d.png
+wwwroot\uploads\productos\94ea950eb4b341489391f90ee18e5028.jpg
+wwwroot\uploads\productos\983ac6fea9dd4b21a5ae5809e0d09ff4.png
+wwwroot\uploads\productos\9ed5aeeb66984dff919b81cbf72aa093.png
+wwwroot\uploads\productos\b07003b4fb244d1eab6e3af47a3ef4b4.png
+wwwroot\uploads\productos\b4d692a329ec4a73a064186bf10c7eda.jpg
+wwwroot\uploads\productos\b52df78c278e46ea96e6f7c136eb7cf2.png
+wwwroot\uploads\productos\b682e752ce6a45c583ac8639895560ac.jpg
+wwwroot\uploads\productos\b801d43bbf0f41f9a9cfed59d63354da.png
+wwwroot\uploads\productos\bae9cbf2df9247b998f5263ac2c58396.png
+wwwroot\uploads\productos\be7e4ef45880489fbddb5a798d398c5d.png
+wwwroot\uploads\productos\c11b834762e64fc98d1dd180cdf4d6ff.jpg
+wwwroot\uploads\productos\c2e3a97973424381bad5d8aa3a7abd76.jpg
+wwwroot\uploads\productos\d3ebbe62b3b945708cf12e0a02546093.jpg
+wwwroot\uploads\productos\d56aeccfea2a4689a35be5bab747ae6c.jpg
+wwwroot\uploads\productos\d792df83d55f4cbbad70004880a1843e.jpeg
+wwwroot\uploads\productos\d887276db5674bb1a8d9caaade4d66fc.jpg
+wwwroot\uploads\productos\dbae4b7d12194e9ca0587e26354d026f.png
+wwwroot\uploads\productos\e109aad2d526425e9e08287a9585c567.png
+wwwroot\uploads\productos\e476cb37fc0042628101e7b46af7d7a7.jpg
+wwwroot\uploads\productos\eebbafcbaeb047b7bdf549caf9900ec6.jpg
+wwwroot\uploads\productos\f79d0d02fa7b4423896b8f22c604ed98.jpg
+wwwroot\uploads\productos\f8cd7c2bbe814576b12bd975ba9078af.jpg
+wwwroot\uploads\productos\f98f15d16cb748df885e18eb6829176f.png
+wwwroot\uploads\productos\f9c2833b7e8b4cd4b2fc2e25717113ed.png
+wwwroot\uploads\productos\fbdae7bf97ba40fbb7751654c5096666.png
+wwwroot\uploads\productos\feba6d2ab200447cad25a3a369008670.jpeg
+wwwroot\uploads\productos\ffe08ad2181a4bc38e9c943a4d0af1e3.png
+wwwroot\uploads\usuarios\055e590f91a6419a8b15d3814d811826.png
+wwwroot\uploads\usuarios\21c15848e4144f48af8d8b2d01d1104d.jpeg
+wwwroot\uploads\usuarios\436f373aa6274f599cb86bfc04a14d38.jpeg
+wwwroot\uploads\usuarios\7f59f0b5143f45e6b1029c40be127e6e.jpeg
+wwwroot\uploads\usuarios\d4a344ff8a8e4fa19910f993be171ab4.jpeg
+wwwroot\uploads\usuarios\ffa70358af5c4edfbc0872add606f7f8.jpeg
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\favicon.ico
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\js\catalogo.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\js\personal.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\js\site.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation\dist\additional-methods.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery-validation\LICENSE.md
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\dist\jquery.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\dist\jquery.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\dist\jquery.min.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\dist\jquery.slim.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\dist\jquery.slim.min.js
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\dist\jquery.slim.min.map
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\nesto\Desktop\DSA 3°\Prof. Javier\Modulo 1\Proyecto AetherDevs\Intento 2\CasaVintage\CasaVintage\wwwroot\css\site.css

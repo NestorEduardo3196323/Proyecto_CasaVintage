@@ -1,0 +1,142 @@
+@page
+@model CasaVintage.Pages.Proveedores.IndexModel
+@{
+    ViewData["Title"] = "Proveedores";
+    Layout = "_Layout";
+    var mensaje = TempData["MensajeProveedor"] as string;
+    var mensajeError = TempData["MensajeProveedorError"] as string;
+}
+
+<div class="personal-cabecera">
+    <div>
+        <span class="kicker">Gestion</span>
+        <h1 class="mb-1">Proveedores</h1>
+        <p class="text-muted mb-0">Los proveedores que abastecen a La Casa Vintage.</p>
+    </div>
+    <a asp-page="Crear" class="btn-vintage">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
+        Nuevo proveedor
+    </a>
+</div>
+
+@if (mensaje is not null)
+{
+    <div class="alerta-vintage alerta-ok" role="status">@mensaje</div>
+}
+@if (mensajeError is not null)
+{
+    <div class="alerta-vintage alerta-error" role="alert">@mensajeError</div>
+}
+
+@if (Model.Proveedores.Count == 0)
+{
+    <div class="tarjeta-vintage estado-vacio">
+        <h2 class="h5 mb-2">Aun no hay proveedores</h2>
+        <p class="text-muted mb-3">Registra el primer proveedor para poder asignarlo a tus productos.</p>
+        <a asp-page="Crear" class="btn-vintage">Agregar el primero</a>
+    </div>
+}
+else
+{
+    <div class="stat-grid">
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Total proveedores</div>
+                <div class="valor">@Model.Total</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.8V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z" /><polyline points="2.32 6.16 12 11 21.68 6.16" /><line x1="12" y1="22.76" x2="12" y2="11" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Con productos</div>
+                <div class="valor">@Model.ConProductos</div>
+                <div class="sub">Abasteciendo el inventario</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Sin productos</div>
+                <div class="valor">@Model.SinProductos</div>
+                <div class="sub">Aun sin articulos</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Productos abastecidos</div>
+                <div class="valor">@Model.ProductosAbastecidos</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tarjeta-vintage">
+        <div class="tabla-toolbar">
+            <div class="buscador-tabla">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                <input type="search" class="form-control" placeholder="Buscar proveedor por nombre o contacto..." data-tabla-buscar="#tablaProveedores" data-sin-resultados="#sinResultadosProv" aria-label="Buscar proveedor" />
+            </div>
+        </div>
+
+        <div class="tabla-vintage-envoltura">
+            <table id="tablaProveedores" class="tabla-vintage">
+                <thead>
+                    <tr>
+                        <th scope="col">Proveedor</th>
+                        <th scope="col">Contacto</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col" class="col-numero">Productos</th>
+                        <th scope="col" class="col-acciones">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var proveedor in Model.Proveedores)
+                    {
+                        <tr>
+                            <td data-etiqueta="Proveedor">
+                                <div class="celda-con-avatar">
+                                    <span class="avatar-iniciales avatar-tabla">@PerfilUsuario.Iniciales(proveedor.Nombre)</span>
+                                    <span class="celda-nombre">@proveedor.Nombre</span>
+                                </div>
+                            </td>
+                            <td data-etiqueta="Contacto">@(proveedor.Contacto ?? "—")</td>
+                            <td data-etiqueta="Telefono">@(proveedor.Telefono ?? "—")</td>
+                            <td data-etiqueta="Productos" class="col-numero">
+                                <span class="chip-conteo">@proveedor.CantidadProductos</span>
+                            </td>
+                            <td data-etiqueta="Acciones" class="col-acciones">
+                                <div class="acciones-fila">
+                                    <a asp-page="Editar" asp-route-id="@proveedor.IdProveedor" class="btn-vintage-outline btn-sm">Editar</a>
+                                    @if (proveedor.CantidadProductos == 0)
+                                    {
+                                        <form method="post" asp-page-handler="Eliminar" class="m-0">
+                                            <input type="hidden" name="id" value="@proveedor.IdProveedor" />
+                                            <button type="submit" class="btn-desactivar btn-sm"
+                                                    data-confirmar="Eliminar al proveedor @proveedor.Nombre? Esta accion no se puede deshacer.">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="nota-bloqueo" title="Tiene productos asociados">No eliminable</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p id="sinResultadosProv" class="sin-resultados" hidden>No se encontraron proveedores con esa busqueda.</p>
+        </div>
+    </div>
+}

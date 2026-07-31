@@ -1,0 +1,7 @@
+CP-16 Decimales y centavos en el comprobante
+
+Venta de $100.00 con IVA 13% incluido.
+Resultado observado:
+SUBTOTAL $88.50 | IVA (13%) $11.50 | TOTAL $100.00
+(100 / 1.13 = 88.4956 -> 88.50; IVA = 11.50). Correcto.
+Estado: PASO

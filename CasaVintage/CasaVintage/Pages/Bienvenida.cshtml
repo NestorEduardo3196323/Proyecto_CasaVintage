@@ -1,0 +1,19 @@
+@page
+@model CasaVintage.Pages.BienvenidaModel
+@{
+    ViewData["Title"] = "Bienvenido";
+    Layout = "_Layout";
+    var nombre = User.Identity?.Name ?? "";
+    var primerNombre = nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? nombre;
+}
+
+<div class="bienvenida-inicio">
+    <span class="kicker">La Casa Vintage</span>
+    <h1 class="mb-2">Hola, @primerNombre</h1>
+    <p class="text-muted bienvenida-inicio-texto">
+        Tu area de trabajo se esta construyendo. En cuanto tu seccion este lista,
+        entraras directo a ella al iniciar sesion. Mientras tanto, usa el menu lateral para navegar.
+    </p>
+
+    <p class="text-muted" style="font-size:0.9rem;">Encontraras tus secciones en el menu de la izquierda.</p>
+</div>

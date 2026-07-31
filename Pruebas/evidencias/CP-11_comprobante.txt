@@ -1,0 +1,9 @@
+CP-11 Comprobante de venta (RF-05)
+Venta #11.
+
+Resultado observado (comprobante):
+FACTURA N 0000011 - Efectivo
+SUBTOTAL $88.50 | IVA (13%) $11.50 | TOTAL $100.00
+Descarga PDF: HTTP 200, application/pdf, 181817 bytes.
+Copia en disco: CasaVintage/Facturas/factura-0000011.pdf
+Estado: PASO

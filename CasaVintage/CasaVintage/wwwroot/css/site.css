@@ -1,0 +1,2495 @@
+/* ============================================================
+   La Casa de Vintage - Sistema visual (estilo STAP)
+   Sidebar fijo, encabezados serif, tarjetas calidas sobre crema.
+   Paleta OTONAL: cocoa + vino especiado + caramelo + oliva + crema.
+   Los nombres de variable se conservan (verde-* = ahora tonos calidos)
+   para no romper referencias; todo se controla aqui: cambiar propaga.
+   ============================================================ */
+:root {
+    --verde-oscuro: #6d3f1c;   /* PRINCIPAL: marron calido (botones, activo, enlaces) */
+    --verde-hover: #522d12;    /* mas oscuro al pasar el mouse */
+    --verde-oliva: #9d9167;    /* Olive Harvest: acento verde apagado */
+    --verde-suave: #ece3cd;    /* tinte claro calido: nav activo, badges */
+    --verde-texto: #5c3a1c;    /* texto (marron) sobre el tinte claro */
+
+    --cafe-oscuro: #3a2817;    /* Cowhide Cocoa profundo: titulos y texto fuerte */
+    --cafe-claro: #8a6a2b;     /* Toasted Caramel: acento */
+
+    --crema: #f6efe1;          /* fondo general (crema calida) */
+    --beige: #efe6d3;          /* superficie tenue (hover, chips) */
+    --laton: #a67c34;          /* dorado/caramelo apagado, acento */
+
+    --vino: #7a2e1c;           /* Spiced Wine: acento fuerte (enfasis, peligro) */
+
+    --tinta: #33281b;          /* texto principal (marron muy oscuro) */
+    --tinta-suave: #7c6c52;    /* texto secundario (taupe calido) */
+
+    --superficie: #fffdf7;     /* tarjetas (blanco calido) */
+    --borde: #e7dcc4;          /* bordes suaves calidos */
+
+    --sombra-suave: 0 1px 2px rgba(28, 28, 24, 0.04), 0 1px 3px rgba(28, 28, 24, 0.04);
+    --sombra-media: 0 6px 22px rgba(28, 28, 24, 0.09);
+    --radio: 14px;
+    --radio-sm: 10px;
+    --sidebar-w: 250px;
+
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "Jost", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+    font-size: 15px;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html { font-size: 16px; }
+}
+
+body {
+    font-family: var(--sans);
+    color: var(--tinta);
+    background-color: var(--crema);
+    margin: 0;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, .titulo-serif {
+    font-family: var(--serif);
+    color: var(--cafe-oscuro);
+    letter-spacing: 0.1px;
+    text-wrap: balance;
+}
+
+h1 { font-size: 2.4rem; line-height: 1.1; }
+
+a { color: var(--verde-oscuro); }
+
+/* Kicker: texto pequeno en mayusculas (estilo editorial STAP) */
+.kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    color: var(--tinta-suave);
+    font-weight: 600;
+}
+
+/* ============================================================
+   Shell: sidebar fijo + barra superior + contenido
+   ============================================================ */
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: var(--sidebar-w);
+    flex: 0 0 var(--sidebar-w);
+    background-color: var(--superficie);
+    border-right: 1px solid var(--borde);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.35rem 1.25rem 1rem;
+    text-decoration: none;
+}
+
+.marca-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(140deg, var(--verde-oliva), var(--verde-oscuro));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
+.marca-nombre {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.12rem;
+    color: var(--cafe-oscuro);
+}
+
+/* Logo de la empresa en el menu lateral (cuando el Admin sube uno). Sin recuadro ni fondo:
+   se funde con el sidebar. Se dimensiona por alto y conserva su proporcion. */
+.marca-logo-img {
+    height: 46px;
+    width: auto;
+    max-width: 165px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Mismo logo, mas grande y centrado, para la pantalla de inicio de sesion. */
+.marca-logo-login {
+    height: 96px;
+    max-width: 230px;
+    margin: 0 auto;
+}
+
+/* Logo pequeno para la tarjeta del pie del menu lateral. */
+.marca-logo-pie {
+    height: 32px;
+    max-width: 60px;
+}
+
+/* Pagina de identidad visual (Ajustes/Marca): vista previa + carga del logo. */
+.marca-preview-fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.marca-previa-cuadro {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radio-sm);
+    border: 1px solid var(--borde);
+    background-color: var(--beige);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex: 0 0 auto;
+}
+
+.marca-previa-cuadro img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.marca-logo-grande {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    font-size: 2rem;
+}
+
+.marca-preview-texto {
+    flex: 1 1 260px;
+    min-width: 240px;
+}
+
+.sidebar-nav {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0.5rem 0.75rem 1rem;
+}
+
+.sidebar-seccion {
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    font-size: 0.65rem;
+    color: var(--tinta-suave);
+    padding: 1rem 0.75rem 0.35rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radio-sm);
+    color: var(--tinta);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    margin-bottom: 0.12rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-item svg {
+    width: 19px;
+    height: 19px;
+    color: var(--tinta-suave);
+    flex: 0 0 auto;
+    transition: color 0.15s ease;
+}
+
+.nav-item:hover {
+    background-color: var(--beige);
+    color: var(--cafe-oscuro);
+}
+
+.nav-item.activo {
+    background-color: var(--verde-suave);
+    color: var(--verde-texto);
+    font-weight: 600;
+}
+
+.nav-item.activo svg {
+    color: var(--verde-oscuro);
+}
+
+.nav-item.deshabilitado {
+    color: var(--tinta-suave);
+    opacity: 0.6;
+    cursor: default;
+}
+
+.nav-item .badge-pronto {
+    margin-left: auto;
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--tinta-suave);
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+    padding: 0.05rem 0.45rem;
+}
+
+.sidebar-pie {
+    padding: 0.9rem;
+    border-top: 1px solid var(--borde);
+}
+
+.sidebar-tarjeta {
+    background-color: var(--crema);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-sm);
+    padding: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.sidebar-tarjeta .titulo {
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    color: var(--cafe-oscuro);
+    line-height: 1.1;
+}
+
+.sidebar-tarjeta .sub {
+    font-size: 0.72rem;
+    color: var(--tinta-suave);
+}
+
+/* Zona principal */
+.app-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1.75rem;
+    background-color: rgba(243, 242, 236, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--borde);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.topbar-derecha {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.topbar-usuario {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.topbar-usuario .datos {
+    text-align: right;
+    line-height: 1.15;
+}
+
+.topbar-usuario .nombre {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--cafe-oscuro);
+}
+
+.topbar-usuario .rol {
+    font-size: 0.75rem;
+    color: var(--tinta-suave);
+}
+
+.btn-menu-movil {
+    display: none;
+    border: 1px solid var(--borde);
+    background-color: var(--superficie);
+    border-radius: var(--radio-sm);
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--cafe-oscuro);
+}
+
+.content {
+    padding: 2rem 1.75rem 3rem;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(28, 28, 24, 0.42);
+    z-index: 40;
+}
+
+/* ---------- Pantallas de autenticacion (sin sidebar) ---------- */
+.auth-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.auth-inner {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ------------------------------------------------------------
+   Login con video de fondo
+   ------------------------------------------------------------ */
+/* Video a pantalla completa detras del formulario de acceso. */
+.login-video-fondo {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+/* Velo con tono vintage para dar contraste al texto sobre el video. */
+.login-video-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(31, 41, 33, 0.62), rgba(43, 34, 24, 0.7));
+    z-index: -1;
+}
+
+/* La tarjeta del login queda con fondo transparente para ver el video.
+   Se usa doble clase para ganarle en especificidad a .tarjeta-vintage. */
+.tarjeta-vintage.tarjeta-login {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* Texto claro y con sombra para que sea legible sobre el video. */
+.tarjeta-login h1,
+.tarjeta-login .h3 {
+    color: #f6efe3;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+.tarjeta-login .text-muted {
+    color: #e8dfd0 !important;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+.tarjeta-login .form-label {
+    color: #f1e9db;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+/* Campos con leve efecto vidrio: siguen siendo legibles al escribir. */
+.tarjeta-login .form-control {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
+.tarjeta-login .form-control:focus {
+    background-color: #fff;
+}
+
+/* ============================================================
+   Botones
+   ============================================================ */
+.btn-vintage {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    background-color: var(--verde-oscuro);
+    border: 1px solid var(--verde-oscuro);
+    color: #fff;
+    border-radius: var(--radio-sm);
+    padding: 0.6rem 1.15rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-vintage:hover {
+    background-color: var(--verde-hover);
+    border-color: var(--verde-hover);
+    color: #fff;
+    box-shadow: var(--sombra-suave);
+}
+
+.btn-vintage-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    color: var(--cafe-oscuro);
+    border-radius: var(--radio-sm);
+    padding: 0.55rem 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.btn-vintage-outline:hover {
+    background-color: var(--beige);
+    border-color: var(--tinta-suave);
+    color: var(--cafe-oscuro);
+}
+
+.btn-sm {
+    padding: 0.38rem 0.85rem;
+    font-size: 0.82rem;
+}
+
+/* ============================================================
+   Tarjetas
+   ============================================================ */
+.tarjeta-vintage {
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+    transition: box-shadow 0.18s ease;
+}
+
+/* Tarjetas de estadistica (icono + numero + etiqueta), estilo STAP */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+    padding: 1.25rem 1.35rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+}
+
+.stat-card .icono {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: var(--verde-suave);
+    color: var(--verde-oscuro);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+.stat-card .etiqueta {
+    color: var(--tinta-suave);
+    font-size: 0.82rem;
+}
+
+.stat-card .valor {
+    font-family: var(--serif);
+    font-size: 1.7rem;
+    color: var(--cafe-oscuro);
+    line-height: 1.1;
+}
+
+.stat-card .sub {
+    font-size: 0.76rem;
+    color: var(--tinta-suave);
+    margin-top: 0.2rem;
+}
+
+/* ---------- Barra de herramientas de tabla (busqueda) ---------- */
+.tabla-toolbar {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--borde);
+}
+
+.buscador-tabla {
+    position: relative;
+    max-width: 380px;
+}
+
+.buscador-tabla svg {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--tinta-suave);
+    pointer-events: none;
+}
+
+.buscador-tabla .form-control {
+    padding-left: 2.3rem;
+}
+
+/* Barra de filtros del historial (busqueda + ano + vendedor + articulos) */
+.historial-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.9rem;
+}
+
+.historial-filtros .buscador-tabla {
+    flex: 1 1 240px;
+    max-width: none;
+}
+
+.historial-filtros .filtro-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.historial-filtros .filtro-campo label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tinta-suave);
+    font-weight: 600;
+}
+
+.historial-filtros .filtro-campo .form-select,
+.historial-filtros .filtro-campo .form-control {
+    min-width: 140px;
+}
+
+.historial-filtros .filtro-campo input[type="number"] {
+    min-width: 120px;
+}
+
+.historial-filtros #histLimpiar {
+    align-self: flex-end;
+}
+
+/* Barra de filtros de los reportes (rango de fechas + accesos rapidos, vendedor, metodo, categoria) */
+.reportes-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.9rem;
+    padding: 1rem 1.1rem;
+}
+
+.reportes-filtros .filtro-rapidos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-self: flex-end;
+}
+
+.reportes-filtros .filtro-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.reportes-filtros .filtro-campo label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tinta-suave);
+    font-weight: 600;
+}
+
+.reportes-filtros .filtro-campo .form-select,
+.reportes-filtros .filtro-campo .form-control {
+    min-width: 150px;
+}
+
+.reportes-filtros .filtro-acciones {
+    display: flex;
+    gap: 0.5rem;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+/* Avatar de iniciales dentro de una fila de tabla */
+.celda-con-avatar {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.avatar-iniciales.avatar-tabla {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+}
+
+.sin-resultados {
+    text-align: center;
+    color: var(--tinta-suave);
+    padding: 1.5rem 1rem 1rem;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Reportes: dos tablas lado a lado */
+.reportes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tabla-toolbar strong {
+    color: var(--cafe-oscuro);
+    font-family: var(--serif);
+    font-size: 1rem;
+}
+
+@media (max-width: 860px) {
+    .reportes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   Avatares (iniciales y foto)
+   ============================================================ */
+.avatar-iniciales {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--verde-suave);
+    color: var(--verde-texto);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-weight: 600;
+    flex: 0 0 auto;
+}
+
+.avatar-iniciales.grande {
+    width: 84px;
+    height: 84px;
+    font-size: 1.9rem;
+}
+
+.avatar-foto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+}
+
+.avatar-foto.grande {
+    width: 84px;
+    height: 84px;
+}
+
+/* ============================================================
+   Formularios
+   ============================================================ */
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--cafe-oscuro);
+    margin-bottom: 0.35rem;
+}
+
+.form-control, .form-select {
+    background-color: #fff;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-sm);
+    color: var(--tinta);
+    padding: 0.55rem 0.85rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--verde-oliva);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(111, 129, 104, 0.18);
+}
+
+.form-control::placeholder {
+    color: #a7a199;
+}
+
+.ayuda-campo {
+    font-size: 0.8rem;
+    color: var(--tinta-suave);
+}
+
+.form-personal {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.form-personal.form-ancho {
+    max-width: 900px;
+}
+
+.volver-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--tinta-suave);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.volver-link:hover { color: var(--cafe-oscuro); }
+
+/* Campo con prefijo de moneda ($) */
+.input-moneda { position: relative; }
+
+.input-moneda > span {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--tinta-suave);
+    pointer-events: none;
+}
+
+.input-moneda .form-control { padding-left: 1.7rem; }
+
+/* Caja del SKU */
+.sku-auto {
+    border: 1px dashed var(--borde);
+    border-radius: var(--radio-sm);
+    padding: 0.55rem 0.85rem;
+    background-color: var(--beige);
+    color: var(--tinta-suave);
+    font-style: italic;
+}
+
+.sku-auto.sku-fijo {
+    border-style: solid;
+    font-style: normal;
+    color: var(--cafe-oscuro);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+/* Subida de foto (una) */
+.foto-campo {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.foto-campo > div {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.foto-previa {
+    flex: 0 0 auto;
+    width: 76px;
+    height: 76px;
+    border-radius: 12px;
+    border: 1px solid var(--borde);
+    background-color: var(--beige);
+    color: var(--tinta-suave);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.foto-previa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Seccion de las 3 fotos del producto */
+.fotos-seccion { margin-top: 1.5rem; }
+
+.fotos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.foto-slot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.foto-slot .foto-previa {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+}
+
+/* ============================================================
+   Alertas (paleta vintage, sin rojos)
+   ============================================================ */
+.alerta-vintage {
+    border-radius: var(--radio-sm);
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+}
+
+.alerta-vintage:empty { display: none; }
+
+/* Cuando el resumen de validacion no tiene errores, no dibujar la caja de alerta. */
+.validation-summary-valid { display: none; }
+
+.alerta-ok {
+    background-color: #ece8ce;
+    border-color: #d3cba2;
+    color: #5b5626;
+}
+
+.alerta-error {
+    background-color: #f3ded2;
+    border-color: #e2c1a6;
+    color: #8a3620;
+}
+
+.alerta-error ul { margin: 0; padding-left: 1.1rem; }
+
+/* ============================================================
+   Encabezado de pagina (titulo + accion)
+   ============================================================ */
+.personal-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================================
+   Tablas de gestion
+   ============================================================ */
+.estado-vacio {
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+
+.tabla-vintage-envoltura {
+    padding: 0.25rem 0.5rem;
+    overflow-x: auto;
+}
+
+.tabla-vintage {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.tabla-vintage thead th {
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--tinta-suave);
+    font-weight: 600;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--borde);
+    white-space: nowrap;
+}
+
+.tabla-vintage tbody td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
+}
+
+.tabla-vintage tbody tr:last-child td { border-bottom: none; }
+
+.tabla-vintage tbody tr { transition: background-color 0.15s ease; }
+
+.tabla-vintage tbody tr:hover { background-color: var(--beige); }
+
+.celda-nombre {
+    font-weight: 600;
+    color: var(--cafe-oscuro);
+}
+
+.celda-sub {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--tinta-suave);
+    margin-top: 0.1rem;
+}
+
+.col-numero { text-align: center; }
+
+.chip-conteo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    background-color: var(--beige);
+    color: var(--cafe-oscuro);
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+.acciones-fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.nota-bloqueo {
+    font-size: 0.78rem;
+    color: var(--tinta-suave);
+    font-style: italic;
+    white-space: nowrap;
+}
+
+/* Miniatura de producto */
+.col-foto { width: 72px; }
+
+.miniatura {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid var(--borde);
+}
+
+.miniatura-vacia {
+    display: inline-block;
+    background-color: var(--beige);
+}
+
+.sku-chip {
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    background-color: var(--beige);
+    color: var(--cafe-oscuro);
+    padding: 0.1rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   Etiquetas de estado
+   ============================================================ */
+.badge-estado, .badge-tu {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.18rem 0.65rem;
+    display: inline-block;
+}
+
+.badge-estado.es-activo {
+    background-color: var(--verde-suave);
+    color: var(--verde-texto);
+}
+
+.badge-estado.es-inactivo {
+    background-color: var(--beige);
+    color: var(--tinta-suave);
+}
+
+.badge-estado.es-bajo {
+    background-color: #f4ead3;
+    color: #8a6a2e;
+}
+
+.badge-tu {
+    background-color: var(--verde-oscuro);
+    color: #fff;
+}
+
+/* ============================================================
+   Personal de la empresa (showcase)
+   ============================================================ */
+.personal-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.personal-fila {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.75rem;
+}
+
+.personal-fila:nth-child(even) { flex-direction: row-reverse; }
+
+.personal-fila.inactiva { opacity: 0.7; }
+
+.personal-retrato {
+    flex: 0 0 200px;
+    aspect-ratio: 1;
+    border-radius: 14px;
+    background: linear-gradient(150deg, var(--beige), var(--crema));
+    border: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-iniciales.showcase {
+    width: 108px;
+    height: 108px;
+    font-size: 2.6rem;
+    box-shadow: var(--sombra-suave);
+}
+
+.personal-fila.inactiva .avatar-iniciales.showcase { filter: grayscale(0.5); }
+
+.personal-foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.personal-fila.inactiva .personal-foto { filter: grayscale(0.5); }
+
+.personal-cuerpo {
+    flex: 1 1 320px;
+    min-width: 0;
+}
+
+.personal-titulo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0.15rem 0 0.6rem;
+}
+
+.personal-titulo h2 { font-size: 1.6rem; }
+
+.personal-desc {
+    color: var(--tinta-suave);
+    max-width: 62ch;
+    margin-bottom: 1rem;
+}
+
+.btn-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: 1px solid var(--borde);
+    color: var(--cafe-oscuro);
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-info:hover { background-color: var(--beige); }
+
+.btn-info svg { transition: transform 0.2s ease; }
+
+.btn-info.abierto svg { transform: rotate(180deg); }
+
+.personal-detalle {
+    margin-top: 1.1rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--borde);
+}
+
+.detalle-datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.9rem 1.5rem;
+    margin: 0 0 1.1rem;
+}
+
+.detalle-datos dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--tinta-suave);
+    margin-bottom: 0.15rem;
+}
+
+.detalle-datos dd {
+    margin: 0;
+    color: var(--tinta);
+    word-break: break-word;
+}
+
+.detalle-datos .dato-oculto {
+    color: var(--tinta-suave);
+    font-style: italic;
+}
+
+.detalle-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-desactivar, .btn-activar {
+    border-radius: var(--radio-sm);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-desactivar {
+    background-color: var(--superficie);
+    border-color: var(--borde);
+    color: var(--cafe-oscuro);
+}
+
+.btn-desactivar:hover {
+    background-color: var(--cafe-oscuro);
+    border-color: var(--cafe-oscuro);
+    color: #fff;
+}
+
+.btn-activar {
+    background-color: var(--verde-oscuro);
+    color: #fff;
+    border-color: var(--verde-oscuro);
+}
+
+.btn-activar:hover {
+    background-color: var(--verde-hover);
+    border-color: var(--verde-hover);
+}
+
+/* ============================================================
+   Dialogo nativo (restablecer contrasena)
+   ============================================================ */
+.dialogo-vintage {
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    box-shadow: var(--sombra-media);
+    background-color: var(--superficie);
+    color: var(--tinta);
+    max-width: 460px;
+    width: calc(100% - 2rem);
+    padding: 1.75rem;
+}
+
+.dialogo-vintage::backdrop {
+    background-color: rgba(28, 28, 24, 0.5);
+    backdrop-filter: blur(3px);
+}
+
+.dialogo-encabezado {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.dialogo-texto {
+    font-size: 0.85rem;
+    margin-bottom: 1.1rem;
+}
+
+.dialogo-cerrar {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--tinta-suave);
+    cursor: pointer;
+}
+
+.dialogo-cerrar:hover { color: var(--cafe-oscuro); }
+
+/* ============================================================
+   Tarjeta de bienvenida (overlay) + aterrizaje
+   ============================================================ */
+.bienvenida-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(28, 28, 24, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.bienvenida-tarjeta {
+    background-color: var(--superficie);
+    border-radius: 18px;
+    box-shadow: var(--sombra-media);
+    max-width: 440px;
+    width: 100%;
+    padding: 1.75rem;
+    position: relative;
+    animation: bienvenida-entra 0.35s ease;
+}
+
+@keyframes bienvenida-entra {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.bienvenida-cerrar {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.9rem;
+    border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--tinta-suave);
+    cursor: pointer;
+}
+
+.bienvenida-cerrar:hover { color: var(--cafe-oscuro); }
+
+.bienvenida-dato {
+    font-size: 0.85rem;
+    color: var(--tinta-suave);
+}
+
+.bienvenida-inicio {
+    max-width: 560px;
+    margin: 4rem auto;
+    text-align: center;
+}
+
+.bienvenida-inicio-texto {
+    max-width: 46ch;
+    margin: 0 auto 1.75rem;
+}
+
+/* ============================================================
+   Revelado suave al hacer scroll (progresivo)
+   ============================================================ */
+.con-revelado .por-revelar {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.con-revelado .por-revelar.revelada {
+    opacity: 1;
+    transform: none;
+}
+
+/* ============================================================
+   Accesibilidad: foco visible
+   ============================================================ */
+.btn:focus-visible, .form-control:focus-visible, .form-select:focus-visible,
+.nav-item:focus-visible, .btn-vintage:focus-visible, .btn-vintage-outline:focus-visible,
+.btn-menu-movil:focus-visible, .btn-info:focus-visible {
+    outline: 2px solid var(--verde-oscuro);
+    outline-offset: 2px;
+}
+
+/* ============================================================
+   Catalogo (cuadricula de tarjetas de producto)
+   ============================================================ */
+.btn-vintage:disabled, .btn-vintage[disabled],
+.btn-vintage-outline:disabled, .btn-vintage-outline[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+}
+
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.producto-card {
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.producto-card:hover {
+    box-shadow: var(--sombra-media);
+    transform: translateY(-3px);
+}
+
+.producto-card.agotado {
+    opacity: 0.78;
+}
+
+/* Boton "ojito": cuando esta activo, oculta los productos agotados (stock 0) del catalogo. */
+[data-catalogo].ocultar-agotados .producto-card.agotado {
+    display: none;
+}
+
+.btn-ojito {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    color: var(--cafe-oscuro);
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-sm);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-ojito:hover {
+    border-color: var(--verde-oscuro);
+}
+
+.btn-ojito.activo {
+    background-color: var(--verde-suave);
+    border-color: var(--verde-oscuro);
+    color: var(--verde-texto);
+}
+
+.btn-ojito [data-ojo-oculto] {
+    display: none;
+}
+
+.btn-ojito.activo [data-ojo-ver] {
+    display: none;
+}
+
+.btn-ojito.activo [data-ojo-oculto] {
+    display: inline;
+}
+
+.producto-imagen {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(150deg, var(--beige), var(--crema));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.producto-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.producto-sin-foto {
+    color: var(--tinta-suave);
+    opacity: 0.55;
+}
+
+.producto-categoria {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.92);
+    color: var(--cafe-oscuro);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    backdrop-filter: blur(2px);
+}
+
+.producto-cuerpo {
+    padding: 1rem 1.1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.producto-meta {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--tinta-suave);
+    margin-bottom: 0.25rem;
+}
+
+.producto-nombre {
+    font-size: 1.1rem;
+    margin: 0 0 0.35rem;
+}
+
+.producto-desc {
+    font-size: 0.85rem;
+    color: var(--tinta-suave);
+    margin: 0 0 0.8rem;
+}
+
+.producto-datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+    margin-bottom: 0.9rem;
+}
+
+.producto-pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.producto-precio {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--cafe-oscuro);
+}
+
+.producto-acciones {
+    display: flex;
+    gap: 0.4rem;
+}
+
+/* Fotos apiladas para el hover (solo la .activa se ve) */
+.producto-img {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.producto-img.activa {
+    opacity: 1;
+}
+
+.producto-conteo-fotos {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
+    background-color: rgba(45, 42, 37, 0.7);
+    color: #fff;
+    font-size: 0.68rem;
+    padding: 0.12rem 0.5rem;
+    border-radius: 999px;
+}
+
+/* ---------- Hero del catalogo ---------- */
+.catalogo-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 1.75rem;
+}
+
+.hero-texto h1 {
+    font-size: 2.6rem;
+    margin: 0.3rem 0 0.6rem;
+}
+
+.hero-showcase {
+    position: relative;
+    min-height: 250px;
+    background-color: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.hero-slide.activa {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.hero-slide-img {
+    flex: 1 1 auto;
+    min-height: 160px;
+    background: linear-gradient(150deg, var(--beige), var(--crema));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tinta-suave);
+}
+
+.hero-slide-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-slide-info {
+    padding: 0.9rem 1.1rem;
+}
+
+.hero-slide-info h3 {
+    font-size: 1.25rem;
+    margin: 0.35rem 0 0.2rem;
+}
+
+.hero-slide-precio {
+    color: var(--tinta-suave);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.hero-dots {
+    position: absolute;
+    bottom: 0.7rem;
+    right: 1.1rem;
+    display: flex;
+    gap: 0.35rem;
+}
+
+.hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--borde);
+    cursor: pointer;
+    padding: 0;
+}
+
+.hero-dot.activo {
+    background-color: var(--verde-oscuro);
+}
+
+/* ---------- Filtros del catalogo ---------- */
+.catalogo-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.filtro-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.pill {
+    border: 1px solid var(--borde);
+    background-color: var(--superficie);
+    color: var(--cafe-oscuro);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pill:hover {
+    background-color: var(--beige);
+}
+
+.pill.activo {
+    background-color: var(--verde-oscuro);
+    border-color: var(--verde-oscuro);
+    color: #fff;
+}
+
+.filtro-selects {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.catalogo-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.catalogo-buscador {
+    flex: 1 1 300px;
+    max-width: 560px;
+}
+
+.filtro-pills {
+    margin-bottom: 1.25rem;
+}
+
+/* ---------- Detalle del producto + galeria manual ---------- */
+.detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+.galeria-principal {
+    position: relative;
+    aspect-ratio: 1;
+    background: linear-gradient(150deg, var(--beige), var(--crema));
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.galeria-principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Imagenes apiladas de la galeria: solo la .activa se ve, con desvanecido al cambiar */
+.galeria-img {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+
+.galeria-img.activa {
+    opacity: 1;
+}
+
+.galeria-sin-foto {
+    color: var(--tinta-suave);
+    opacity: 0.5;
+}
+
+.galeria-flecha {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--borde);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--cafe-oscuro);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.galeria-flecha.izq { left: 0.75rem; }
+.galeria-flecha.der { right: 0.75rem; }
+.galeria-flecha:hover { background-color: #fff; }
+
+.galeria-miniaturas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+}
+
+.galeria-thumb {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    background-color: var(--beige);
+    cursor: pointer;
+    padding: 0;
+}
+
+.galeria-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.galeria-thumb.activa {
+    border-color: var(--verde-oscuro);
+}
+
+.detalle-nombre {
+    font-size: 2.2rem;
+    margin: 0.4rem 0 0.4rem;
+}
+
+.detalle-linea {
+    color: var(--tinta-suave);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.detalle-precio {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--cafe-oscuro);
+    margin-bottom: 1rem;
+}
+
+.detalle-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.pill-tag {
+    background-color: var(--beige);
+    color: var(--cafe-oscuro);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.detalle-descripcion {
+    margin-bottom: 1.5rem;
+}
+
+.detalle-descripcion h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--tinta-suave);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    margin-bottom: 0.4rem;
+}
+
+.detalle-descripcion p {
+    color: var(--tinta);
+    line-height: 1.6;
+    max-width: 60ch;
+}
+
+.detalle-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+/* Toque: entrada suave y escalonada de las tarjetas del catalogo (respeta reduce-motion) */
+@keyframes aparecer-tarjeta {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+}
+
+.catalogo-grid .producto-card {
+    animation: aparecer-tarjeta 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.catalogo-grid .producto-card:nth-child(2) { animation-delay: 0.05s; }
+.catalogo-grid .producto-card:nth-child(3) { animation-delay: 0.1s; }
+.catalogo-grid .producto-card:nth-child(4) { animation-delay: 0.15s; }
+.catalogo-grid .producto-card:nth-child(5) { animation-delay: 0.2s; }
+.catalogo-grid .producto-card:nth-child(6) { animation-delay: 0.25s; }
+.catalogo-grid .producto-card:nth-child(n+7) { animation-delay: 0.3s; }
+
+/* Toque: zoom leve de la imagen del detalle al pasar el mouse */
+.galeria-img {
+    transition: opacity 0.45s ease, transform 0.5s ease;
+}
+
+.galeria-principal:hover .galeria-img.activa {
+    transform: scale(1.04);
+}
+
+@media (max-width: 767.98px) {
+    .catalogo-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-texto h1 {
+        font-size: 2.1rem;
+    }
+
+    .detalle-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* ============================================================
+   Incremento 7 - Carrito, aviso flotante (toast) y contador
+   ============================================================ */
+.nav-badge {
+    margin-left: auto;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background-color: var(--verde-oscuro);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item.activo .nav-badge {
+    background-color: var(--verde-oscuro);
+    color: #fff;
+}
+
+.toast-cont {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 1090;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: min(360px, 90vw);
+}
+
+.toast-vintage {
+    padding: 0.7rem 1rem;
+    border-radius: var(--radio-sm);
+    box-shadow: var(--sombra-media);
+    font-size: 0.88rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-vintage.visible {
+    opacity: 1;
+    transform: none;
+}
+
+.toast-vintage.es-ok {
+    background-color: #ece8ce;
+    color: #5b5626;
+    border: 1px solid #d3cba2;
+}
+
+.toast-vintage.es-error {
+    background-color: #f3ded2;
+    color: #8a3620;
+    border: 1px solid #e2c1a6;
+}
+
+.carrito-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.carrito-lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.carrito-item {
+    display: grid;
+    grid-template-columns: 70px 1fr auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+}
+
+.carrito-item.excede {
+    border-color: #e0c8b0;
+}
+
+.carrito-foto {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: var(--beige);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carrito-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carrito-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.carrito-subtotal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+}
+
+.btn-quitar {
+    background: none;
+    border: none;
+    color: var(--tinta-suave);
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.btn-quitar:hover {
+    color: var(--cafe-oscuro);
+}
+
+.carrito-resumen {
+    padding: 1.25rem;
+    position: sticky;
+    top: 5rem;
+}
+
+.resumen-linea {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    color: var(--tinta-suave);
+}
+
+.resumen-linea.total {
+    border-top: 1px solid var(--borde);
+    margin-top: 0.4rem;
+    padding-top: 0.8rem;
+    color: var(--tinta);
+    font-weight: 600;
+    align-items: center;
+}
+
+/* Resumen de la venta (lista de items) */
+.resumen-items {
+    list-style: none;
+    margin: 0 0 0.5rem;
+    padding: 0;
+}
+
+.resumen-items li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    font-size: 0.88rem;
+    color: var(--tinta-suave);
+    border-bottom: 1px solid var(--borde);
+}
+
+.resumen-items li:last-child {
+    border-bottom: none;
+}
+
+/* Metodo de pago (tarjetas seleccionables) */
+.pago-opciones {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.pago-opcion {
+    flex: 1 1 140px;
+    cursor: pointer;
+    margin: 0;
+    position: relative;
+}
+
+.pago-opcion input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.pago-cara {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-sm);
+    color: var(--cafe-oscuro);
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.pago-opcion input:checked + .pago-cara {
+    border-color: var(--verde-oscuro);
+    background-color: var(--verde-suave);
+    color: var(--verde-texto);
+}
+
+.pago-opcion input:focus-visible + .pago-cara {
+    outline: 2px solid var(--verde-oscuro);
+    outline-offset: 2px;
+}
+
+/* Bloque de datos de la tarjeta (pago simulado), aparece solo con metodo Tarjeta */
+.tarjeta-datos-pago {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--borde);
+}
+
+/* Overlay de "Procesando pago..." de la simulacion de tarjeta */
+.pago-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(51, 40, 27, 0.55);
+}
+
+.pago-overlay[hidden] {
+    display: none;
+}
+
+.pago-overlay-caja {
+    background-color: var(--superficie);
+    border-radius: var(--radio);
+    padding: 2rem 2.6rem;
+    text-align: center;
+    box-shadow: var(--sombra-media);
+}
+
+.pago-overlay-caja p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--cafe-oscuro);
+}
+
+.pago-spinner {
+    width: 38px;
+    height: 38px;
+    margin: 0 auto 1rem;
+    border: 3px solid var(--borde);
+    border-top-color: var(--verde-oscuro);
+    border-radius: 50%;
+    animation: girar-pago 0.8s linear infinite;
+}
+
+@keyframes girar-pago {
+    to { transform: rotate(360deg); }
+}
+
+/* Confirmacion de la venta */
+.confirmacion {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.confirmacion-icono {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    background-color: var(--verde-suave);
+    color: var(--verde-oscuro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirmacion-tarjeta {
+    text-align: left;
+    margin-top: 1.5rem;
+}
+
+.detalle-acciones.justify-content-center {
+    justify-content: center;
+}
+
+@media (max-width: 767.98px) {
+    .carrito-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .carrito-item {
+        grid-template-columns: 60px 1fr;
+        row-gap: 0.75rem;
+    }
+
+    .carrito-cantidad, .carrito-subtotal {
+        grid-column: 1 / -1;
+    }
+
+    .carrito-subtotal {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .carrito-resumen {
+        position: static;
+    }
+}
+
+/* ============================================================
+   Responsivo
+   ============================================================ */
+@media (max-width: 991.98px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 60;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: var(--sombra-media);
+    }
+
+    .app-shell.menu-abierto .sidebar { transform: none; }
+
+    .app-shell.menu-abierto .sidebar-backdrop { display: block; }
+
+    .btn-menu-movil { display: inline-flex; }
+}
+
+@media (max-width: 767.98px) {
+    .content { padding: 1.5rem 1rem 2.5rem; }
+
+    .topbar { padding: 0.7rem 1rem; }
+
+    .personal-fila, .personal-fila:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.25rem;
+    }
+
+    .personal-retrato {
+        flex-basis: auto;
+        width: 140px;
+    }
+
+    .personal-titulo { justify-content: center; }
+
+    .personal-desc {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .detalle-acciones { justify-content: center; }
+
+    .detalle-datos { text-align: left; }
+}
+
+/* Tabla apilada como tarjetas en pantallas pequenas */
+@media (max-width: 640px) {
+    .tabla-vintage thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+    }
+
+    .tabla-vintage, .tabla-vintage tbody, .tabla-vintage tr, .tabla-vintage td {
+        display: block;
+        width: 100%;
+    }
+
+    .tabla-vintage tbody tr {
+        border: 1px solid var(--borde);
+        border-radius: var(--radio-sm);
+        margin-bottom: 0.85rem;
+        padding: 0.35rem 0.25rem;
+    }
+
+    .tabla-vintage tbody td {
+        border-bottom: 1px solid var(--borde);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        text-align: right;
+    }
+
+    .tabla-vintage tbody td::before {
+        content: attr(data-etiqueta);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--tinta-suave);
+        font-weight: 600;
+    }
+
+    .acciones-fila { justify-content: flex-end; }
+}
+
+/* ============================================================
+   Incremento 8 - Factura / comprobante
+   ============================================================ */
+.factura-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.factura-hoja {
+    background-color: #fff;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem;
+}
+
+.factura-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.factura-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.factura-logo {
+    width: 58px;
+    height: 74px;
+    border-radius: 0 0 28px 28px;
+    background-color: var(--verde-oscuro);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
+/* Logo real de la empresa en el comprobante (sin recuadro, se funde con la hoja). */
+.factura-logo-img {
+    height: 72px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+}
+
+.factura-marca-nombre {
+    font-family: var(--serif);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--cafe-oscuro);
+}
+
+.factura-marca-sub {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--tinta-suave);
+}
+
+.factura-numero {
+    text-align: right;
+}
+
+.factura-numero .n {
+    font-weight: 700;
+    color: var(--cafe-oscuro);
+}
+
+.factura-numero .fecha {
+    font-size: 0.82rem;
+    color: var(--tinta-suave);
+}
+
+.factura-empresa h2 {
+    font-size: 1.6rem;
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--tinta);
+}
+
+.factura-empresa p {
+    margin: 0.12rem 0;
+    color: var(--tinta-suave);
+    font-size: 0.9rem;
+}
+
+.factura-cliente {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 2rem;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+.factura-cliente span {
+    color: var(--tinta-suave);
+    font-weight: 600;
+}
+
+.factura-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.factura-tabla th {
+    text-align: left;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--tinta-suave);
+    padding: 0.6rem 0.5rem;
+    border-bottom: 2px solid var(--tinta);
+}
+
+.factura-tabla th.num,
+.factura-tabla td.num {
+    text-align: right;
+}
+
+.factura-tabla td {
+    padding: 0.85rem 0.5rem;
+    border-bottom: 1px solid var(--borde);
+    vertical-align: top;
+}
+
+.factura-sku {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--tinta-suave);
+}
+
+.factura-totales {
+    margin-left: auto;
+    width: 260px;
+    margin-top: 1rem;
+}
+
+.factura-totales .linea {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    font-weight: 600;
+}
+
+.factura-totales .linea > span:first-child {
+    color: var(--tinta-suave);
+}
+
+.factura-totales .total {
+    border-top: 2px solid var(--tinta);
+    margin-top: 0.3rem;
+    padding-top: 0.7rem;
+    font-size: 1.15rem;
+    color: var(--cafe-oscuro);
+}
+
+.factura-totales .total > span:first-child {
+    color: var(--cafe-oscuro);
+}
+
+.factura-pie {
+    text-align: center;
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--borde);
+    color: var(--tinta-suave);
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+}
+
+/* Impresion: solo el comprobante, sin sidebar/topbar/botones */
+@media print {
+    .sidebar, .topbar, .no-print, .app-footer, .toast-cont, .bienvenida-overlay {
+        display: none !important;
+    }
+
+    body {
+        background-color: #fff;
+    }
+
+    .content {
+        padding: 0 !important;
+        max-width: none !important;
+    }
+
+    .factura-hoja {
+        box-shadow: none;
+        border: none;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .con-revelado .por-revelar { opacity: 1; transform: none; }
+}

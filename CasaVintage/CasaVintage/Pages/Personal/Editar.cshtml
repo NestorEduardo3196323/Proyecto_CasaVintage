@@ -1,0 +1,90 @@
+@page "{id:int}"
+@model CasaVintage.Pages.Personal.EditarModel
+@{
+    ViewData["Title"] = "Editar cuenta";
+    Layout = "_Layout";
+}
+
+<div class="form-personal">
+    <a asp-page="Index" class="volver-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+        Volver al personal
+    </a>
+
+    <div class="mb-4">
+        <span class="kicker">Personal de la empresa</span>
+        <h1 class="mb-1">Editar cuenta</h1>
+        <p class="text-muted mb-0">Actualiza los datos del empleado. Para cambiar la contrasena usa "Restablecer contrasena".</p>
+    </div>
+
+    <div class="tarjeta-vintage p-4 p-md-5">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="alerta-vintage alerta-error mb-4" role="alert"></div>
+            <input type="hidden" asp-for="Entrada.IdUsuario" />
+            <input type="hidden" asp-for="Entrada.FotoActual" />
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Entrada.NombreUsuario" class="form-label"></label>
+                    <input asp-for="Entrada.NombreUsuario" class="form-control" autocomplete="name" autofocus />
+                    <span asp-validation-for="Entrada.NombreUsuario" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-7">
+                    <label asp-for="Entrada.Correo" class="form-label"></label>
+                    <input asp-for="Entrada.Correo" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Entrada.Correo" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-5">
+                    <label asp-for="Entrada.Rol" class="form-label"></label>
+                    <select asp-for="Entrada.Rol" class="form-select">
+                        @foreach (var rol in Model.Roles)
+                        {
+                            <option value="@rol">@rol</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Entrada.Rol" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Entrada.Foto" class="form-label"></label>
+                    <div class="foto-campo" data-foto-grupo>
+                        <span class="foto-previa" data-foto-previa>
+                            @if (!string.IsNullOrEmpty(Model.Entrada.FotoActual))
+                            {
+                                <img src="@Model.Entrada.FotoActual" alt="Foto actual" />
+                            }
+                            else
+                            {
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z" /><circle cx="12" cy="13" r="3" /></svg>
+                            }
+                        </span>
+                        <div>
+                            <input asp-for="Entrada.Foto" type="file" class="form-control" accept="image/png,image/jpeg,image/webp" data-foto-input />
+                            <p class="ayuda-campo mt-1 mb-2">JPG, PNG o WEBP, hasta 8 MB. Al subir una imagen reemplazas la actual.</p>
+                            @if (!string.IsNullOrEmpty(Model.Entrada.FotoActual))
+                            {
+                                <div class="form-check">
+                                    <input asp-for="Entrada.QuitarFoto" class="form-check-input" />
+                                    <label asp-for="Entrada.QuitarFoto" class="form-check-label"></label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <span asp-validation-for="Entrada.Foto" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <button type="submit" class="btn-vintage">Guardar cambios</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/personal.js" asp-append-version="true"></script>
+}

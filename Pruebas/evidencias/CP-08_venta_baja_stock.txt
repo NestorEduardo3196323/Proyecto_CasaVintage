@@ -1,0 +1,6 @@
+CP-08 Venta valida con baja de stock (RF-05)
+
+Resultado observado:
+Venta #11 registrada (Cliente Prueba Ventas, Efectivo, $100.00).
+Verificacion en base: VIN-0008 stock 5 -> 4; disponibilidad=1.
+Estado: PASO

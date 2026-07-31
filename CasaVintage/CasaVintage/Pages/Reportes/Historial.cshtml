@@ -1,0 +1,138 @@
+@page
+@model CasaVintage.Pages.Reportes.HistorialModel
+@{
+    ViewData["Title"] = "Historial de ventas";
+    Layout = "_Layout";
+}
+
+<div class="mb-4">
+    <span class="kicker">Analisis</span>
+    <h1 class="mb-1">Historial de ventas</h1>
+    <p class="text-muted mb-0">Todas las ventas registradas, de la mas reciente a la mas antigua.</p>
+</div>
+
+<form method="get" class="reportes-filtros tarjeta-vintage mb-3">
+    <div class="filtro-rapidos">
+        <button type="submit" name="rango" value="hoy" class="pill @(Model.Rango == "hoy" ? "activo" : "")">Hoy</button>
+        <button type="submit" name="rango" value="semana" class="pill @(Model.Rango == "semana" ? "activo" : "")">Esta semana</button>
+        <button type="submit" name="rango" value="mes" class="pill @(Model.Rango == "mes" ? "activo" : "")">Este mes</button>
+        <button type="submit" name="rango" value="anio" class="pill @(Model.Rango == "anio" ? "activo" : "")">Este año</button>
+    </div>
+    <div class="filtro-campo">
+        <label for="fDesde">Desde</label>
+        <input type="date" id="fDesde" name="desde" class="form-control form-control-sm" value="@(Model.Filtro.Desde?.ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="filtro-campo">
+        <label for="fHasta">Hasta</label>
+        <input type="date" id="fHasta" name="hasta" class="form-control form-control-sm" value="@(Model.Filtro.Hasta?.ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="filtro-campo">
+        <label for="fVendedor">Vendedor</label>
+        <select id="fVendedor" name="vendedor" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            @foreach (var v in Model.Vendedores)
+            {
+                <option value="@v.Id" selected="@(Model.Vendedor == v.Id)">@v.Nombre</option>
+            }
+        </select>
+    </div>
+    <div class="filtro-campo">
+        <label for="fMetodo">Metodo de pago</label>
+        <select id="fMetodo" name="metodo" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <option value="Efectivo" selected="@(Model.Metodo == "Efectivo")">Efectivo</option>
+            <option value="Tarjeta" selected="@(Model.Metodo == "Tarjeta")">Tarjeta</option>
+        </select>
+    </div>
+    <div class="filtro-campo">
+        <label for="fCategoria">Categoria</label>
+        <select id="fCategoria" name="categoria" class="form-select form-select-sm">
+            <option value="">Todas</option>
+            @foreach (var c in Model.Categorias)
+            {
+                <option value="@c" selected="@(Model.Categoria == c)">@c</option>
+            }
+        </select>
+    </div>
+    <div class="filtro-acciones">
+        <button type="submit" name="rango" value="personalizado" class="btn-vintage btn-sm">Filtrar</button>
+        <a asp-page="Historial" class="btn-vintage-outline btn-sm">Limpiar</a>
+    </div>
+</form>
+
+@if (Model.Ventas.Count == 0)
+{
+    <div class="tarjeta-vintage estado-vacio">
+        <h2 class="h5 mb-2">No hay ventas para ese filtro</h2>
+        <p class="text-muted mb-0">Ajusta el rango de fechas u otros filtros, o pulsa Limpiar.</p>
+    </div>
+}
+else
+{
+    <div class="tarjeta-vintage">
+        <div class="tabla-toolbar">
+            <div class="buscador-tabla">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                <input type="search" id="histBuscar" class="form-control" placeholder="Buscar por cliente, vendedor o numero..." aria-label="Buscar venta" />
+            </div>
+        </div>
+        <div class="tabla-vintage-envoltura">
+            <table id="tablaHistorial" class="tabla-vintage">
+                <thead>
+                    <tr>
+                        <th scope="col">Venta</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Vendedor</th>
+                        <th scope="col">Pago</th>
+                        <th scope="col" class="col-numero">Articulos</th>
+                        <th scope="col" class="col-numero">Total</th>
+                        <th scope="col" class="col-acciones">Comprobante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model.Ventas)
+                    {
+                        <tr data-buscar="@($"#{v.IdVenta:D7} {v.Cliente} {v.Vendedor} {v.MetodoPago}".ToLowerInvariant())">
+                            <td data-etiqueta="Venta"><span class="sku-chip">#@v.IdVenta.ToString("D7")</span></td>
+                            <td data-etiqueta="Fecha">@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td data-etiqueta="Cliente"><span class="celda-nombre">@v.Cliente</span></td>
+                            <td data-etiqueta="Vendedor">@v.Vendedor</td>
+                            <td data-etiqueta="Pago">@v.MetodoPago</td>
+                            <td data-etiqueta="Articulos" class="col-numero"><span class="chip-conteo">@v.Articulos</span></td>
+                            <td data-etiqueta="Total" class="col-numero">$@v.Total.ToString("N2")</td>
+                            <td data-etiqueta="Comprobante" class="col-acciones">
+                                <a asp-page="/Carrito/Factura" asp-route-id="@v.IdVenta" class="btn-vintage-outline btn-sm">Ver</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p id="sinResultadosHist" class="sin-resultados" hidden>No se encontraron ventas con esa busqueda.</p>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            // Busqueda de texto en vivo sobre las ventas ya filtradas por el servidor.
+            (function () {
+                var tabla = document.getElementById("tablaHistorial");
+                if (!tabla) { return; }
+                var filas = Array.prototype.slice.call(tabla.tBodies[0].rows);
+                var vacio = document.getElementById("sinResultadosHist");
+                var buscar = document.getElementById("histBuscar");
+
+                buscar.addEventListener("input", function () {
+                    var texto = (buscar.value || "").trim().toLowerCase();
+                    var visibles = 0;
+                    filas.forEach(function (fila) {
+                        var ok = !texto || fila.dataset.buscar.indexOf(texto) !== -1;
+                        fila.hidden = !ok;
+                        if (ok) { visibles++; }
+                    });
+                    if (vacio) { vacio.hidden = visibles !== 0; }
+                });
+            })();
+        </script>
+    }
+}

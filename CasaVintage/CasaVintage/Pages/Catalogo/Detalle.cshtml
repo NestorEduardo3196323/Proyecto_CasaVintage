@@ -1,0 +1,100 @@
+@page "{id:int}"
+@model CasaVintage.Pages.Catalogo.DetalleModel
+@{
+    ViewData["Title"] = Model.Producto.Nombre;
+    Layout = "_Layout";
+    var p = Model.Producto;
+    var fotos = new[] { p.Foto1, p.Foto2, p.Foto3 }.Where(f => !string.IsNullOrEmpty(f)).ToList();
+}
+
+<a asp-page="Index" class="volver-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+    Volver al catalogo
+</a>
+
+<div class="detalle-grid">
+    <div class="galeria" data-galeria>
+        <div class="galeria-principal">
+            @if (fotos.Count > 0)
+            {
+                for (var i = 0; i < fotos.Count; i++)
+                {
+                    <img src="@fotos[i]" alt="@p.Nombre" class="galeria-img @(i == 0 ? "activa" : "")" data-galeria-slide loading="@(i == 0 ? "eager" : "lazy")" />
+                }
+                @if (fotos.Count > 1)
+                {
+                    <button type="button" class="galeria-flecha izq" data-galeria-prev aria-label="Foto anterior">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                    </button>
+                    <button type="button" class="galeria-flecha der" data-galeria-next aria-label="Foto siguiente">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                    </button>
+                }
+            }
+            else
+            {
+                <span class="producto-sin-foto galeria-sin-foto" aria-hidden="true">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                </span>
+            }
+        </div>
+
+        @if (fotos.Count > 1)
+        {
+            <div class="galeria-miniaturas">
+                @for (var i = 0; i < fotos.Count; i++)
+                {
+                    <button type="button" class="galeria-thumb @(i == 0 ? "activa" : "")" data-galeria-thumb="@fotos[i]" aria-label="Foto @(i + 1)">
+                        <img src="@fotos[i]" alt="Foto @(i + 1) de @p.Nombre" />
+                    </button>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="detalle-info">
+        @if (p.Disponibilidad)
+        {
+            <span class="badge-estado es-activo">@p.Stock en stock</span>
+        }
+        else
+        {
+            <span class="badge-estado es-inactivo">Sin stock</span>
+        }
+
+        <h1 class="detalle-nombre">@p.Nombre</h1>
+        <p class="detalle-linea">SKU @p.Sku &middot; @p.Categoria &middot; Proveedor: @p.ProveedorNombre</p>
+
+        <div class="detalle-precio">$@p.Precio.ToString("N2")</div>
+
+        <div class="detalle-tags">
+            <span class="pill-tag">@p.Categoria</span>
+            <span class="pill-tag">@p.Epoca</span>
+            <span class="pill-tag">Estado: @p.Estado</span>
+        </div>
+
+        <div class="detalle-descripcion">
+            <h2 class="h6">Descripcion</h2>
+            <p>@p.Descripcion</p>
+        </div>
+
+        <div class="detalle-acciones">
+            @if (User.IsInRole("Vendedor"))
+            {
+                if (p.Disponibilidad)
+                {
+                    <button type="button" class="btn-vintage" data-agregar="@p.IdProducto">Agregar al carrito</button>
+                }
+                else
+                {
+                    <button type="button" class="btn-vintage" disabled>Sin stock</button>
+                }
+            }
+            <a asp-page="Index" class="btn-vintage-outline">Volver al catalogo</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/catalogo.js" asp-append-version="true"></script>
+}

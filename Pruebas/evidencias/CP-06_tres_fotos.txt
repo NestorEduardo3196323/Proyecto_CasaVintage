@@ -1,0 +1,10 @@
+CP-06 Hasta 3 fotos (RF-02)
+
+Formulario: 3 espacios de foto (JPG/PNG/WEBP, hasta 8 MB).
+Consulta a la base (num de fotos por producto):
+VIN-0001=3, VIN-0002=3, VIN-0003=3, VIN-0004=3, VIN-0005=3, VIN-0006=3, VIN-0007=3.
+Ejemplo rutas VIN-0004:
+/uploads/productos/b682e752ce6a45c583ac8639895560ac.jpg
+/uploads/productos/94ea950eb4b341489391f90ee18e5028.jpg
+/uploads/productos/f8cd7c2bbe814576b12bd975ba9078af.jpg
+Estado: PASO

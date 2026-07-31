@@ -1,0 +1,11 @@
+CP-14 Campos obligatorios sin llenar
+
+Resultado observado (envio de formulario vacio):
+'El nombre es obligatorio.'
+'La descripcion es obligatoria.'
+'La categoria es obligatoria.'
+'La epoca es obligatoria.'
+'El estado es obligatorio.'
+'Selecciona un proveedor.'
+No se creo el producto.
+Estado: PASO

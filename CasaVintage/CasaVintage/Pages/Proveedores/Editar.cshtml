@@ -1,0 +1,55 @@
+@page "{id:int}"
+@model CasaVintage.Pages.Proveedores.EditarModel
+@{
+    ViewData["Title"] = "Editar proveedor";
+    Layout = "_Layout";
+}
+
+<div class="form-personal">
+    <a asp-page="Index" class="volver-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+        Volver a proveedores
+    </a>
+
+    <div class="mb-4">
+        <span class="kicker">Proveedores</span>
+        <h1 class="mb-1">Editar proveedor</h1>
+        <p class="text-muted mb-0">Actualiza los datos de contacto del proveedor.</p>
+    </div>
+
+    <div class="tarjeta-vintage p-4 p-md-5">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="alerta-vintage alerta-error mb-4" role="alert"></div>
+            <input type="hidden" asp-for="Entrada.IdProveedor" />
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Entrada.Nombre" class="form-label"></label>
+                    <input asp-for="Entrada.Nombre" class="form-control" autofocus />
+                    <span asp-validation-for="Entrada.Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-7">
+                    <label asp-for="Entrada.Contacto" class="form-label"></label>
+                    <input asp-for="Entrada.Contacto" class="form-control" placeholder="Persona o medio de contacto" />
+                    <span asp-validation-for="Entrada.Contacto" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-5">
+                    <label asp-for="Entrada.Telefono" class="form-label"></label>
+                    <input asp-for="Entrada.Telefono" class="form-control" placeholder="2211-3344" />
+                    <span asp-validation-for="Entrada.Telefono" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <button type="submit" class="btn-vintage">Guardar cambios</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

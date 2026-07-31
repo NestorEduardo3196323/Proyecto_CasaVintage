@@ -1,0 +1,55 @@
+@page
+@model CasaVintage.Pages.Ajustes.MarcaModel
+@{
+    ViewData["Title"] = "Identidad visual";
+    Layout = "_Layout";
+}
+
+<div class="mb-4">
+    <span class="kicker">Ajustes</span>
+    <h1 class="mb-1">Identidad visual</h1>
+    <p class="text-muted mb-0">Sube el logo de la tienda. Se muestra en el menu lateral en lugar del monograma.</p>
+</div>
+
+@if (Model.Mensaje is not null)
+{
+    <div class="alerta-vintage alerta-ok" role="status">@Model.Mensaje</div>
+}
+
+<div class="tarjeta-vintage p-4 p-md-5">
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="alerta-vintage alerta-error mb-4" role="alert"></div>
+
+        <div class="marca-preview-fila">
+            <div class="marca-preview" data-foto-grupo>
+                <span class="marca-previa-cuadro" data-foto-previa>
+                    @if (Model.LogoActual is not null)
+                    {
+                        <img src="@Model.LogoActual" alt="Logo actual" />
+                    }
+                    else
+                    {
+                        <span class="marca-logo marca-logo-grande">V</span>
+                    }
+                </span>
+            </div>
+            <div class="marca-preview-texto">
+                <label for="Logo" class="form-label">Archivo del logo</label>
+                <input type="file" id="Logo" name="Logo" class="form-control" accept=".png,.jpg,.jpeg,.webp" data-foto-input />
+                <p class="text-muted mt-2 mb-0" style="font-size:0.85rem;">Formatos: PNG, JPG o WEBP. Maximo 8 MB. Se recomienda un PNG con fondo transparente.</p>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap mt-4">
+            <button type="submit" asp-page-handler="Guardar" class="btn-vintage">Guardar logo</button>
+            @if (Model.LogoActual is not null)
+            {
+                <button type="submit" asp-page-handler="Quitar" class="btn-vintage-outline" formnovalidate>Quitar logo</button>
+            }
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/personal.js" asp-append-version="true"></script>
+}

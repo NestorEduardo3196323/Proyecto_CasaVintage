@@ -1,0 +1,104 @@
+@page
+@model CasaVintage.Pages.Carrito.FacturaModel
+@inject CasaVintage.Services.IMarcaService Marca
+@{
+    ViewData["Title"] = "Comprobante";
+    Layout = "_Layout";
+    var f = Model.Factura;
+    var ok = TempData["FacturaOk"] as string;
+    var error = TempData["FacturaError"] as string;
+    var logoFactura = Marca.RutaLogo();
+}
+
+<div class="factura-acciones no-print">
+    <a href="#" class="volver-link mb-0" onclick="if (history.length > 1) { history.back(); } else { window.location.href='/'; } return false;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+        Volver
+    </a>
+    <div class="d-flex flex-wrap gap-2">
+        <button type="button" class="btn-vintage-outline btn-sm" onclick="window.print()">Imprimir</button>
+        <a class="btn-vintage-outline btn-sm" asp-page-handler="Pdf" asp-route-id="@f.NumeroVenta">Descargar PDF</a>
+        @if (User.IsInRole("Vendedor"))
+        {
+            <form method="post" asp-page-handler="Enviar" asp-route-id="@f.NumeroVenta" class="m-0">
+                <button type="submit" class="btn-vintage btn-sm">Enviar por correo</button>
+            </form>
+        }
+    </div>
+</div>
+
+@if (ok is not null)
+{
+    <div class="alerta-vintage alerta-ok no-print" role="status">@ok</div>
+}
+@if (error is not null)
+{
+    <div class="alerta-vintage alerta-error no-print" role="alert">@error</div>
+}
+
+<div class="factura-hoja">
+    <div class="factura-encabezado">
+        <div class="factura-marca">
+            @if (logoFactura is not null)
+            {
+                <img src="@logoFactura" alt="La Casa de Vintage" class="factura-logo-img" />
+            }
+            else
+            {
+                <span class="factura-logo">V</span>
+            }
+            <div>
+                <div class="factura-marca-nombre">LA CASA DE VINTAGE</div>
+                <div class="factura-marca-sub">Tienda de antigüedades</div>
+            </div>
+        </div>
+        <div class="factura-numero">
+            <div class="n">FACTURA N° @f.NumeroVenta.ToString("D7")</div>
+            <div class="fecha">Fecha: @f.Fecha.ToString("dd/MM/yyyy HH:mm")</div>
+            <div class="fecha">Metodo de pago: @f.MetodoPagoTexto</div>
+        </div>
+    </div>
+
+    <div class="factura-empresa">
+        <h2>@f.EmpresaNombre</h2>
+        <p>@f.EmpresaTelefono</p>
+        <p>@f.EmpresaDireccion</p>
+        <p>@f.EmpresaCorreo</p>
+    </div>
+
+    <div class="factura-cliente">
+        <div><span>Cliente:</span> @f.ClienteNombre</div>
+        <div><span>Correo:</span> @(string.IsNullOrEmpty(f.ClienteCorreo) ? "—" : f.ClienteCorreo)</div>
+        <div><span>Atendió:</span> @f.VendedorNombre</div>
+    </div>
+
+    <table class="factura-tabla">
+        <thead>
+            <tr>
+                <th>CONCEPTO</th>
+                <th class="num">CANTIDAD</th>
+                <th class="num">PRECIO</th>
+                <th class="num">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var linea in f.Lineas)
+            {
+                <tr>
+                    <td>@linea.Nombre <span class="factura-sku">@linea.Sku</span></td>
+                    <td class="num">@linea.Cantidad</td>
+                    <td class="num">$@linea.PrecioUnitario.ToString("N2")</td>
+                    <td class="num">$@linea.Subtotal.ToString("N2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="factura-totales">
+        <div class="linea"><span>SUBTOTAL</span><span>$@f.Subtotal.ToString("N2")</span></div>
+        <div class="linea"><span>IVA (13%)</span><span>$@f.Iva.ToString("N2")</span></div>
+        <div class="linea total"><span>TOTAL</span><span>$@f.Total.ToString("N2")</span></div>
+    </div>
+
+    <div class="factura-pie">Gracias por su compra &middot; La Casa de Vintage</div>
+</div>

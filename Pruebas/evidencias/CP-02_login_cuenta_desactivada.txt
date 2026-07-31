@@ -1,0 +1,7 @@
+CP-02 Login con cuenta desactivada
+Usuario: contador@casavintage.local (activo=0 durante la prueba)
+
+Resultado observado:
+'Tu cuenta esta desactivada. Contacta al administrador.'
+No se autentico. La cuenta se reactivo tras la prueba.
+Estado: PASO

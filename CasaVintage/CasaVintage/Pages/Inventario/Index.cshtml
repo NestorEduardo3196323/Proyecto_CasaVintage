@@ -1,0 +1,167 @@
+@page
+@model CasaVintage.Pages.Inventario.IndexModel
+@{
+    ViewData["Title"] = "Inventario";
+    Layout = "_Layout";
+    var mensaje = TempData["MensajeInventario"] as string;
+    var mensajeError = TempData["MensajeInventarioError"] as string;
+}
+
+<div class="personal-cabecera">
+    <div>
+        <span class="kicker">Gestion</span>
+        <h1 class="mb-1">Inventario</h1>
+        <p class="text-muted mb-0">Los productos de La Casa Vintage. La disponibilidad se sincroniza con el stock.</p>
+    </div>
+    <a asp-page="Crear" class="btn-vintage">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
+        Nuevo producto
+    </a>
+</div>
+
+@if (mensaje is not null)
+{
+    <div class="alerta-vintage alerta-ok" role="status">@mensaje</div>
+}
+@if (mensajeError is not null)
+{
+    <div class="alerta-vintage alerta-error" role="alert">@mensajeError</div>
+}
+
+@if (Model.Productos.Count == 0)
+{
+    <div class="tarjeta-vintage estado-vacio">
+        <h2 class="h5 mb-2">El inventario esta vacio</h2>
+        <p class="text-muted mb-3">Registra el primer producto para empezar a construir el catalogo.</p>
+        <a asp-page="Crear" class="btn-vintage">Agregar el primero</a>
+    </div>
+}
+else
+{
+    <div class="stat-grid">
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.89 1.45l8 4A2 2 0 0 1 22 7.24v9.53a2 2 0 0 1-1.11 1.79l-8 4a2 2 0 0 1-1.79 0l-8-4a2 2 0 0 1-1.1-1.8V7.24a2 2 0 0 1 1.11-1.79l8-4a2 2 0 0 1 1.78 0z" /><polyline points="2.32 6.16 12 11 21.68 6.16" /><line x1="12" y1="22.76" x2="12" y2="11" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Total productos</div>
+                <div class="valor">@Model.Total</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Stock bajo</div>
+                <div class="valor">@Model.StockBajo</div>
+                <div class="sub">En o bajo su minimo</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Sin stock</div>
+                <div class="valor">@Model.SinStock</div>
+                <div class="sub">Agotados</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="icono">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+            </span>
+            <div>
+                <div class="etiqueta">Valor del inventario</div>
+                <div class="valor">$@Model.ValorInventario.ToString("N2")</div>
+                <div class="sub">Al costo</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tarjeta-vintage">
+        <div class="tabla-toolbar">
+            <div class="buscador-tabla">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                <input type="search" class="form-control" placeholder="Buscar por nombre, SKU o categoria..." data-tabla-buscar="#tablaInventario" data-sin-resultados="#sinResultadosInv" aria-label="Buscar producto" />
+            </div>
+        </div>
+
+        <div class="tabla-vintage-envoltura">
+            <table id="tablaInventario" class="tabla-vintage">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-foto">Foto</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">SKU</th>
+                    <th scope="col" class="col-numero">Precio</th>
+                    <th scope="col" class="col-numero">Stock</th>
+                    <th scope="col">Disponibilidad</th>
+                    <th scope="col" class="col-acciones">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model.Productos)
+                {
+                    <tr>
+                        <td data-etiqueta="Foto" class="col-foto">
+                            @if (!string.IsNullOrEmpty(producto.Foto))
+                            {
+                                <img src="@producto.Foto" alt="@producto.Nombre" class="miniatura" loading="lazy" />
+                            }
+                            else
+                            {
+                                <span class="miniatura miniatura-vacia" aria-hidden="true"></span>
+                            }
+                        </td>
+                        <td data-etiqueta="Producto">
+                            <span class="celda-nombre">@producto.Nombre</span>
+                            <span class="celda-sub">@producto.Categoria &middot; @producto.Epoca &middot; @producto.ProveedorNombre</span>
+                        </td>
+                        <td data-etiqueta="SKU"><span class="sku-chip">@producto.Sku</span></td>
+                        <td data-etiqueta="Precio" class="col-numero">$@producto.Precio.ToString("N2")</td>
+                        <td data-etiqueta="Stock" class="col-numero">
+                            <span class="chip-conteo">@producto.Stock</span>
+                        </td>
+                        <td data-etiqueta="Disponibilidad">
+                            @if (producto.Stock == 0)
+                            {
+                                <span class="badge-estado es-inactivo">Sin stock</span>
+                            }
+                            else if (producto.StockMinimo > 0 && producto.Stock <= producto.StockMinimo)
+                            {
+                                <span class="badge-estado es-bajo">Stock bajo</span>
+                            }
+                            else
+                            {
+                                <span class="badge-estado es-activo">Disponible</span>
+                            }
+                        </td>
+                        <td data-etiqueta="Acciones" class="col-acciones">
+                            <div class="acciones-fila">
+                                <a asp-page="Editar" asp-route-id="@producto.IdProducto" class="btn-vintage-outline btn-sm">Editar</a>
+                                @if (producto.PuedeEliminar)
+                                {
+                                    <form method="post" asp-page-handler="Eliminar" class="m-0">
+                                        <input type="hidden" name="id" value="@producto.IdProducto" />
+                                        <button type="submit" class="btn-desactivar btn-sm"
+                                                data-confirmar="Eliminar el producto @producto.Nombre (@producto.Sku)? Esta accion no se puede deshacer.">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="nota-bloqueo" title="Tiene ventas registradas">Con ventas</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+            <p id="sinResultadosInv" class="sin-resultados" hidden>No se encontraron productos con esa busqueda.</p>
+        </div>
+    </div>
+}

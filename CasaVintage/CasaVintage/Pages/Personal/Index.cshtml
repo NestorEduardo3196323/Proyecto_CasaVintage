@@ -1,0 +1,158 @@
+@page
+@model CasaVintage.Pages.Personal.IndexModel
+@{
+    ViewData["Title"] = "Personal de la empresa";
+    Layout = "_Layout";
+    var mensaje = TempData["MensajePersonal"] as string;
+    var mensajeError = TempData["MensajePersonalError"] as string;
+    // Al reabrir el dialogo tras un error de validacion, se recupera el nombre del empleado.
+    var nombreRestablecer = Model.ReabrirRestablecer
+        ? Model.Personal.FirstOrDefault(p => p.IdUsuario == Model.Restablecer.IdUsuario)?.NombreUsuario
+        : null;
+}
+
+<div class="personal-cabecera">
+    <div>
+        <span class="kicker">Gestion</span>
+        <h1 class="mb-1">Personal de la empresa</h1>
+        <p class="text-muted mb-0">El equipo de La Casa Vintage. Administra las cuentas, los roles y el acceso.</p>
+    </div>
+    <a asp-page="Crear" class="btn-vintage">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
+        Nueva cuenta
+    </a>
+</div>
+
+@if (mensaje is not null)
+{
+    <div class="alerta-vintage alerta-ok" role="status">@mensaje</div>
+}
+@if (mensajeError is not null)
+{
+    <div class="alerta-vintage alerta-error" role="alert">@mensajeError</div>
+}
+
+<div class="personal-lista" data-reveal>
+    @foreach (var persona in Model.Personal)
+    {
+        <article class="personal-fila tarjeta-vintage @(persona.Activo ? "" : "inactiva")">
+            <div class="personal-retrato">
+                @if (!string.IsNullOrEmpty(persona.Foto))
+                {
+                    <img src="@persona.Foto" alt="Foto de @persona.NombreUsuario" class="personal-foto" loading="lazy" />
+                }
+                else
+                {
+                    <span class="avatar-iniciales showcase">@PerfilUsuario.Iniciales(persona.NombreUsuario)</span>
+                }
+            </div>
+
+            <div class="personal-cuerpo">
+                <span class="kicker">@persona.Rol</span>
+                <div class="personal-titulo">
+                    <h2 class="mb-0">@persona.NombreUsuario</h2>
+                    <span class="badge-estado @(persona.Activo ? "es-activo" : "es-inactivo")">
+                        @(persona.Activo ? "Activa" : "Inactiva")
+                    </span>
+                    @if (persona.EsUsuarioActual)
+                    {
+                        <span class="badge-tu">Tu cuenta</span>
+                    }
+                </div>
+
+                <p class="personal-desc">@persona.Descripcion</p>
+
+                <button type="button" class="btn-info" aria-expanded="false" aria-controls="detalle-@persona.IdUsuario" data-info-toggle>
+                    <span class="btn-info-texto">Info</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                </button>
+
+                <div class="personal-detalle" id="detalle-@persona.IdUsuario" hidden>
+                    <dl class="detalle-datos">
+                        <div>
+                            <dt>Correo</dt>
+                            <dd>@persona.Correo</dd>
+                        </div>
+                        <div>
+                            <dt>Fecha de ingreso</dt>
+                            <dd>@persona.FechaCreado.ToString("dd/MM/yyyy")</dd>
+                        </div>
+                        <div>
+                            <dt>Contrasena</dt>
+                            <dd class="dato-oculto">Protegida (hasheada)</dd>
+                        </div>
+                    </dl>
+
+                    <div class="detalle-acciones">
+                        <a asp-page="Editar" asp-route-id="@persona.IdUsuario" class="btn-vintage-outline btn-sm">Editar</a>
+
+                        <button type="button" class="btn-vintage-outline btn-sm" data-restablecer
+                                data-id="@persona.IdUsuario" data-nombre="@persona.NombreUsuario">
+                            Restablecer contrasena
+                        </button>
+
+                        @if (!persona.EsUsuarioActual)
+                        {
+                            <form method="post" asp-page-handler="CambiarEstado" class="m-0">
+                                <input type="hidden" name="id" value="@persona.IdUsuario" />
+                                <input type="hidden" name="activar" value="@((!persona.Activo).ToString().ToLower())" />
+                                @if (persona.Activo)
+                                {
+                                    <button type="submit" class="btn-desactivar btn-sm" data-confirmar="Desactivar la cuenta de @persona.NombreUsuario? No podra iniciar sesion hasta reactivarla.">Desactivar</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn-activar btn-sm">Activar</button>
+                                }
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </article>
+    }
+</div>
+
+<dialog id="dlgRestablecer" class="dialogo-vintage">
+    <form method="post" asp-page-handler="Restablecer">
+        <div class="dialogo-encabezado">
+            <div>
+                <span class="kicker">Restablecer contrasena</span>
+                <h2 class="h4 mb-0" id="dlgRestablecerNombre">@(nombreRestablecer ?? "Empleado")</h2>
+            </div>
+            <button type="button" class="dialogo-cerrar" data-cerrar-dialogo aria-label="Cerrar">&times;</button>
+        </div>
+
+        <p class="text-muted dialogo-texto">Escribe la nueva contrasena. La anterior no se puede recuperar. Comunicasela al empleado por un medio seguro.</p>
+
+        <div asp-validation-summary="ModelOnly" class="alerta-vintage alerta-error mb-3" role="alert"></div>
+        <input type="hidden" asp-for="Restablecer.IdUsuario" />
+
+        <div class="mb-3">
+            <label asp-for="Restablecer.Password" class="form-label"></label>
+            <input asp-for="Restablecer.Password" class="form-control" autocomplete="new-password" />
+            <span asp-validation-for="Restablecer.Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-2">
+            <label asp-for="Restablecer.ConfirmarPassword" class="form-label"></label>
+            <input asp-for="Restablecer.ConfirmarPassword" class="form-control" autocomplete="new-password" />
+            <span asp-validation-for="Restablecer.ConfirmarPassword" class="text-danger"></span>
+        </div>
+
+        <p class="ayuda-campo mb-4">Al menos 8 caracteres, con una letra y un numero.</p>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-end">
+            <button type="button" class="btn-vintage-outline" data-cerrar-dialogo>Cancelar</button>
+            <button type="submit" class="btn-vintage">Restablecer</button>
+        </div>
+    </form>
+</dialog>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        window.CasaVintagePersonal = { reabrirRestablecer: @(Model.ReabrirRestablecer ? "true" : "false") };
+    </script>
+    <script src="~/js/personal.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,8 @@
+CP-15 Numero negativo (precio)
+
+Datos: producto valido con precio -50.
+Resultado observado:
+El precio negativo se rechaza (no se guarda), PERO el mensaje aparece en ingles:
+'Please enter a value greater than or equal to 0.'
+Inconsistente con la interfaz en espanol. Ver BUG-01.
+Estado: FALLO

@@ -1,0 +1,172 @@
+@page "{id:int}"
+@model CasaVintage.Pages.Inventario.EditarModel
+@{
+    ViewData["Title"] = "Editar producto";
+    Layout = "_Layout";
+    var fotosActuales = new[] { Model.Entrada.Foto1Actual, Model.Entrada.Foto2Actual, Model.Entrada.Foto3Actual };
+}
+
+<div class="form-personal form-ancho">
+    <a asp-page="Index" class="volver-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
+        Volver al inventario
+    </a>
+
+    <div class="mb-4">
+        <span class="kicker">Inventario</span>
+        <h1 class="mb-1">Editar producto</h1>
+        <p class="text-muted mb-0">Actualiza los datos o el stock. Para reabastecer, sube la cantidad de stock.</p>
+    </div>
+
+    <div class="tarjeta-vintage p-4 p-md-5">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="alerta-vintage alerta-error mb-4" role="alert"></div>
+            <input type="hidden" asp-for="Entrada.IdProducto" />
+            <input type="hidden" asp-for="Entrada.Foto1Actual" />
+            <input type="hidden" asp-for="Entrada.Foto2Actual" />
+            <input type="hidden" asp-for="Entrada.Foto3Actual" />
+
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label asp-for="Entrada.Nombre" class="form-label"></label>
+                    <input asp-for="Entrada.Nombre" class="form-control" autofocus />
+                    <span asp-validation-for="Entrada.Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">SKU</label>
+                    <div class="sku-auto sku-fijo">@Model.Entrada.Sku</div>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Entrada.Descripcion" class="form-label"></label>
+                    <textarea asp-for="Entrada.Descripcion" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Entrada.Descripcion" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Entrada.Categoria" class="form-label"></label>
+                    <input asp-for="Entrada.Categoria" class="form-control" list="lista-categorias" autocomplete="off" />
+                    <datalist id="lista-categorias">
+                        @foreach (var valor in Model.Datos.Categorias)
+                        {
+                            <option value="@valor"></option>
+                        }
+                    </datalist>
+                    <span asp-validation-for="Entrada.Categoria" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Entrada.Epoca" class="form-label"></label>
+                    <input asp-for="Entrada.Epoca" class="form-control" list="lista-epocas" autocomplete="off" />
+                    <datalist id="lista-epocas">
+                        @foreach (var valor in Model.Datos.Epocas)
+                        {
+                            <option value="@valor"></option>
+                        }
+                    </datalist>
+                    <span asp-validation-for="Entrada.Epoca" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Entrada.Estado" class="form-label"></label>
+                    <input asp-for="Entrada.Estado" class="form-control" list="lista-estados" autocomplete="off" />
+                    <datalist id="lista-estados">
+                        @foreach (var valor in Model.Datos.Estados)
+                        {
+                            <option value="@valor"></option>
+                        }
+                    </datalist>
+                    <span asp-validation-for="Entrada.Estado" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label asp-for="Entrada.Precio" class="form-label"></label>
+                    <div class="input-moneda">
+                        <span>$</span>
+                        <input asp-for="Entrada.Precio" class="form-control" type="number" step="0.01" min="0" />
+                    </div>
+                    <span asp-validation-for="Entrada.Precio" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label asp-for="Entrada.Costo" class="form-label"></label>
+                    <div class="input-moneda">
+                        <span>$</span>
+                        <input asp-for="Entrada.Costo" class="form-control" type="number" step="0.01" min="0" />
+                    </div>
+                    <span asp-validation-for="Entrada.Costo" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label asp-for="Entrada.Stock" class="form-label"></label>
+                    <input asp-for="Entrada.Stock" class="form-control" type="number" step="1" min="0" />
+                    <span asp-validation-for="Entrada.Stock" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <label asp-for="Entrada.StockMinimo" class="form-label"></label>
+                    <input asp-for="Entrada.StockMinimo" class="form-control" type="number" step="1" min="0" />
+                    <span class="ayuda-campo">0 = sin alerta</span>
+                    <span asp-validation-for="Entrada.StockMinimo" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Entrada.IdProveedor" class="form-label"></label>
+                    <select asp-for="Entrada.IdProveedor" class="form-select">
+                        <option value="">Selecciona un proveedor</option>
+                        @foreach (var proveedor in Model.Datos.Proveedores)
+                        {
+                            <option value="@proveedor.Id">@proveedor.Nombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Entrada.IdProveedor" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="fotos-seccion">
+                <label class="form-label">Fotos del producto</label>
+                <div class="fotos-grid">
+                    @for (var i = 1; i <= 3; i++)
+                    {
+                        var actual = fotosActuales[i - 1];
+                        <div class="foto-slot" data-foto-grupo>
+                            <span class="foto-previa" data-foto-previa>
+                                @if (!string.IsNullOrEmpty(actual))
+                                {
+                                    <img src="@actual" alt="Foto @i" />
+                                }
+                                else
+                                {
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z" /><circle cx="12" cy="13" r="3" /></svg>
+                                }
+                            </span>
+                            <input type="file" name="Entrada.Foto@(i)" class="form-control form-control-sm" accept="image/png,image/jpeg,image/webp" data-foto-input />
+                            @if (!string.IsNullOrEmpty(actual))
+                            {
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" name="Entrada.QuitarFoto@(i)" value="true" id="quitar@(i)" />
+                                    <label class="form-check-label" for="quitar@(i)">Quitar</label>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <p class="ayuda-campo mt-1 mb-0">Sube una imagen para reemplazar la de ese espacio. JPG, PNG o WEBP, hasta 8 MB.</p>
+                <span asp-validation-for="Entrada.Foto1" class="text-danger d-block"></span>
+                <span asp-validation-for="Entrada.Foto2" class="text-danger d-block"></span>
+                <span asp-validation-for="Entrada.Foto3" class="text-danger d-block"></span>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <button type="submit" class="btn-vintage">Guardar cambios</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/personal.js" asp-append-version="true"></script>
+}
