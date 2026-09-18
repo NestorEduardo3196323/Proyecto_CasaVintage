@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Catalogo
 {
-    // Catalogo de productos: la pantalla de trabajo del Vendedor. El Administrador puede VERLO
-    // (consulta), pero NO vender: el boton "Agregar al carrito" no se le muestra y el handler de
-    // agregar esta blindado a solo Vendedor. El carrito y el cobro son exclusivos del Vendedor.
+    // Product catalog: the Salesperson's work screen. The Administrator can VIEW it (read-only),
+    // but cannot sell: the "Add to cart" button is not shown to them and the add handler is locked
+    // to Salesperson only. The cart and the checkout are exclusive to the Salesperson.
     [Authorize(Roles = "Administrador,Gerente,Vendedor")]
     public class IndexModel : PageModel
     {
@@ -23,10 +23,10 @@ namespace CasaVintage.Pages.Catalogo
 
         public IReadOnlyList<ProductoCatalogoViewModel> Productos { get; private set; } = Array.Empty<ProductoCatalogoViewModel>();
 
-        // Piezas destacadas para el hero (disponibles). Rotan en el cliente.
+        // Featured pieces for the hero (available). They rotate on the client.
         public IReadOnlyList<ProductoCatalogoViewModel> Destacados { get; private set; } = Array.Empty<ProductoCatalogoViewModel>();
 
-        // Valores para los filtros (categoria, epoca, estado), tomados de los productos existentes.
+        // Values for the filters (category, era, condition), taken from the existing products.
         public IReadOnlyList<string> Categorias { get; private set; } = Array.Empty<string>();
         public IReadOnlyList<string> Epocas { get; private set; } = Array.Empty<string>();
         public IReadOnlyList<string> Estados { get; private set; } = Array.Empty<string>();
@@ -41,22 +41,22 @@ namespace CasaVintage.Pages.Catalogo
             Estados = Productos.Select(p => p.Estado).Distinct().OrderBy(e => e).ToList();
         }
 
-        // Handler AJAX del buscador en vivo: devuelve en JSON los productos que coinciden con el
-        // texto y los filtros. Lo consume catalogo.js conforme el vendedor escribe o filtra.
+        // Live search AJAX handler: returns as JSON the products matching the text and the filters.
+        // catalogo.js consumes it as the salesperson types or filters.
         public async Task<IActionResult> OnGetBuscarAsync(string? q, string? categoria, string? epoca, string? estado)
         {
             var resultados = await _productos.BuscarCatalogoAsync(q, categoria, epoca, estado);
             return new JsonResult(resultados);
         }
 
-        // Handler AJAX de "Agregar al carrito": agrega el producto y devuelve el nuevo total y un
-        // mensaje. Lo usan las tarjetas del catalogo y la ficha de detalle. Solo el Vendedor puede
-        // vender; el Administrador entra al catalogo solo de consulta (blindaje del lado servidor).
+        // "Add to cart" AJAX handler: adds the product and returns the new total and a message.
+        // The catalog cards and the detail card use it. Only the Salesperson can sell; the
+        // Administrator enters the catalog read-only (server-side lockdown).
         public async Task<IActionResult> OnPostAgregarAsync(int id, int cantidad = 1)
         {
             if (!User.IsInRole("Vendedor"))
             {
-                return new JsonResult(new { exito = false, mensaje = "Solo el vendedor puede agregar productos al carrito.", totalProductos = 0 });
+                return new JsonResult(new { exito = false, mensaje = "Only the salesperson can add products to the cart.", totalProductos = 0 });
             }
 
             var resultado = await _carrito.AgregarAsync(id, cantidad);

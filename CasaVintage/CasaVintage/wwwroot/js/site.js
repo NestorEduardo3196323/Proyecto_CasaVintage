@@ -1,8 +1,8 @@
-// Comportamientos del cliente para La Casa Vintage.
+// Client behaviors for La Casa Vintage.
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Tarjeta de bienvenida: el boton "Ingresar" solo cierra el overlay para revelar el panel.
-    // La "X" no se maneja aqui porque envia el formulario de cierre de sesion (no entrar).
+    // Welcome card: the "Enter" button only closes the overlay to reveal the panel.
+    // The "X" is not handled here because it submits the sign-out form (do not enter).
     var overlay = document.getElementById("bienvenidaOverlay");
     var btnIngresar = document.getElementById("btnIngresarBienvenida");
 
@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Confirmacion global para acciones sensibles: cualquier boton con [data-confirmar] pide
-    // confirmacion antes de enviar su formulario (eliminar proveedor, desactivar cuenta, etc.).
+    // Global confirmation for sensitive actions: any button with [data-confirmar] asks for
+    // confirmation before submitting its form (delete supplier, disable account, etc.).
     document.querySelectorAll("[data-confirmar]").forEach(function (boton) {
         boton.addEventListener("click", function (evento) {
             if (!window.confirm(boton.getAttribute("data-confirmar"))) {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Busqueda en tablas del lado del cliente: filtra las filas segun el texto escrito.
+    // Client-side table search: filters the rows by the typed text.
     document.querySelectorAll("[data-tabla-buscar]").forEach(function (input) {
         var tabla = document.querySelector(input.getAttribute("data-tabla-buscar"));
         if (!tabla) {
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Menu lateral en movil: el boton lo abre y el fondo oscuro (o la tecla Esc) lo cierra.
+    // Side menu on mobile: the button opens it and the dark backdrop (or the Esc key) closes it.
     var shell = document.getElementById("appShell");
     if (shell) {
         document.querySelectorAll("[data-abrir-menu]").forEach(function (abrir) {
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Aviso flotante (toast). Global para que otros scripts (carrito) lo usen.
+// Floating notice (toast). Global so other scripts (cart) can use it.
 window.mostrarToast = function (mensaje, tipo) {
     var cont = document.getElementById("toastCont");
     if (!cont) {
@@ -82,7 +82,7 @@ window.mostrarToast = function (mensaje, tipo) {
     toast.className = "toast-vintage " + (tipo === "error" ? "es-error" : "es-ok");
     toast.textContent = mensaje;
     cont.appendChild(toast);
-    // Forzar el reflow para que la transicion de entrada corra.
+    // Force the reflow so the entry transition runs.
     void toast.offsetWidth;
     toast.classList.add("visible");
     window.setTimeout(function () {
@@ -91,7 +91,7 @@ window.mostrarToast = function (mensaje, tipo) {
     }, 3000);
 };
 
-// Actualiza el contador del icono del carrito en el menu (lo llama el boton "Agregar").
+// Updates the cart icon counter in the menu (called by the "Add" button).
 window.actualizarCarritoBadge = function (total) {
     var badge = document.getElementById("carritoBadge");
     if (!badge) {

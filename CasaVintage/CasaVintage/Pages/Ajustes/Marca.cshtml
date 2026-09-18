@@ -1,14 +1,14 @@
 @page
 @model CasaVintage.Pages.Ajustes.MarcaModel
 @{
-    ViewData["Title"] = "Identidad visual";
+    ViewData["Title"] = "Visual identity";
     Layout = "_Layout";
 }
 
 <div class="mb-4">
-    <span class="kicker">Ajustes</span>
-    <h1 class="mb-1">Identidad visual</h1>
-    <p class="text-muted mb-0">Sube el logo de la tienda. Se muestra en el menu lateral en lugar del monograma.</p>
+    <span class="kicker">Settings</span>
+    <h1 class="mb-1">Visual identity</h1>
+    <p class="text-muted mb-0">Upload the store logo. It is shown in the side menu instead of the monogram.</p>
 </div>
 
 @if (Model.Mensaje is not null)
@@ -25,7 +25,7 @@
                 <span class="marca-previa-cuadro" data-foto-previa>
                     @if (Model.LogoActual is not null)
                     {
-                        <img src="@Model.LogoActual" alt="Logo actual" />
+                        <img src="@Model.LogoActual" alt="Current logo" />
                     }
                     else
                     {
@@ -34,17 +34,17 @@
                 </span>
             </div>
             <div class="marca-preview-texto">
-                <label for="Logo" class="form-label">Archivo del logo</label>
+                <label for="Logo" class="form-label">Logo file</label>
                 <input type="file" id="Logo" name="Logo" class="form-control" accept=".png,.jpg,.jpeg,.webp" data-foto-input />
-                <p class="text-muted mt-2 mb-0" style="font-size:0.85rem;">Formatos: PNG, JPG o WEBP. Maximo 8 MB. Se recomienda un PNG con fondo transparente.</p>
+                <p class="text-muted mt-2 mb-0" style="font-size:0.85rem;">Formats: PNG, JPG or WEBP. Maximum 8 MB. A PNG with a transparent background is recommended.</p>
             </div>
         </div>
 
         <div class="d-flex gap-2 flex-wrap mt-4">
-            <button type="submit" asp-page-handler="Guardar" class="btn-vintage">Guardar logo</button>
+            <button type="submit" asp-page-handler="Guardar" class="btn-vintage">Save logo</button>
             @if (Model.LogoActual is not null)
             {
-                <button type="submit" asp-page-handler="Quitar" class="btn-vintage-outline" formnovalidate>Quitar logo</button>
+                <button type="submit" asp-page-handler="Quitar" class="btn-vintage-outline" formnovalidate>Remove logo</button>
             }
         </div>
     </form>

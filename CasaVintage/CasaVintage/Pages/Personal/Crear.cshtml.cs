@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Personal
 {
-    // Alta de una cuenta del personal. Solo el Administrador. La PageModel orquesta: valida la
-    // entrada, delega en el service y traduce el motivo de falla a un mensaje en el campo correcto.
+    // Staff account creation. Administrator only. The PageModel orchestrates: it validates the input,
+    // delegates to the service and translates the failure reason to a message on the correct field.
     [Authorize(Roles = "Administrador")]
     public class CrearModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace CasaVintage.Pages.Personal
         [BindProperty]
         public UsuarioCrearViewModel Entrada { get; set; } = new();
 
-        // Opciones del <select> de rol.
+        // Options for the role <select>.
         public IReadOnlyList<string> Roles => RolInfo.Todos;
 
         public void OnGet()
@@ -37,8 +37,8 @@ namespace CasaVintage.Pages.Personal
                 return Page();
             }
 
-            // Se guarda la foto (si la hay) antes de crear la cuenta; si el formato o tamano fallan,
-            // se muestra el error sin tocar la base.
+            // The photo (if any) is saved before creating the account; if the format or size fail,
+            // the error is shown without touching the database.
             string? fotoRuta = null;
             if (Entrada.Foto is not null)
             {
@@ -56,13 +56,13 @@ namespace CasaVintage.Pages.Personal
 
             if (!resultado.Exito)
             {
-                // El alta fallo: se borra la imagen recien guardada para no dejar archivos huerfanos.
+                // The creation failed: the just-saved image is deleted so no orphan files are left.
                 _archivos.Eliminar(fotoRuta);
                 AplicarError(resultado.Error);
                 return Page();
             }
 
-            TempData["MensajePersonal"] = $"Cuenta creada para {resultado.Usuario!.NombreUsuario}.";
+            TempData["MensajePersonal"] = $"Account created for {resultado.Usuario!.NombreUsuario}.";
             return RedirectToPage("Index");
         }
 
@@ -71,23 +71,23 @@ namespace CasaVintage.Pages.Personal
             switch (error)
             {
                 case ErrorUsuario.CorreoDuplicado:
-                    ModelState.AddModelError("Entrada.Correo", "Ya existe una cuenta con ese correo.");
+                    ModelState.AddModelError("Entrada.Correo", "An account with that email already exists.");
                     break;
                 case ErrorUsuario.RolInvalido:
-                    ModelState.AddModelError("Entrada.Rol", "Selecciona un rol valido.");
+                    ModelState.AddModelError("Entrada.Rol", "Select a valid role.");
                     break;
                 default:
-                    ModelState.AddModelError(string.Empty, "No se pudo crear la cuenta. Intenta de nuevo.");
+                    ModelState.AddModelError(string.Empty, "The account could not be created. Try again.");
                     break;
             }
         }
 
-        // Traduce el error de la imagen a un mensaje para el usuario. Compartido con la edicion.
+        // Translates the image error to a message for the user. Shared with editing.
         internal static string MensajeFoto(ErrorArchivo error) => error switch
         {
-            ErrorArchivo.FormatoNoValido => "La foto debe ser una imagen JPG, PNG o WEBP.",
-            ErrorArchivo.DemasiadoGrande => "La foto no puede superar los 8 MB.",
-            _ => "No se pudo guardar la foto. Intenta con otra imagen."
+            ErrorArchivo.FormatoNoValido => "The photo must be a JPG, PNG or WEBP image.",
+            ErrorArchivo.DemasiadoGrande => "The photo cannot exceed 8 MB.",
+            _ => "The photo could not be saved. Try another image."
         };
     }
 }

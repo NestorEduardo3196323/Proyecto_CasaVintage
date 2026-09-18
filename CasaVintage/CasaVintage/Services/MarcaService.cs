@@ -1,27 +1,27 @@
 namespace CasaVintage.Services
 {
-    // Gestiona el logo de la empresa (identidad visual). Se guarda en disco con un nombre fijo
-    // (logo.<ext>) dentro de wwwroot/uploads/marca, asi el layout lo encuentra sin necesidad de BD.
-    // Solo el Administrador lo cambia (ver Pages/Ajustes/Marca).
+    // Manages the company logo (visual identity). It is saved to disk with a fixed name
+    // (logo.<ext>) inside wwwroot/uploads/marca, so the layout finds it without needing the DB.
+    // Only the Administrator changes it (see Pages/Ajustes/Marca).
     public interface IMarcaService
     {
-        // Ruta web del logo actual (con version para refrescar la cache del navegador), o null si no hay.
+        // Web path of the current logo (with a version to refresh the browser cache), or null if none.
         string? RutaLogo();
 
-        // Bytes del logo actual para incrustarlo en documentos (PDF, Excel), o null si no hay.
+        // Bytes of the current logo to embed it in documents (PDF, Excel), or null if none.
         byte[]? LogoBytes();
 
-        // Guarda el archivo como logo. Devuelve null si todo bien, o un mensaje de error si no es valido.
+        // Saves the file as the logo. Returns null if everything is fine, or an error message if invalid.
         Task<string?> GuardarLogoAsync(IFormFile? archivo);
 
-        // Quita el logo actual (la app vuelve al monograma por defecto).
+        // Removes the current logo (the app goes back to the default monogram).
         void QuitarLogo();
     }
 
     public class MarcaService : IMarcaService
     {
         private static readonly string[] ExtensionesPermitidas = { ".png", ".jpg", ".jpeg", ".webp" };
-        private const long TamanoMaximo = 8 * 1024 * 1024; // 8 MB (fotos de celular)
+        private const long TamanoMaximo = 8 * 1024 * 1024; // 8 MB (phone photos)
 
         private readonly IWebHostEnvironment _entorno;
         private readonly ILogger<MarcaService> _logger;
@@ -47,13 +47,13 @@ namespace CasaVintage.Services
                 {
                     return null;
                 }
-                // El parametro ?v= (fecha de modificacion) fuerza a recargar el logo si cambia.
+                // The ?v= parameter (modification date) forces the logo to reload if it changes.
                 var version = File.GetLastWriteTimeUtc(archivo).Ticks;
                 return $"/uploads/marca/{Path.GetFileName(archivo)}?v={version}";
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "No se pudo leer el logo de la empresa.");
+                _logger.LogWarning(ex, "Could not read the company logo.");
                 return null;
             }
         }
@@ -71,7 +71,7 @@ namespace CasaVintage.Services
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "No se pudo leer los bytes del logo.");
+                _logger.LogWarning(ex, "Could not read the logo bytes.");
                 return null;
             }
         }
@@ -80,20 +80,20 @@ namespace CasaVintage.Services
         {
             if (archivo is null || archivo.Length == 0)
             {
-                return "Selecciona una imagen para el logo.";
+                return "Select an image for the logo.";
             }
             if (archivo.Length > TamanoMaximo)
             {
-                return "La imagen no debe pasar de 8 MB.";
+                return "The image must not exceed 8 MB.";
             }
             var extension = Path.GetExtension(archivo.FileName).ToLowerInvariant();
             if (!ExtensionesPermitidas.Contains(extension))
             {
-                return "Formato no valido. Usa PNG, JPG o WEBP.";
+                return "Invalid format. Use PNG, JPG or WEBP.";
             }
 
             Directory.CreateDirectory(Carpeta);
-            // Se borra cualquier logo anterior (sin importar su extension) antes de guardar el nuevo.
+            // Any previous logo (regardless of its extension) is deleted before saving the new one.
             QuitarLogo();
 
             var destino = Path.Combine(Carpeta, "logo" + extension);
@@ -101,7 +101,7 @@ namespace CasaVintage.Services
             {
                 await archivo.CopyToAsync(stream);
             }
-            return null; // sin error
+            return null; // no error
         }
 
         public void QuitarLogo()
@@ -119,7 +119,7 @@ namespace CasaVintage.Services
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "No se pudo quitar el logo de la empresa.");
+                _logger.LogWarning(ex, "Could not remove the company logo.");
             }
         }
     }

@@ -1,22 +1,22 @@
 namespace CasaVintage.Models
 {
-    // Entidad que representa una linea de una venta (un producto y su cantidad). Mapea a "detalle_venta".
+    // Entity representing a line of a sale (a product and its quantity). Maps to "detalle_venta".
     public class DetalleVenta
     {
         public int IdDetalle { get; set; }
 
-        // Venta a la que pertenece la linea.
+        // Sale the line belongs to.
         public int IdVenta { get; set; }
         public Venta? Venta { get; set; }
 
-        // Producto vendido.
+        // Sold product.
         public int IdProducto { get; set; }
         public Producto? Producto { get; set; }
 
-        // Cantidad vendida (mayor a 0, validado por CHECK en la BD).
+        // Quantity sold (greater than 0, validated by a CHECK in the DB).
         public int Cantidad { get; set; }
 
-        // Precio unitario al momento de la venta.
+        // Unit price at the moment of the sale.
         public decimal PrecioUnitario { get; set; }
     }
 }

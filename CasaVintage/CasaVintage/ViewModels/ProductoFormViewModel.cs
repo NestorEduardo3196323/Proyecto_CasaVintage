@@ -2,76 +2,76 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CasaVintage.ViewModels
 {
-    // Datos para crear o editar un producto del inventario (Admin/Gerente). El SKU no se captura:
-    // se autogenera al crear y no se edita. Hasta 3 fotos (opcionales) que se guardan en disco.
+    // Data to create or edit an inventory product (Admin/Manager). The SKU is not captured:
+    // it is auto-generated on create and not edited. Up to 3 photos (optional) saved to disk.
     public class ProductoFormViewModel
     {
         public int IdProducto { get; set; }
 
-        // Solo lectura en la vista (autogenerado). Se muestra al editar.
+        // Read-only in the view (auto-generated). Shown when editing.
         public string? Sku { get; set; }
 
-        [Required(ErrorMessage = "El nombre es obligatorio.")]
-        [StringLength(100, ErrorMessage = "El nombre no puede superar 100 caracteres.")]
-        [Display(Name = "Nombre")]
+        [Required(ErrorMessage = "The name is required.")]
+        [StringLength(100, ErrorMessage = "The name cannot exceed 100 characters.")]
+        [Display(Name = "Name")]
         public string Nombre { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La descripcion es obligatoria.")]
-        [Display(Name = "Descripcion")]
+        [Required(ErrorMessage = "The description is required.")]
+        [Display(Name = "Description")]
         public string Descripcion { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La epoca es obligatoria.")]
-        [StringLength(50, ErrorMessage = "La epoca no puede superar 50 caracteres.")]
-        [Display(Name = "Epoca")]
+        [Required(ErrorMessage = "The era is required.")]
+        [StringLength(50, ErrorMessage = "The era cannot exceed 50 characters.")]
+        [Display(Name = "Era")]
         public string Epoca { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El estado es obligatorio.")]
-        [StringLength(50, ErrorMessage = "El estado no puede superar 50 caracteres.")]
-        [Display(Name = "Estado de conservacion")]
+        [Required(ErrorMessage = "The condition is required.")]
+        [StringLength(50, ErrorMessage = "The condition cannot exceed 50 characters.")]
+        [Display(Name = "Condition")]
         public string Estado { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "La categoria es obligatoria.")]
-        [StringLength(50, ErrorMessage = "La categoria no puede superar 50 caracteres.")]
-        [Display(Name = "Categoria")]
+        [Required(ErrorMessage = "The category is required.")]
+        [StringLength(50, ErrorMessage = "The category cannot exceed 50 characters.")]
+        [Display(Name = "Category")]
         public string Categoria { get; set; } = string.Empty;
 
-        [Range(typeof(decimal), "0", "99999999.99", ErrorMessage = "El precio debe ser un valor valido (0 o mas).")]
-        [Display(Name = "Precio de venta")]
+        [Range(typeof(decimal), "0", "99999999.99", ErrorMessage = "The price must be a valid value (0 or more).")]
+        [Display(Name = "Sale price")]
         public decimal Precio { get; set; }
 
-        [Range(typeof(decimal), "0", "99999999.99", ErrorMessage = "El costo debe ser un valor valido (0 o mas).")]
-        [Display(Name = "Costo de adquisicion")]
+        [Range(typeof(decimal), "0", "99999999.99", ErrorMessage = "The cost must be a valid value (0 or more).")]
+        [Display(Name = "Acquisition cost")]
         public decimal Costo { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "El stock no puede ser negativo.")]
+        [Range(0, int.MaxValue, ErrorMessage = "The stock cannot be negative.")]
         [Display(Name = "Stock")]
         public int Stock { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "El stock minimo no puede ser negativo.")]
-        [Display(Name = "Stock minimo")]
+        [Range(0, int.MaxValue, ErrorMessage = "The minimum stock cannot be negative.")]
+        [Display(Name = "Minimum stock")]
         public int StockMinimo { get; set; }
 
-        [Required(ErrorMessage = "Selecciona un proveedor.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Selecciona un proveedor.")]
-        [Display(Name = "Proveedor")]
+        [Required(ErrorMessage = "Select a supplier.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Select a supplier.")]
+        [Display(Name = "Supplier")]
         public int IdProveedor { get; set; }
 
-        // Fotos nuevas (opcionales). En edicion reemplazan a la actual de ese espacio.
-        [Display(Name = "Foto 1")]
+        // New photos (optional). When editing, they replace the current one in that slot.
+        [Display(Name = "Photo 1")]
         public IFormFile? Foto1 { get; set; }
 
-        [Display(Name = "Foto 2")]
+        [Display(Name = "Photo 2")]
         public IFormFile? Foto2 { get; set; }
 
-        [Display(Name = "Foto 3")]
+        [Display(Name = "Photo 3")]
         public IFormFile? Foto3 { get; set; }
 
-        // Rutas de las fotos actuales (solo para mostrarlas en edicion).
+        // Paths of the current photos (only to show them when editing).
         public string? Foto1Actual { get; set; }
         public string? Foto2Actual { get; set; }
         public string? Foto3Actual { get; set; }
 
-        // Marcar para quitar la foto actual de ese espacio (en edicion).
+        // Check to remove the current photo in that slot (when editing).
         public bool QuitarFoto1 { get; set; }
         public bool QuitarFoto2 { get; set; }
         public bool QuitarFoto3 { get; set; }

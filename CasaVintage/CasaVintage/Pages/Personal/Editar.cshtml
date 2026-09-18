@@ -1,20 +1,20 @@
 @page "{id:int}"
 @model CasaVintage.Pages.Personal.EditarModel
 @{
-    ViewData["Title"] = "Editar cuenta";
+    ViewData["Title"] = "Edit account";
     Layout = "_Layout";
 }
 
 <div class="form-personal">
     <a asp-page="Index" class="volver-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
-        Volver al personal
+        Back to staff
     </a>
 
     <div class="mb-4">
-        <span class="kicker">Personal de la empresa</span>
-        <h1 class="mb-1">Editar cuenta</h1>
-        <p class="text-muted mb-0">Actualiza los datos del empleado. Para cambiar la contrasena usa "Restablecer contrasena".</p>
+        <span class="kicker">Company staff</span>
+        <h1 class="mb-1">Edit account</h1>
+        <p class="text-muted mb-0">Update the employee data. To change the password use "Reset password".</p>
     </div>
 
     <div class="tarjeta-vintage p-4 p-md-5">
@@ -53,7 +53,7 @@
                         <span class="foto-previa" data-foto-previa>
                             @if (!string.IsNullOrEmpty(Model.Entrada.FotoActual))
                             {
-                                <img src="@Model.Entrada.FotoActual" alt="Foto actual" />
+                                <img src="@Model.Entrada.FotoActual" alt="Current photo" />
                             }
                             else
                             {
@@ -62,7 +62,7 @@
                         </span>
                         <div>
                             <input asp-for="Entrada.Foto" type="file" class="form-control" accept="image/png,image/jpeg,image/webp" data-foto-input />
-                            <p class="ayuda-campo mt-1 mb-2">JPG, PNG o WEBP, hasta 8 MB. Al subir una imagen reemplazas la actual.</p>
+                            <p class="ayuda-campo mt-1 mb-2">JPG, PNG or WEBP, up to 8 MB. Uploading an image replaces the current one.</p>
                             @if (!string.IsNullOrEmpty(Model.Entrada.FotoActual))
                             {
                                 <div class="form-check">
@@ -77,8 +77,8 @@
             </div>
 
             <div class="d-flex flex-wrap gap-2 mt-4">
-                <button type="submit" class="btn-vintage">Guardar cambios</button>
-                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+                <button type="submit" class="btn-vintage">Save changes</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancel</a>
             </div>
         </form>
     </div>

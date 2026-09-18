@@ -1,15 +1,15 @@
 namespace CasaVintage.Services
 {
-    // Guarda archivos (facturas, reportes) en carpetas del disco configuradas en "Rutas" de
-    // appsettings, relativas a la raiz del proyecto. Crea la carpeta si no existe. No es critico:
-    // si algo falla, se registra y se sigue (no debe tumbar la venta ni la descarga).
+    // Saves files (invoices, reports) in disk folders configured under "Rutas" in appsettings,
+    // relative to the project root. Creates the folder if it does not exist. It is not critical:
+    // if something fails, it is logged and continues (it must not bring down the sale or the download).
     public interface IArchivadorLocal
     {
-        // Guarda el contenido en la carpeta indicada por su clave ("Facturas" o "Reportes").
-        // Devuelve la ruta completa donde se guardo, o null si no se pudo.
+        // Saves the content in the folder named by its key ("Facturas" or "Reportes").
+        // Returns the full path where it was saved, or null if it could not.
         Task<string?> GuardarAsync(string claveCarpeta, string nombreArchivo, byte[] contenido);
 
-        // Crea (si no existe) la carpeta de la clave y devuelve su ruta absoluta.
+        // Creates (if it does not exist) the key's folder and returns its absolute path.
         string AsegurarCarpeta(string claveCarpeta);
     }
 
@@ -26,8 +26,8 @@ namespace CasaVintage.Services
             _logger = logger;
         }
 
-        // Resuelve la ruta absoluta de la carpeta de una clave (Rutas:<clave> de appsettings,
-        // relativa a la raiz del proyecto) o un valor por defecto.
+        // Resolves the absolute path of a key's folder (Rutas:<clave> in appsettings, relative to the
+        // project root) or a default value.
         private string ResolverCarpeta(string claveCarpeta)
         {
             var configurada = _config[$"Rutas:{claveCarpeta}"] ?? $"..\\{claveCarpeta}";
@@ -51,12 +51,12 @@ namespace CasaVintage.Services
                 var rutaCompleta = Path.Combine(carpeta, nombreArchivo);
                 await File.WriteAllBytesAsync(rutaCompleta, contenido);
 
-                _logger.LogInformation("Archivo guardado en {Ruta}.", rutaCompleta);
+                _logger.LogInformation("File saved at {Ruta}.", rutaCompleta);
                 return rutaCompleta;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "No se pudo guardar {Archivo} en la carpeta {Carpeta}.", nombreArchivo, claveCarpeta);
+                _logger.LogWarning(ex, "Could not save {Archivo} in the folder {Carpeta}.", nombreArchivo, claveCarpeta);
                 return null;
             }
         }

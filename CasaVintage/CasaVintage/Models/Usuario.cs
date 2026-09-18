@@ -1,34 +1,34 @@
 namespace CasaVintage.Models
 {
-    // Entidad que representa a un empleado con acceso al sistema. Mapea a "usuarios".
-    // El login es por correo; la contrasena se guarda hasheada (nunca en texto plano).
+    // Entity representing an employee with access to the system. Maps to "usuarios".
+    // Login is by email; the password is stored hashed (never in plain text).
     public class Usuario
     {
         public int IdUsuario { get; set; }
 
-        // Nombre completo del empleado.
+        // Full name of the employee.
         public string NombreUsuario { get; set; } = string.Empty;
 
-        // Correo con el que inicia sesion (unico).
+        // Email used to log in (unique).
         public string Correo { get; set; } = string.Empty;
 
-        // Hash de la contrasena (IPasswordHasher).
+        // Password hash (IPasswordHasher).
         public string Password { get; set; } = string.Empty;
 
-        // Rol: Administrador | Gerente | Vendedor | Contador (validado por CHECK en la BD).
+        // Role: Administrador | Gerente | Vendedor | Contador (validated by a CHECK in the DB).
         public string Rol { get; set; } = string.Empty;
 
-        // Cuenta activa; si es false el acceso queda bloqueado aunque la contrasena sea correcta.
+        // Active account; if false, access is blocked even when the password is correct.
         public bool Activo { get; set; } = true;
 
-        // Fecha de alta de la cuenta (auditoria).
+        // Account creation date (audit).
         public DateTime FechaCreado { get; set; }
 
-        // Ruta en disco de la foto de perfil del empleado (no el binario). Null si no tiene foto;
-        // en ese caso la interfaz muestra un avatar con las iniciales.
+        // Path on disk of the employee's profile photo (not the binary). Null if there is no photo;
+        // in that case the interface shows an avatar with the initials.
         public string? Foto { get; set; }
 
-        // Ventas registradas por este usuario (vendedor).
+        // Sales registered by this user (salesperson).
         public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
     }
 }

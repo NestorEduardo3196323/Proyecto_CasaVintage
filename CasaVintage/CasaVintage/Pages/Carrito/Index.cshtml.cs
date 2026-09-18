@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Carrito
 {
-    // Carrito del vendedor: revisa los productos agregados, ajusta cantidades, quita o vacia, y ve
-    // los totales. El cobro (datos del cliente + metodo de pago + procesar la venta) es el paso siguiente.
+    // Salesperson cart: reviews the added products, adjusts quantities, removes or empties, and sees
+    // the totals. The checkout (customer data + payment method + processing the sale) is the next step.
     [Authorize(Roles = "Vendedor")]
     public class IndexModel : PageModel
     {
@@ -34,14 +34,14 @@ namespace CasaVintage.Pages.Carrito
         public IActionResult OnPostQuitar(int id)
         {
             _carrito.Quitar(id);
-            TempData["MensajeCarrito"] = "Producto quitado del carrito.";
+            TempData["MensajeCarrito"] = "Product removed from the cart.";
             return RedirectToPage();
         }
 
         public IActionResult OnPostVaciar()
         {
             _carrito.Vaciar();
-            TempData["MensajeCarrito"] = "Carrito vaciado.";
+            TempData["MensajeCarrito"] = "Cart emptied.";
             return RedirectToPage();
         }
     }

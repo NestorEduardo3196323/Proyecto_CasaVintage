@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Implementacion del modulo de Usuarios. Toda regla de negocio de las cuentas vive aqui para
-    // que las PageModels solo orquesten. El correo se normaliza en minusculas para comparar; la
-    // contrasena se guarda siempre hasheada con IPasswordHasher (nunca en texto plano).
+    // Users module implementation. Every account business rule lives here so the PageModels only
+    // orchestrate. The email is normalized to lowercase for comparison; the password is always
+    // stored hashed with IPasswordHasher (never in plain text).
     public class UsuarioService : IUsuarioService
     {
         private readonly CasaVintageContext _db;
@@ -25,7 +25,7 @@ namespace CasaVintage.Services
 
         public async Task<IReadOnlyList<Usuario>> ListarAsync()
         {
-            // Activos primero y luego alfabetico: la vista del personal muestra al equipo vigente arriba.
+            // Active first, then alphabetical: the staff view shows the current team at the top.
             return await _db.Usuarios
                 .AsNoTracking()
                 .OrderByDescending(u => u.Activo)
@@ -66,7 +66,7 @@ namespace CasaVintage.Services
             _db.Usuarios.Add(usuario);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Cuenta creada: {Correo} con rol {Rol}.", usuario.Correo, usuario.Rol);
+            _logger.LogInformation("Account created: {Correo} with role {Rol}.", usuario.Correo, usuario.Rol);
             return ResultadoUsuario.Ok(usuario);
         }
 
@@ -91,7 +91,7 @@ namespace CasaVintage.Services
                 return ResultadoUsuario.Falla(ErrorUsuario.CorreoDuplicado);
             }
 
-            // Guarda: no dejar el sistema sin ningun Administrador activo al degradar el rol.
+            // Guard: do not leave the system without any active Administrator when demoting the role.
             var quitaAdmin = usuario.Rol == "Administrador" && rol != "Administrador" && usuario.Activo;
             if (quitaAdmin && await EsUltimoAdminActivoAsync(usuario.IdUsuario))
             {
@@ -102,7 +102,7 @@ namespace CasaVintage.Services
             usuario.Correo = correo;
             usuario.Rol = rol;
 
-            // Reemplazo de foto: se borra del disco la anterior y se guarda la ruta nueva (o null).
+            // Photo replacement: the previous one is deleted from disk and the new path is saved (or null).
             if (cambiarFoto)
             {
                 var fotoAnterior = usuario.Foto;
@@ -115,13 +115,13 @@ namespace CasaVintage.Services
 
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Cuenta editada: id {Id} ({Correo}).", usuario.IdUsuario, usuario.Correo);
+            _logger.LogInformation("Account edited: id {Id} ({Correo}).", usuario.IdUsuario, usuario.Correo);
             return ResultadoUsuario.Ok(usuario);
         }
 
         public async Task<ResultadoUsuario> CambiarEstadoAsync(int id, bool activar, int idUsuarioActual)
         {
-            // El admin no puede activar/desactivar su propia cuenta (evita auto-bloqueo accidental).
+            // The admin cannot enable/disable their own account (prevents accidental self-lockout).
             if (id == idUsuarioActual)
             {
                 return ResultadoUsuario.Falla(ErrorUsuario.NoPuedeCambiarPropioEstado);
@@ -133,7 +133,7 @@ namespace CasaVintage.Services
                 return ResultadoUsuario.Falla(ErrorUsuario.NoEncontrado);
             }
 
-            // Guarda: no desactivar al ultimo Administrador activo.
+            // Guard: do not disable the last active Administrator.
             if (!activar && usuario.Rol == "Administrador" && await EsUltimoAdminActivoAsync(usuario.IdUsuario))
             {
                 return ResultadoUsuario.Falla(ErrorUsuario.UltimoAdministrador);
@@ -142,8 +142,8 @@ namespace CasaVintage.Services
             usuario.Activo = activar;
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Cuenta {Estado}: id {Id} ({Correo}).",
-                activar ? "activada" : "desactivada", usuario.IdUsuario, usuario.Correo);
+            _logger.LogInformation("Account {Estado}: id {Id} ({Correo}).",
+                activar ? "enabled" : "disabled", usuario.IdUsuario, usuario.Correo);
             return ResultadoUsuario.Ok(usuario);
         }
 
@@ -158,11 +158,11 @@ namespace CasaVintage.Services
             usuario.Password = _hasher.HashPassword(usuario, nuevaPassword);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Contrasena restablecida: id {Id} ({Correo}).", usuario.IdUsuario, usuario.Correo);
+            _logger.LogInformation("Password reset: id {Id} ({Correo}).", usuario.IdUsuario, usuario.Correo);
             return ResultadoUsuario.Ok(usuario);
         }
 
-        // Comprueba si el correo ya lo usa otra cuenta (comparacion sin distinguir mayusculas).
+        // Checks whether the email is already used by another account (case-insensitive comparison).
         private async Task<bool> CorreoEnUsoAsync(string correo, int? exceptoId)
         {
             return await _db.Usuarios.AnyAsync(u =>
@@ -170,7 +170,7 @@ namespace CasaVintage.Services
                 (exceptoId == null || u.IdUsuario != exceptoId));
         }
 
-        // True si la cuenta indicada es el unico Administrador activo que queda.
+        // True if the given account is the only active Administrator left.
         private async Task<bool> EsUltimoAdminActivoAsync(int idUsuario)
         {
             var adminsActivos = await _db.Usuarios

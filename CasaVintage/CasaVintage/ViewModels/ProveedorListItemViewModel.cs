@@ -1,7 +1,7 @@
 namespace CasaVintage.ViewModels
 {
-    // Fila de la tabla de proveedores. Incluye el numero de productos suministrados: sirve de
-    // informacion y explica por que un proveedor con productos no se puede eliminar.
+    // Suppliers table row. Includes the number of products supplied: it is informative and explains
+    // why a supplier with products cannot be deleted.
     public sealed record ProveedorListItemViewModel(
         int IdProveedor,
         string Nombre,

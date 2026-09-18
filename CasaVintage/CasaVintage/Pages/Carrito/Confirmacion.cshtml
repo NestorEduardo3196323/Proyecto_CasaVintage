@@ -1,7 +1,7 @@
 @page
 @model CasaVintage.Pages.Carrito.ConfirmacionModel
 @{
-    ViewData["Title"] = "Venta registrada";
+    ViewData["Title"] = "Sale registered";
     Layout = "_Layout";
     var v = Model.Venta;
 }
@@ -10,22 +10,22 @@
     <div class="confirmacion-icono">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
     </div>
-    <span class="kicker">Venta registrada</span>
-    <h1 class="mb-1">Venta #@v.IdVenta</h1>
-    <p class="text-muted">@v.Fecha.ToString("dd/MM/yyyy HH:mm") &middot; Atendió: @v.VendedorNombre</p>
+    <span class="kicker">Sale registered</span>
+    <h1 class="mb-1">Sale #@v.IdVenta</h1>
+    <p class="text-muted">@v.Fecha.ToString("dd/MM/yyyy HH:mm") &middot; Served by: @v.VendedorNombre</p>
 
     <div class="tarjeta-vintage p-4 confirmacion-tarjeta">
         <div class="detalle-datos mb-3">
             <div>
-                <dt>Cliente</dt>
+                <dt>Customer</dt>
                 <dd>@v.ClienteNombre</dd>
             </div>
             <div>
-                <dt>Correo</dt>
+                <dt>Email</dt>
                 <dd>@(string.IsNullOrEmpty(v.ClienteCorreo) ? "—" : v.ClienteCorreo)</dd>
             </div>
             <div>
-                <dt>Metodo de pago</dt>
+                <dt>Payment method</dt>
                 <dd>@v.MetodoPagoTexto</dd>
             </div>
         </div>
@@ -33,9 +33,9 @@
         <table class="tabla-vintage">
             <thead>
                 <tr>
-                    <th scope="col">Producto</th>
-                    <th scope="col" class="col-numero">Cantidad</th>
-                    <th scope="col" class="col-numero">Precio</th>
+                    <th scope="col">Product</th>
+                    <th scope="col" class="col-numero">Quantity</th>
+                    <th scope="col" class="col-numero">Price</th>
                     <th scope="col" class="col-numero">Subtotal</th>
                 </tr>
             </thead>
@@ -43,12 +43,12 @@
                 @foreach (var linea in v.Lineas)
                 {
                     <tr>
-                        <td data-etiqueta="Producto">
+                        <td data-etiqueta="Product">
                             <span class="celda-nombre">@linea.Nombre</span>
                             <span class="celda-sub">@linea.Sku</span>
                         </td>
-                        <td data-etiqueta="Cantidad" class="col-numero">@linea.Cantidad</td>
-                        <td data-etiqueta="Precio" class="col-numero">$@linea.PrecioUnitario.ToString("N2")</td>
+                        <td data-etiqueta="Quantity" class="col-numero">@linea.Cantidad</td>
+                        <td data-etiqueta="Price" class="col-numero">$@linea.PrecioUnitario.ToString("N2")</td>
                         <td data-etiqueta="Subtotal" class="col-numero">$@linea.Subtotal.ToString("N2")</td>
                     </tr>
                 }
@@ -56,13 +56,13 @@
         </table>
 
         <div class="resumen-linea total mt-2">
-            <span>Total pagado</span>
+            <span>Total paid</span>
             <span class="producto-precio">$@v.Total.ToString("N2")</span>
         </div>
     </div>
 
     <div class="detalle-acciones justify-content-center mt-4">
-        <a asp-page="Factura" asp-route-id="@v.IdVenta" class="btn-vintage">Ver comprobante</a>
-        <a asp-page="/Catalogo/Index" class="btn-vintage-outline">Nueva venta</a>
+        <a asp-page="Factura" asp-route-id="@v.IdVenta" class="btn-vintage">View receipt</a>
+        <a asp-page="/Catalogo/Index" class="btn-vintage-outline">New sale</a>
     </div>
 </div>

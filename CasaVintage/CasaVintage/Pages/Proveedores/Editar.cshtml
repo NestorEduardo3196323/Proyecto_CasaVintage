@@ -1,20 +1,20 @@
 @page "{id:int}"
 @model CasaVintage.Pages.Proveedores.EditarModel
 @{
-    ViewData["Title"] = "Editar proveedor";
+    ViewData["Title"] = "Edit supplier";
     Layout = "_Layout";
 }
 
 <div class="form-personal">
     <a asp-page="Index" class="volver-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
-        Volver a proveedores
+        Back to suppliers
     </a>
 
     <div class="mb-4">
-        <span class="kicker">Proveedores</span>
-        <h1 class="mb-1">Editar proveedor</h1>
-        <p class="text-muted mb-0">Actualiza los datos de contacto del proveedor.</p>
+        <span class="kicker">Suppliers</span>
+        <h1 class="mb-1">Edit supplier</h1>
+        <p class="text-muted mb-0">Update the supplier's contact data.</p>
     </div>
 
     <div class="tarjeta-vintage p-4 p-md-5">
@@ -31,7 +31,7 @@
 
                 <div class="col-md-7">
                     <label asp-for="Entrada.Contacto" class="form-label"></label>
-                    <input asp-for="Entrada.Contacto" class="form-control" placeholder="Persona o medio de contacto" />
+                    <input asp-for="Entrada.Contacto" class="form-control" placeholder="Person or contact channel" />
                     <span asp-validation-for="Entrada.Contacto" class="text-danger"></span>
                 </div>
 
@@ -43,8 +43,8 @@
             </div>
 
             <div class="d-flex flex-wrap gap-2 mt-4">
-                <button type="submit" class="btn-vintage">Guardar cambios</button>
-                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+                <button type="submit" class="btn-vintage">Save changes</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancel</a>
             </div>
         </form>
     </div>

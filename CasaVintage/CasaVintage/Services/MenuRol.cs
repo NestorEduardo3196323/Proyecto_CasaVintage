@@ -1,71 +1,70 @@
 namespace CasaVintage.Services
 {
-    // Un enlace del menu lateral. Pagina es la ruta Razor (o null si aun no existe).
-    // Disponible=false lo pinta como "proximamente" (se habilita en su incremento).
-    // Icono es la clave del icono SVG que dibuja el layout (users, box, truck, grid, cart, ...).
+    // A side-menu link. Pagina is the Razor route (or null if it does not exist yet).
+    // Disponible=false renders it as "coming soon" (enabled in its increment).
+    // Icono is the key of the SVG icon drawn by the layout (users, box, truck, grid, cart, ...).
     public sealed record MenuItem(string Texto, string? Pagina, bool Disponible, string Icono = "grid");
 
-    // Un grupo de enlaces bajo un titulo de seccion.
+    // A group of links under a section title.
     public sealed record MenuSeccion(string Titulo, IReadOnlyList<MenuItem> Items);
 
-    // Define las secciones del menu lateral segun el rol. Es la unica fuente de navegacion: no hay
-    // dashboard de inicio; cada rol aterriza directo en su primera seccion disponible (ver
-    // PrimeraDisponible). Cada incremento posterior solo cambia Disponible a true y pone la ruta real.
+    // Defines the side-menu sections by role. It is the single source of navigation: there is no
+    // home dashboard; each role lands straight in its first available section (see PrimeraDisponible).
     public static class MenuRol
     {
         public static IReadOnlyList<MenuSeccion> Para(string? rol) => rol switch
         {
             "Administrador" => new[]
             {
-                new MenuSeccion("Gestion", new[]
+                new MenuSeccion("Management", new[]
                 {
-                    new MenuItem("Personal de la empresa", "/Personal/Index", true, "users"),
-                    new MenuItem("Inventario", "/Inventario/Index", true, "box"),
-                    new MenuItem("Proveedores", "/Proveedores/Index", true, "truck"),
-                    new MenuItem("Identidad visual", "/Ajustes/Marca", true, "image")
+                    new MenuItem("Company staff", "/Personal/Index", true, "users"),
+                    new MenuItem("Inventory", "/Inventario/Index", true, "box"),
+                    new MenuItem("Suppliers", "/Proveedores/Index", true, "truck"),
+                    new MenuItem("Visual identity", "/Ajustes/Marca", true, "image")
                 }),
-                new MenuSeccion("Operacion", new[]
+                new MenuSeccion("Operation", new[]
                 {
-                    new MenuItem("Catalogo", "/Catalogo/Index", true, "grid"),
-                    new MenuItem("Ventas", "/Reportes/Historial", true, "cart"),
-                    new MenuItem("Reportes", "/Reportes/Index", true, "chart")
+                    new MenuItem("Catalog", "/Catalogo/Index", true, "grid"),
+                    new MenuItem("Sales", "/Reportes/Historial", true, "cart"),
+                    new MenuItem("Reports", "/Reportes/Index", true, "chart")
                 })
             },
             "Gerente" => new[]
             {
-                new MenuSeccion("Gestion", new[]
+                new MenuSeccion("Management", new[]
                 {
-                    new MenuItem("Inventario", "/Inventario/Index", true, "box"),
-                    new MenuItem("Proveedores", "/Proveedores/Index", true, "truck")
+                    new MenuItem("Inventory", "/Inventario/Index", true, "box"),
+                    new MenuItem("Suppliers", "/Proveedores/Index", true, "truck")
                 }),
-                new MenuSeccion("Operacion", new[]
+                new MenuSeccion("Operation", new[]
                 {
-                    new MenuItem("Catalogo", "/Catalogo/Index", true, "grid"),
-                    new MenuItem("Ventas", "/Reportes/Historial", true, "cart")
+                    new MenuItem("Catalog", "/Catalogo/Index", true, "grid"),
+                    new MenuItem("Sales", "/Reportes/Historial", true, "cart")
                 })
             },
             "Vendedor" => new[]
             {
-                new MenuSeccion("Operacion", new[]
+                new MenuSeccion("Operation", new[]
                 {
-                    new MenuItem("Catalogo", "/Catalogo/Index", true, "grid"),
-                    new MenuItem("Carrito", "/Carrito/Index", true, "cart"),
-                    new MenuItem("Mis ventas", "/Ventas/MisVentas", true, "receipt")
+                    new MenuItem("Catalog", "/Catalogo/Index", true, "grid"),
+                    new MenuItem("Cart", "/Carrito/Index", true, "cart"),
+                    new MenuItem("My sales", "/Ventas/MisVentas", true, "receipt")
                 })
             },
             "Contador" => new[]
             {
-                new MenuSeccion("Analisis", new[]
+                new MenuSeccion("Analysis", new[]
                 {
-                    new MenuItem("Reportes", "/Reportes/Index", true, "chart"),
-                    new MenuItem("Historial de ventas", "/Reportes/Historial", true, "history")
+                    new MenuItem("Reports", "/Reportes/Index", true, "chart"),
+                    new MenuItem("Sales history", "/Reportes/Historial", true, "history")
                 })
             },
             _ => Array.Empty<MenuSeccion>()
         };
 
-        // Ruta de la primera seccion habilitada del rol (donde aterriza al iniciar sesion), o null
-        // si aun no tiene ninguna construida (en ese caso se usa la pantalla de bienvenida).
+        // Route of the first enabled section for the role (where it lands on sign in), or null if it
+        // has none built yet (in that case the welcome screen is used).
         public static string? PrimeraDisponible(string? rol)
         {
             return Para(rol)

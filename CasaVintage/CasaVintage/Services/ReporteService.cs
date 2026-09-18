@@ -9,20 +9,20 @@ using QuestPDF.Infrastructure;
 
 namespace CasaVintage.Services
 {
-    // Implementacion de los reportes. Se traen filas simples de la base y se agregan en memoria: EF
-    // no traduce a SQL los GroupBy con navegacion + calculo, y el volumen de ventas de la tienda es
-    // pequeno. La ganancia usa el precio de venta de cada linea menos el costo actual del producto.
+    // Reports implementation. Simple rows are fetched from the database and aggregated in memory: EF
+    // does not translate GroupBy with navigation + calculation to SQL, and the store's sales volume
+    // is small. Profit uses each line's sale price minus the product's current cost.
     public class ReporteService : IReporteService
     {
-        // Paleta vintage (otonal) para los documentos exportados.
-        private const string Cafe = "#6D3F1C";       // marron principal (Cowhide Cocoa)
-        private const string Crema = "#F6EFE1";       // fondo crema
-        private const string CremaTarjeta = "#ECE3CD";// tarjetas / franjas suaves
-        private const string Caramelo = "#8A6A2B";    // Toasted Caramel (acento)
+        // Vintage (autumnal) palette for the exported documents.
+        private const string Cafe = "#6D3F1C";       // main brown (Cowhide Cocoa)
+        private const string Crema = "#F6EFE1";       // cream background
+        private const string CremaTarjeta = "#ECE3CD";// cards / soft bands
+        private const string Caramelo = "#8A6A2B";    // Toasted Caramel (accent)
         private const string Oliva = "#9D9167";       // Olive Harvest
-        private const string Tinta = "#33281B";       // texto principal
-        private const string TintaSuave = "#7C6C52";  // texto secundario
-        private const string Borde = "#E7DCC4";       // bordes suaves
+        private const string Tinta = "#33281B";       // main text
+        private const string TintaSuave = "#7C6C52";  // secondary text
+        private const string Borde = "#E7DCC4";       // soft borders
 
         private readonly CasaVintageContext _db;
         private readonly IMarcaService _marca;
@@ -35,9 +35,9 @@ namespace CasaVintage.Services
 
         public async Task<ReporteResumenViewModel> ObtenerResumenAsync(ReporteFiltro filtro)
         {
-            // El filtro se aplica en la consulta (SQL); la agregacion se hace sobre las filas ya
-            // filtradas. Se calcula desde las lineas para que la categoria filtre de forma coherente;
-            // sin categoria, el total coincide con la suma de total_pagado de las ventas.
+            // The filter is applied in the query (SQL); the aggregation is done over the already-filtered
+            // rows. It is computed from the lines so the category filters consistently; without a
+            // category, the total matches the sum of total_pagado of the sales.
             var lineas = await AplicarFiltroDetalle(_db.DetallesVenta.AsNoTracking(), filtro)
                 .Select(d => new { d.IdVenta, d.Cantidad, d.PrecioUnitario, Costo = d.Producto!.Costo })
                 .ToListAsync();
@@ -71,8 +71,8 @@ namespace CasaVintage.Services
                 .ToList();
         }
 
-        // Productos con lo vendido de cada uno (incluye los de 0). Con categoria en el filtro, solo
-        // los productos de esa categoria; las ventas se limitan por fecha/vendedor/metodo.
+        // Products with how much of each has been sold (includes the ones at 0). With a category in the
+        // filter, only the products of that category; sales are limited by date/salesperson/method.
         private async Task<List<ProductoVendidoViewModel>> VendidosPorProductoAsync(ReporteFiltro filtro)
         {
             var productosConsulta = _db.Productos.AsNoTracking();
@@ -105,7 +105,7 @@ namespace CasaVintage.Services
 
         public async Task<IReadOnlyList<VentaPorVendedorViewModel>> VentasPorVendedorAsync(ReporteFiltro filtro)
         {
-            // Desde las lineas filtradas: por vendedor, numero de ventas distintas y total vendido.
+            // From the filtered lines: per salesperson, number of distinct sales and total sold.
             var lineas = await AplicarFiltroDetalle(_db.DetallesVenta.AsNoTracking(), filtro)
                 .Select(d => new { Vendedor = d.Venta!.Usuario!.NombreUsuario, d.IdVenta, d.PrecioUnitario, d.Cantidad })
                 .ToListAsync();
@@ -162,7 +162,7 @@ namespace CasaVintage.Services
                 .ToListAsync();
         }
 
-        // ---- Aplicacion del filtro DENTRO de la consulta (se traduce a SQL) ----
+        // ---- Applying the filter INSIDE the query (translated to SQL) ----
         private static IQueryable<Venta> AplicarFiltroVenta(IQueryable<Venta> q, ReporteFiltro f)
         {
             if (f.Desde.HasValue) { var d = f.Desde.Value.Date; q = q.Where(v => v.Fecha >= d); }
@@ -183,28 +183,36 @@ namespace CasaVintage.Services
             return q;
         }
 
-        // Texto que describe el filtro activo (subtitulo de los documentos exportados).
+        // Payment method display text (the stored value stays in Spanish; this only affects display).
+        private static string MetodoPagoTexto(string metodo) => metodo switch
+        {
+            "Efectivo" => "Cash",
+            "Tarjeta" => "Card",
+            _ => metodo
+        };
+
+        // Text describing the active filter (subtitle of the exported documents).
         private async Task<string> DescripcionFiltroAsync(ReporteFiltro f)
         {
             if (!f.HayFiltro)
             {
-                return "Todos los datos";
+                return "All data";
             }
             var partes = new List<string>();
             if (f.Desde.HasValue || f.Hasta.HasValue)
             {
-                var desde = f.Desde?.ToString("dd/MM/yyyy") ?? "inicio";
-                var hasta = f.Hasta?.ToString("dd/MM/yyyy") ?? "hoy";
-                partes.Add($"Periodo {desde} - {hasta}");
+                var desde = f.Desde?.ToString("dd/MM/yyyy") ?? "start";
+                var hasta = f.Hasta?.ToString("dd/MM/yyyy") ?? "today";
+                partes.Add($"Period {desde} - {hasta}");
             }
             if (f.IdVendedor.HasValue)
             {
                 var nombre = await _db.Usuarios.Where(u => u.IdUsuario == f.IdVendedor.Value)
                     .Select(u => u.NombreUsuario).FirstOrDefaultAsync();
-                partes.Add($"Vendedor: {nombre}");
+                partes.Add($"Salesperson: {nombre}");
             }
-            if (!string.IsNullOrEmpty(f.MetodoPago)) partes.Add($"Pago: {f.MetodoPago}");
-            if (!string.IsNullOrEmpty(f.Categoria)) partes.Add($"Categoria: {f.Categoria}");
+            if (!string.IsNullOrEmpty(f.MetodoPago)) partes.Add($"Payment: {MetodoPagoTexto(f.MetodoPago)}");
+            if (!string.IsNullOrEmpty(f.Categoria)) partes.Add($"Category: {f.Categoria}");
             return string.Join("   |   ", partes);
         }
 
@@ -228,39 +236,39 @@ namespace CasaVintage.Services
                     {
                         if (logo is not null)
                         {
-                            // FitArea dentro de una caja fija: conserva la proporcion y nunca choca
-                            // (funciona con logos apaisados, cuadrados o verticales).
+                            // FitArea inside a fixed box: keeps the proportion and never clashes
+                            // (works with landscape, square or portrait logos).
                             fila.ConstantItem(90).Height(56).AlignLeft().AlignMiddle().Image(logo).FitArea();
                             fila.ConstantItem(12);
                         }
                         fila.RelativeItem().AlignMiddle().Column(col =>
                         {
                             col.Item().Text("La Casa de Vintage").FontSize(18).Bold().FontColor(Cafe);
-                            col.Item().Text("Reporte general de ventas").FontSize(11).FontColor(TintaSuave);
+                            col.Item().Text("General sales report").FontSize(11).FontColor(TintaSuave);
                             col.Item().Text(descripcion).FontSize(8).FontColor(TintaSuave);
                         });
                     });
 
                     page.Content().PaddingVertical(16).Column(col =>
                     {
-                        col.Item().PaddingBottom(8).Text("Resumen").FontSize(13).Bold();
+                        col.Item().PaddingBottom(8).Text("Summary").FontSize(13).Bold();
                         col.Item().Row(r =>
                         {
-                            ResumenCelda(r, "Ventas", resumen.TotalVentas.ToString());
-                            ResumenCelda(r, "Unidades", resumen.UnidadesVendidas.ToString());
-                            ResumenCelda(r, "Ingresos", $"${resumen.Ingresos:N2}");
-                            ResumenCelda(r, "Ganancia", $"${resumen.Ganancia:N2}");
+                            ResumenCelda(r, "Sales", resumen.TotalVentas.ToString());
+                            ResumenCelda(r, "Units", resumen.UnidadesVendidas.ToString());
+                            ResumenCelda(r, "Revenue", $"${resumen.Ingresos:N2}");
+                            ResumenCelda(r, "Profit", $"${resumen.Ganancia:N2}");
                         });
 
-                        col.Item().PaddingTop(16).PaddingBottom(6).Text("Productos mas vendidos").FontSize(13).Bold().FontColor(Cafe);
+                        col.Item().PaddingTop(16).PaddingBottom(6).Text("Best-selling products").FontSize(13).Bold().FontColor(Cafe);
                         col.Item().Table(tabla =>
                         {
                             tabla.ColumnsDefinition(c => { c.RelativeColumn(3); c.RelativeColumn(1); c.RelativeColumn(1.5f); });
                             tabla.Header(h =>
                             {
-                                h.Cell().Background(Cafe).Padding(5).Text("Producto").Bold().FontColor(Colors.White);
-                                h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Vendidos").Bold().FontColor(Colors.White);
-                                h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Ingresos").Bold().FontColor(Colors.White);
+                                h.Cell().Background(Cafe).Padding(5).Text("Product").Bold().FontColor(Colors.White);
+                                h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Sold").Bold().FontColor(Colors.White);
+                                h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Revenue").Bold().FontColor(Colors.White);
                             });
                             foreach (var p in productos)
                             {
@@ -270,14 +278,14 @@ namespace CasaVintage.Services
                             }
                         });
 
-                        col.Item().PaddingTop(16).PaddingBottom(6).Text("Ventas por vendedor").FontSize(13).Bold().FontColor(Cafe);
+                        col.Item().PaddingTop(16).PaddingBottom(6).Text("Sales by salesperson").FontSize(13).Bold().FontColor(Cafe);
                         col.Item().Table(tabla =>
                         {
                             tabla.ColumnsDefinition(c => { c.RelativeColumn(3); c.RelativeColumn(1); c.RelativeColumn(1.5f); });
                             tabla.Header(h =>
                             {
-                                h.Cell().Background(Cafe).Padding(5).Text("Vendedor").Bold().FontColor(Colors.White);
-                                h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Ventas").Bold().FontColor(Colors.White);
+                                h.Cell().Background(Cafe).Padding(5).Text("Salesperson").Bold().FontColor(Colors.White);
+                                h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Sales").Bold().FontColor(Colors.White);
                                 h.Cell().Background(Cafe).Padding(5).AlignRight().Text("Total").Bold().FontColor(Colors.White);
                             });
                             foreach (var v in vendedores)
@@ -289,7 +297,7 @@ namespace CasaVintage.Services
                         });
                     });
 
-                    page.Footer().AlignCenter().Text("La Casa de Vintage - Reporte de ventas").FontSize(8).FontColor(TintaSuave);
+                    page.Footer().AlignCenter().Text("La Casa de Vintage - Sales report").FontSize(8).FontColor(TintaSuave);
                 });
             });
 
@@ -313,7 +321,7 @@ namespace CasaVintage.Services
             var descripcion = await DescripcionFiltroAsync(filtro);
             var logo = _marca.LogoBytes();
 
-            // Paleta vintage para el libro.
+            // Vintage palette for the workbook.
             var cafe = XLColor.FromHtml(Cafe);
             var crema = XLColor.FromHtml(Crema);
             var cremaCard = XLColor.FromHtml("#F0E7D4");
@@ -324,7 +332,7 @@ namespace CasaVintage.Services
             var bordeCol = XLColor.FromHtml(Borde);
             const string Moneda = "$#,##0.00";
 
-            // Encabezado de tabla: fondo cafe, texto blanco en negrita.
+            // Table header: brown background, white bold text.
             static void EncabezadoTabla(IXLRange rango, XLColor fondo)
             {
                 rango.Style.Font.Bold = true;
@@ -335,24 +343,24 @@ namespace CasaVintage.Services
 
             using var libro = new XLWorkbook();
 
-            // ================= Hoja Resumen (tablero) =================
-            var r = libro.Worksheets.Add("Resumen");
+            // ================= Summary sheet (dashboard) =================
+            var r = libro.Worksheets.Add("Summary");
             r.ShowGridLines = false;
             r.Style.Font.FontName = "Segoe UI";
 
-            // Anchos de columna (A = margen; B..I = contenido, 2 columnas por tarjeta).
+            // Column widths (A = margin; B..I = content, 2 columns per card).
             r.Column(1).Width = 3;
             for (var c = 2; c <= 9; c++)
             {
                 r.Column(c).Width = 15;
             }
 
-            // Fondo crema general.
+            // General cream background.
             r.Range(1, 1, 40, 9).Style.Fill.BackgroundColor = crema;
 
-            // Titulo y subtitulo (centrados en el ancho del contenido).
+            // Title and subtitle (centered across the content width).
             var titulo = r.Range(2, 2, 2, 9).Merge();
-            titulo.Value = "REPORTE GENERAL";
+            titulo.Value = "GENERAL REPORT";
             titulo.Style.Font.FontName = "Georgia";
             titulo.Style.Font.FontSize = 24;
             titulo.Style.Font.Bold = true;
@@ -360,15 +368,15 @@ namespace CasaVintage.Services
             titulo.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
             var sub = r.Range(3, 2, 3, 9).Merge();
-            sub.Value = $"Generado el {DateTime.Now:dd/MM/yyyy HH:mm}   ·   {descripcion}";
+            sub.Value = $"Generated on {DateTime.Now:dd/MM/yyyy HH:mm}   ·   {descripcion}";
             sub.Style.Font.FontColor = tintaSuave;
             sub.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             r.Row(2).Height = 34;
 
-            // Logo (esquina superior izquierda), si hay. Conserva su proporcion.
+            // Logo (top-left corner), if any. Keeps its proportion.
             if (logo is not null)
             {
-                // El stream se deja vivo hasta guardar el libro (no se libera antes con 'using').
+                // The stream is kept alive until the workbook is saved (not disposed early with 'using').
                 var ms = new MemoryStream(logo);
                 var pic = r.AddPicture(ms, "logo").MoveTo(r.Cell(2, 2));
                 if (pic.OriginalHeight > 0)
@@ -377,7 +385,7 @@ namespace CasaVintage.Services
                 }
             }
 
-            // Tarjetas KPI (fila 5 etiqueta, 6-7 valor, 8 subtitulo). Cada una ocupa 2 columnas.
+            // KPI cards (row 5 label, 6-7 value, 8 subtitle). Each one spans 2 columns.
             void Tarjeta(int col, string etiqueta, string valor, string subtitulo, XLColor valorColor)
             {
                 var card = r.Range(5, col, 8, col + 1);
@@ -410,22 +418,22 @@ namespace CasaVintage.Services
 
             r.Row(6).Height = 20;
             r.Row(7).Height = 20;
-            Tarjeta(2, "VENTAS REGISTRADAS", resumen.TotalVentas.ToString(), $"{resumen.UnidadesVendidas} unidades vendidas", cafe);
-            Tarjeta(4, "INGRESOS TOTALES", $"${resumen.Ingresos:N2}", "Total de ventas", cafe);
-            Tarjeta(6, "GANANCIA (RENTABILIDAD)", $"${resumen.Ganancia:N2}", "Precio menos costo", oliva);
-            Tarjeta(8, "TICKET PROMEDIO", $"${resumen.TicketPromedio:N2}", "Promedio por venta", caramelo);
+            Tarjeta(2, "REGISTERED SALES", resumen.TotalVentas.ToString(), $"{resumen.UnidadesVendidas} units sold", cafe);
+            Tarjeta(4, "TOTAL REVENUE", $"${resumen.Ingresos:N2}", "Total of sales", cafe);
+            Tarjeta(6, "PROFIT (PROFITABILITY)", $"${resumen.Ganancia:N2}", "Price minus cost", oliva);
+            Tarjeta(8, "AVERAGE TICKET", $"${resumen.TicketPromedio:N2}", "Average per sale", caramelo);
 
-            // ---- Tabla: Productos mas vendidos ----
+            // ---- Table: Best-selling products ----
             var f = 10;
             var tp = r.Range(f, 2, f, 5).Merge();
-            tp.Value = "PRODUCTOS MAS VENDIDOS";
+            tp.Value = "BEST-SELLING PRODUCTS";
             tp.Style.Font.Bold = true;
             tp.Style.Font.FontColor = cafe;
             f++;
             r.Cell(f, 2).Value = "SKU";
-            r.Cell(f, 3).Value = "Producto";
-            r.Cell(f, 4).Value = "Vendidos";
-            r.Cell(f, 5).Value = "Ingresos";
+            r.Cell(f, 3).Value = "Product";
+            r.Cell(f, 4).Value = "Sold";
+            r.Cell(f, 5).Value = "Revenue";
             EncabezadoTabla(r.Range(f, 2, f, 5), cafe);
             f++;
             foreach (var p in productos)
@@ -440,15 +448,15 @@ namespace CasaVintage.Services
                 f++;
             }
 
-            // ---- Tabla: Ventas por vendedor ----
+            // ---- Table: Sales by salesperson ----
             f += 1;
             var tv = r.Range(f, 2, f, 5).Merge();
-            tv.Value = "VENTAS POR VENDEDOR";
+            tv.Value = "SALES BY SALESPERSON";
             tv.Style.Font.Bold = true;
             tv.Style.Font.FontColor = cafe;
             f++;
-            r.Cell(f, 2).Value = "Vendedor";
-            r.Cell(f, 4).Value = "Ventas";
+            r.Cell(f, 2).Value = "Salesperson";
+            r.Cell(f, 4).Value = "Sales";
             r.Cell(f, 5).Value = "Total";
             r.Range(f, 2, f, 3).Merge();
             EncabezadoTabla(r.Range(f, 2, f, 5), cafe);
@@ -464,7 +472,7 @@ namespace CasaVintage.Services
                 r.Range(f, 2, f, 5).Style.Border.BottomBorderColor = bordeCol;
                 f++;
             }
-            // Fila TOTAL.
+            // TOTAL row.
             r.Range(f, 2, f, 3).Merge();
             r.Cell(f, 2).Value = "TOTAL";
             r.Cell(f, 4).Value = vendedores.Sum(v => v.NumeroVentas);
@@ -473,12 +481,12 @@ namespace CasaVintage.Services
             r.Range(f, 2, f, 5).Style.Font.Bold = true;
             r.Range(f, 2, f, 5).Style.Fill.BackgroundColor = cremaCard;
 
-            // ================= Hoja Productos (detalle) =================
-            var hp = libro.Worksheets.Add("Productos");
+            // ================= Products sheet (detail) =================
+            var hp = libro.Worksheets.Add("Products");
             hp.Cell(1, 1).Value = "SKU";
-            hp.Cell(1, 2).Value = "Producto";
-            hp.Cell(1, 3).Value = "Vendidos";
-            hp.Cell(1, 4).Value = "Ingresos";
+            hp.Cell(1, 2).Value = "Product";
+            hp.Cell(1, 3).Value = "Sold";
+            hp.Cell(1, 4).Value = "Revenue";
             EncabezadoTabla(hp.Range(1, 1, 1, 4), cafe);
             var fila = 2;
             foreach (var p in productos)
@@ -493,10 +501,10 @@ namespace CasaVintage.Services
             hp.Columns().AdjustToContents();
             hp.SheetView.FreezeRows(1);
 
-            // ================= Hoja Vendedores (detalle) =================
-            var hv = libro.Worksheets.Add("Vendedores");
-            hv.Cell(1, 1).Value = "Vendedor";
-            hv.Cell(1, 2).Value = "Ventas";
+            // ================= Salespeople sheet (detail) =================
+            var hv = libro.Worksheets.Add("Salespeople");
+            hv.Cell(1, 1).Value = "Salesperson";
+            hv.Cell(1, 2).Value = "Sales";
             hv.Cell(1, 3).Value = "Total";
             EncabezadoTabla(hv.Range(1, 1, 1, 3), cafe);
             fila = 2;

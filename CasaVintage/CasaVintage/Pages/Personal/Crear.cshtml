@@ -1,20 +1,20 @@
 @page
 @model CasaVintage.Pages.Personal.CrearModel
 @{
-    ViewData["Title"] = "Nueva cuenta";
+    ViewData["Title"] = "New account";
     Layout = "_Layout";
 }
 
 <div class="form-personal">
     <a asp-page="Index" class="volver-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
-        Volver al personal
+        Back to staff
     </a>
 
     <div class="mb-4">
-        <span class="kicker">Personal de la empresa</span>
-        <h1 class="mb-1">Nueva cuenta</h1>
-        <p class="text-muted mb-0">Registra a un empleado y asignale un rol. La cuenta se crea activa.</p>
+        <span class="kicker">Company staff</span>
+        <h1 class="mb-1">New account</h1>
+        <p class="text-muted mb-0">Register an employee and assign them a role. The account is created active.</p>
     </div>
 
     <div class="tarjeta-vintage p-4 p-md-5">
@@ -37,7 +37,7 @@
                 <div class="col-md-5">
                     <label asp-for="Entrada.Rol" class="form-label"></label>
                     <select asp-for="Entrada.Rol" class="form-select">
-                        <option value="">Selecciona un rol</option>
+                        <option value="">Select a role</option>
                         @foreach (var rol in Model.Roles)
                         {
                             <option value="@rol">@rol</option>
@@ -54,7 +54,7 @@
                         </span>
                         <div>
                             <input asp-for="Entrada.Foto" type="file" class="form-control" accept="image/png,image/jpeg,image/webp" data-foto-input />
-                            <p class="ayuda-campo mt-1 mb-0">Opcional. JPG, PNG o WEBP, hasta 8 MB. Si no subes foto se usa un avatar con las iniciales.</p>
+                            <p class="ayuda-campo mt-1 mb-0">Optional. JPG, PNG or WEBP, up to 8 MB. If you do not upload a photo, an avatar with the initials is used.</p>
                         </div>
                     </div>
                     <span asp-validation-for="Entrada.Foto" class="text-danger"></span>
@@ -73,11 +73,11 @@
                 </div>
             </div>
 
-            <p class="ayuda-campo mt-2 mb-4">La contrasena debe tener al menos 8 caracteres e incluir una letra y un numero.</p>
+            <p class="ayuda-campo mt-2 mb-4">The password must have at least 8 characters and include a letter and a number.</p>
 
             <div class="d-flex flex-wrap gap-2">
-                <button type="submit" class="btn-vintage">Crear cuenta</button>
-                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+                <button type="submit" class="btn-vintage">Create account</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancel</a>
             </div>
         </form>
     </div>

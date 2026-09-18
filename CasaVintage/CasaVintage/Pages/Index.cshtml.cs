@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages
 {
-    // Pagina de entrada. Requiere autenticacion (convencion global) y reenvia a cada usuario a su
-    // primera seccion disponible. Un anonimo nunca llega aqui: la cookie lo manda antes al login.
+    // Entry page. Requires authentication (global convention) and forwards each user to their
+    // first available section. An anonymous user never reaches here: the cookie sends them to login.
     public class IndexModel : PageModel
     {
         public IActionResult OnGet()

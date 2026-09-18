@@ -1,7 +1,7 @@
 namespace CasaVintage.ViewModels
 {
-    // Proyeccion de un producto para su ficha de detalle en el catalogo. Incluye la descripcion
-    // completa, el proveedor y las 3 fotos (para la galeria manual con flechas/miniaturas).
+    // Projection of a product for its detail card in the catalog. Includes the full description,
+    // the supplier and the 3 photos (for the manual gallery with arrows/thumbnails).
     public sealed record ProductoDetalleViewModel(
         int IdProducto,
         string Sku,

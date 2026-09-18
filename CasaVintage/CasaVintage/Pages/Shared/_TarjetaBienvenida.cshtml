@@ -1,5 +1,5 @@
 @{
-    // Se muestra una sola vez, al aterrizar en el panel tras el login (flag puesto en el login).
+    // Shown only once, when landing on the panel after login (flag set at login).
     var mostrar = TempData["MostrarBienvenida"] as string == "1";
     if (!mostrar)
     {
@@ -16,17 +16,17 @@
 <div class="bienvenida-overlay" id="bienvenidaOverlay">
     <div class="bienvenida-tarjeta">
         <form method="post" asp-page="/Cuenta/Logout" class="m-0">
-            <button type="submit" class="bienvenida-cerrar" title="No entrar y salir" aria-label="No entrar y salir">&times;</button>
+            <button type="submit" class="bienvenida-cerrar" title="Do not enter and sign out" aria-label="Do not enter and sign out">&times;</button>
         </form>
 
         <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
             <div>
-                <span class="kicker">Bienvenido</span>
-                <h2 class="h4 mb-0">Hola, @primerNombre</h2>
+                <span class="kicker">Welcome</span>
+                <h2 class="h4 mb-0">Hello, @primerNombre</h2>
             </div>
             @if (foto is not null)
             {
-                <img src="@foto" alt="Foto de @nombre" class="avatar-foto grande" />
+                <img src="@foto" alt="Photo of @nombre" class="avatar-foto grande" />
             }
             else
             {
@@ -34,12 +34,12 @@
             }
         </div>
 
-        <p class="bienvenida-dato mb-1"><strong>Cargo:</strong> @rol</p>
+        <p class="bienvenida-dato mb-1"><strong>Role:</strong> @rol</p>
         <p class="bienvenida-dato mb-4">
-            <strong>Fecha de ingreso:</strong>
-            @(fecha.HasValue ? fecha.Value.ToString("dd/MM/yyyy") : "No disponible")
+            <strong>Join date:</strong>
+            @(fecha.HasValue ? fecha.Value.ToString("dd/MM/yyyy") : "Not available")
         </p>
 
-        <button type="button" class="btn-vintage w-100" id="btnIngresarBienvenida">Ingresar</button>
+        <button type="button" class="btn-vintage w-100" id="btnIngresarBienvenida">Enter</button>
     </div>
 </div>

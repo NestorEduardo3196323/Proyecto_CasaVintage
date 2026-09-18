@@ -1,15 +1,15 @@
 namespace CasaVintage.Services
 {
-    // Implementacion del almacenamiento de imagenes en disco (dentro de wwwroot). Valida el tipo
-    // y el tamano antes de escribir, genera un nombre unico para no sobrescribir, y borra por ruta.
+    // Disk image storage implementation (inside wwwroot). Validates the type and size before writing,
+    // generates a unique name to avoid overwriting, and deletes by path.
     public class AlmacenArchivos : IAlmacenArchivos
     {
         private readonly IWebHostEnvironment _entorno;
         private readonly ILogger<AlmacenArchivos> _logger;
 
-        // Extensiones y tamano permitidos para las imagenes de perfil.
+        // Allowed extensions and size for the profile images.
         private static readonly string[] ExtensionesValidas = { ".jpg", ".jpeg", ".png", ".webp" };
-        private const long TamanoMaximoBytes = 8 * 1024 * 1024; // 8 MB (fotos de celular)
+        private const long TamanoMaximoBytes = 8 * 1024 * 1024; // 8 MB (phone photos)
 
         public AlmacenArchivos(IWebHostEnvironment entorno, ILogger<AlmacenArchivos> logger)
         {
@@ -35,7 +35,7 @@ namespace CasaVintage.Services
                 return new ResultadoArchivo(false, null, ErrorArchivo.DemasiadoGrande);
             }
 
-            // wwwroot puede ser null en escenarios raros; se usa una ruta por defecto como respaldo.
+            // wwwroot can be null in rare scenarios; a default path is used as a fallback.
             var raiz = _entorno.WebRootPath ?? Path.Combine(_entorno.ContentRootPath, "wwwroot");
             var carpetaDestino = Path.Combine(raiz, subcarpeta.Replace('/', Path.DirectorySeparatorChar));
             Directory.CreateDirectory(carpetaDestino);
@@ -48,9 +48,9 @@ namespace CasaVintage.Services
                 await archivo.CopyToAsync(stream);
             }
 
-            // Ruta web (con barras normales) para persistir y usar en <img src="...">.
+            // Web path (with normal slashes) to persist and use in <img src="...">.
             var rutaWeb = "/" + subcarpeta.Trim('/') + "/" + nombreArchivo;
-            _logger.LogInformation("Imagen guardada en {Ruta}.", rutaWeb);
+            _logger.LogInformation("Image saved at {Ruta}.", rutaWeb);
             return new ResultadoArchivo(true, rutaWeb, ErrorArchivo.Ninguno);
         }
 
@@ -69,13 +69,13 @@ namespace CasaVintage.Services
                 if (File.Exists(rutaFisica))
                 {
                     File.Delete(rutaFisica);
-                    _logger.LogInformation("Imagen eliminada: {Ruta}.", rutaWeb);
+                    _logger.LogInformation("Image deleted: {Ruta}.", rutaWeb);
                 }
             }
             catch (IOException ex)
             {
-                // No es critico si no se puede borrar el archivo viejo; se registra y se sigue.
-                _logger.LogWarning(ex, "No se pudo eliminar la imagen {Ruta}.", rutaWeb);
+                // It is not critical if the old file cannot be deleted; it is logged and continues.
+                _logger.LogWarning(ex, "Could not delete the image {Ruta}.", rutaWeb);
             }
         }
     }

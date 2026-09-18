@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Inventario
 {
-    // Lista del inventario (Admin/Gerente). Tabla con miniatura, SKU, precio, stock y disponibilidad.
-    // El borrado usa POST-redirect-GET y esta protegido en el service (no se borra un producto vendido).
+    // Inventory list (Admin/Manager). Table with thumbnail, SKU, price, stock and availability.
+    // Deletion uses POST-redirect-GET and is protected in the service (a sold product is not deleted).
     [Authorize(Roles = "Administrador,Gerente")]
     public class IndexModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace CasaVintage.Pages.Inventario
 
         public IReadOnlyList<ProductoListItemViewModel> Productos { get; private set; } = Array.Empty<ProductoListItemViewModel>();
 
-        // Metricas para las tarjetas de resumen (se calculan de la misma lista, sin consultas extra).
+        // Metrics for the summary cards (computed from the same list, no extra queries).
         public int Total { get; private set; }
         public int StockBajo { get; private set; }
         public int SinStock { get; private set; }
@@ -31,7 +31,7 @@ namespace CasaVintage.Pages.Inventario
             Productos = await _productos.ListarAsync();
 
             Total = Productos.Count;
-            // Stock bajo: por debajo (o igual) del minimo definido para ese producto (minimo 0 = sin alerta).
+            // Low stock: at or below the minimum defined for that product (minimum 0 = no alert).
             StockBajo = Productos.Count(p => p.StockMinimo > 0 && p.Stock > 0 && p.Stock <= p.StockMinimo);
             SinStock = Productos.Count(p => p.Stock == 0);
             ValorInventario = Productos.Sum(p => p.Stock * p.Costo);
@@ -43,15 +43,15 @@ namespace CasaVintage.Pages.Inventario
 
             if (resultado.Exito)
             {
-                TempData["MensajeInventario"] = $"Producto \"{resultado.Producto!.Nombre}\" eliminado.";
+                TempData["MensajeInventario"] = $"Product \"{resultado.Producto!.Nombre}\" deleted.";
             }
             else
             {
                 TempData["MensajeInventarioError"] = resultado.Error switch
                 {
-                    ErrorProducto.TieneVentas => "No se puede eliminar: el producto ya tiene ventas registradas. Puedes ponerlo en stock 0 para que no aparezca disponible.",
-                    ErrorProducto.NoEncontrado => "El producto ya no existe.",
-                    _ => "No se pudo eliminar el producto. Intenta de nuevo."
+                    ErrorProducto.TieneVentas => "Cannot delete: the product already has registered sales. You can set its stock to 0 so it does not appear as available.",
+                    ErrorProducto.NoEncontrado => "The product no longer exists.",
+                    _ => "The product could not be deleted. Try again."
                 };
             }
 

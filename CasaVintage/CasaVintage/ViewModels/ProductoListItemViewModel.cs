@@ -1,7 +1,7 @@
 namespace CasaVintage.ViewModels
 {
-    // Fila de la lista de inventario. Incluye la primera foto (miniatura), el nombre del proveedor
-    // y si el producto se puede eliminar (no se puede si ya tiene ventas registradas).
+    // Inventory list row. Includes the first photo (thumbnail), the supplier name and whether the
+    // product can be deleted (it cannot if it already has registered sales).
     public sealed record ProductoListItemViewModel(
         int IdProducto,
         string Sku,

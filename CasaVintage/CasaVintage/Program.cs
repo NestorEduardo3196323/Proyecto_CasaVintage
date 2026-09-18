@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-// Licencia Community de QuestPDF (gratuita para este uso). Debe fijarse antes de generar PDFs.
+// QuestPDF Community license (free for this use). It must be set before generating PDFs.
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Razor Pages. Por convencion se exige autenticacion en TODAS las paginas y solo se permite
-// el acceso anonimo a login, error y acceso denegado. Asi la autorizacion es real en servidor.
+// Razor Pages. By convention, authentication is required on ALL pages and anonymous access is only
+// allowed to login, error and access denied. This way authorization is really enforced on the server.
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/");
@@ -20,29 +20,29 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AllowAnonymousToPage("/Error");
 });
 
-// Contexto de EF Core apuntando a la instancia local CASTWINGS\SQLEXPRESS (base CASA_VINTAGE).
+// EF Core context pointing to the local instance CASTWINGS\SQLEXPRESS (database CASA_VINTAGE).
 builder.Services.AddDbContext<CasaVintageContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CasaVintage")));
 
-// Hasher de contrasenas (IPasswordHasher del framework); se usa en el seed y en la autenticacion.
+// Password hasher (the framework's IPasswordHasher); used in the seed and in authentication.
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
 
-// Servicio de autenticacion (logica de negocio del login).
+// Authentication service (login business logic).
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Servicio del modulo de Usuarios / "Personal de la empresa" (solo Administrador).
+// Users / "Company personnel" module service (Administrator only).
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
-// Almacenamiento de imagenes en disco (fotos de perfil ahora; fotos de productos mas adelante).
+// Image storage on disk (profile photos now; product photos later on).
 builder.Services.AddScoped<IAlmacenArchivos, AlmacenArchivos>();
 
-// Servicio del modulo de Proveedores (Admin/Gerente).
+// Suppliers module service (Admin/Manager).
 builder.Services.AddScoped<IProveedorService, ProveedorService>();
 
-// Servicio del modulo de Inventario/Productos (Admin/Gerente).
+// Inventory/Products module service (Admin/Manager).
 builder.Services.AddScoped<IProductoService, ProductoService>();
 
-// Sesion en memoria para el carrito del vendedor (vive mientras dura la sesion del navegador).
+// In-memory session for the salesperson's cart (it lives as long as the browser session lasts).
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -53,26 +53,26 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Servicio del carrito (guardado en la sesion) para el flujo de ventas.
+// Cart service (stored in the session) for the sales flow.
 builder.Services.AddScoped<ICarritoService, CarritoService>();
 
-// Servicio de ventas: procesa la venta en una transaccion con concurrencia optimista.
+// Sales service: processes the sale in a transaction with optimistic concurrency.
 builder.Services.AddScoped<IVentaService, VentaService>();
 
-// Facturacion: comprobante en PDF (QuestPDF) y envio por correo (SMTP).
+// Billing: PDF receipt (QuestPDF) and sending by email (SMTP).
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IFacturaService, FacturaService>();
 
-// Reportes del Contador (resumen, mas/menos vendidos, por vendedor, historial).
+// Accountant reports (summary, best/least sold, by salesperson, history).
 builder.Services.AddScoped<IReporteService, ReporteService>();
 
-// Guarda facturas y reportes en carpetas del disco (Rutas de appsettings).
+// Saves invoices and reports into folders on disk (Paths from appsettings).
 builder.Services.AddScoped<IArchivadorLocal, ArchivadorLocal>();
 
-// Logo de la empresa (identidad visual): lo cambia el Administrador desde Ajustes.
+// Company logo (visual identity): the Administrator changes it from Settings.
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 
-// Autenticacion por cookies nativa (sin ASP.NET Identity completo).
+// Native cookie authentication (without the full ASP.NET Identity).
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -90,7 +90,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Aplica migraciones pendientes (crea CASA_VINTAGE si no existe) y siembra datos de prueba.
+// Applies pending migrations (creates CASA_VINTAGE if it does not exist) and seeds test data.
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -99,12 +99,12 @@ using (var scope = app.Services.CreateScope())
     var hasher = services.GetRequiredService<IPasswordHasher<Usuario>>();
     await DbInitializer.SeedAsync(db, hasher);
 
-    // Crea las carpetas de Facturas y Reportes al arrancar y registra su ruta absoluta,
-    // asi el usuario ve donde se guardan (y confirma que corre el build actual).
+    // Creates the Invoices and Reports folders at startup and logs their absolute path,
+    // so the user sees where they are saved (and confirms the current build is running).
     var archivador = services.GetRequiredService<IArchivadorLocal>();
     var log = services.GetRequiredService<ILogger<Program>>();
-    log.LogInformation("Carpeta de Facturas: {Ruta}", archivador.AsegurarCarpeta("Facturas"));
-    log.LogInformation("Carpeta de Reportes: {Ruta}", archivador.AsegurarCarpeta("Reportes"));
+    log.LogInformation("Invoices folder: {Ruta}", archivador.AsegurarCarpeta("Facturas"));
+    log.LogInformation("Reports folder: {Ruta}", archivador.AsegurarCarpeta("Reportes"));
 }
 
 // Configure the HTTP request pipeline.
@@ -119,10 +119,10 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-// La sesion (carrito) debe estar disponible antes de ejecutar las paginas.
+// The session (cart) must be available before executing the pages.
 app.UseSession();
 
-// El orden importa: primero autenticar (leer la cookie), luego autorizar.
+// The order matters: first authenticate (read the cookie), then authorize.
 app.UseAuthentication();
 app.UseAuthorization();
 

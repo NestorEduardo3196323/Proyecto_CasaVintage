@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Data
 {
-    // Contexto de EF Core. Es la fuente de verdad del esquema: las entidades se mapean
-    // exactamente a las tablas y columnas de docs/esquema_casa_vintage.sql (snake_case, varchar,
-    // checks, defaults y row_version) para que las migraciones generen la base CASA_VINTAGE.
+    // EF Core context. It is the source of truth of the schema: the entities map exactly to the
+    // tables and columns of docs/esquema_casa_vintage.sql (snake_case, varchar, checks, defaults
+    // and row_version) so that the migrations generate the CASA_VINTAGE database.
     public class CasaVintageContext : DbContext
     {
         public CasaVintageContext(DbContextOptions<CasaVintageContext> options) : base(options)

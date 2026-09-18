@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Cuenta
 {
-    // Pagina que se muestra cuando un usuario autenticado intenta entrar a una seccion que su
-    // rol no permite (lo redirige aqui el AccessDeniedPath de la cookie).
+    // Page shown when an authenticated user tries to enter a section their role does not allow
+    // (the cookie's AccessDeniedPath redirects here).
     [AllowAnonymous]
     public class DenegadoModel : PageModel
     {

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Implementacion del modulo de Inventario/Productos. Concentra las reglas de negocio: el SKU se
-    // autogenera (VIN-####), la disponibilidad se sincroniza con el stock en la misma operacion, y
-    // no se puede borrar un producto que ya tiene ventas. Las fotos se guardan como rutas en disco.
+    // Inventory/Products module implementation. It concentrates the business rules: the SKU is
+    // auto-generated (VIN-####), availability is synced with the stock in the same operation, and a
+    // product that already has sales cannot be deleted. Photos are stored as disk paths.
     public class ProductoService : IProductoService
     {
         private const string PrefijoSku = "VIN-";
@@ -47,7 +47,7 @@ namespace CasaVintage.Services
 
         public async Task<IReadOnlyList<ProductoCatalogoViewModel>> ListarCatalogoAsync()
         {
-            // Disponibles primero (con stock) y luego alfabetico: el vendedor ve lo vendible arriba.
+            // Available first (in stock) and then alphabetical: the salesperson sees the sellable at the top.
             return await _db.Productos
                 .AsNoTracking()
                 .OrderByDescending(p => p.Disponibilidad)
@@ -152,7 +152,7 @@ namespace CasaVintage.Services
                 .Select(p => new ProveedorOpcion(p.IdProveedor, p.Nombre))
                 .ToListAsync();
 
-            // Sugerencias para los datalist: valores ya usados (el campo sigue siendo texto libre).
+            // Suggestions for the datalists: values already used (the field is still free text).
             var categorias = await ValoresDistintosAsync(p => p.Categoria);
             var epocas = await ValoresDistintosAsync(p => p.Epoca);
             var estados = await ValoresDistintosAsync(p => p.Estado);
@@ -170,7 +170,7 @@ namespace CasaVintage.Services
             var producto = new Producto();
             AplicarDatos(producto, datos);
 
-            // El SKU se autogenera. Si por concurrencia chocara con el indice unico, se reintenta.
+            // The SKU is auto-generated. If it clashes with the unique index due to concurrency, it retries.
             for (var intento = 0; intento < 3; intento++)
             {
                 producto.Sku = await GenerarSkuAsync();
@@ -178,12 +178,12 @@ namespace CasaVintage.Services
                 try
                 {
                     await _db.SaveChangesAsync();
-                    _logger.LogInformation("Producto creado: {Sku} ({Nombre}).", producto.Sku, producto.Nombre);
+                    _logger.LogInformation("Product created: {Sku} ({Nombre}).", producto.Sku, producto.Nombre);
                     return ResultadoProducto.Ok(producto);
                 }
                 catch (DbUpdateException) when (intento < 2)
                 {
-                    // Probable colision de SKU: se descarta el intento y se genera otro.
+                    // Likely SKU collision: the attempt is discarded and another is generated.
                     _db.Entry(producto).State = EntityState.Detached;
                 }
             }
@@ -212,11 +212,11 @@ namespace CasaVintage.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                // Otro usuario modifico el producto entre la carga y el guardado.
+                // Another user modified the product between loading and saving.
                 return ResultadoProducto.Falla(ErrorProducto.Conflicto);
             }
 
-            _logger.LogInformation("Producto editado: {Sku} (id {Id}).", producto.Sku, producto.IdProducto);
+            _logger.LogInformation("Product edited: {Sku} (id {Id}).", producto.Sku, producto.IdProducto);
             return ResultadoProducto.Ok(producto);
         }
 
@@ -228,8 +228,8 @@ namespace CasaVintage.Services
                 return ResultadoProducto.Falla(ErrorProducto.NoEncontrado);
             }
 
-            // Guarda: no se puede borrar un producto que ya se vendio (FK Restrict con detalle_venta);
-            // romperia el historial de ventas.
+            // Guard: a product that has already been sold cannot be deleted (FK Restrict with
+            // detalle_venta); it would break the sales history.
             if (await _db.DetallesVenta.AnyAsync(d => d.IdProducto == id))
             {
                 return ResultadoProducto.Falla(ErrorProducto.TieneVentas);
@@ -238,16 +238,16 @@ namespace CasaVintage.Services
             _db.Productos.Remove(producto);
             await _db.SaveChangesAsync();
 
-            // Ya sin fila que las referencie, se borran las fotos del disco.
+            // With no row referencing them anymore, the photos are deleted from disk.
             _archivos.Eliminar(producto.Foto1);
             _archivos.Eliminar(producto.Foto2);
             _archivos.Eliminar(producto.Foto3);
 
-            _logger.LogInformation("Producto eliminado: {Sku} (id {Id}).", producto.Sku, id);
+            _logger.LogInformation("Product deleted: {Sku} (id {Id}).", producto.Sku, id);
             return ResultadoProducto.Ok(producto);
         }
 
-        // Copia los datos del formulario a la entidad y sincroniza disponibilidad = (stock > 0).
+        // Copies the form data to the entity and syncs available = (stock > 0).
         private static void AplicarDatos(Producto producto, ProductoDatos datos)
         {
             producto.Nombre = datos.Nombre.Trim();
@@ -266,7 +266,7 @@ namespace CasaVintage.Services
             producto.Foto3 = datos.Foto3;
         }
 
-        // Siguiente SKU correlativo con el prefijo VIN- (VIN-0001, VIN-0002, ...).
+        // Next sequential SKU with the VIN- prefix (VIN-0001, VIN-0002, ...).
         private async Task<string> GenerarSkuAsync()
         {
             var skus = await _db.Productos

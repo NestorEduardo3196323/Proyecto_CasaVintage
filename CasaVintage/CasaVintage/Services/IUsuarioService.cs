@@ -2,8 +2,8 @@ using CasaVintage.Models;
 
 namespace CasaVintage.Services
 {
-    // Motivo por el que una operacion sobre una cuenta no se pudo completar. Permite que la
-    // PageModel muestre un mensaje preciso (y lo asocie al campo correcto cuando aplica).
+    // Reason an operation on an account could not be completed. Lets the PageModel show a precise
+    // message (and associate it with the correct field when applicable).
     public enum ErrorUsuario
     {
         Ninguno,
@@ -14,39 +14,40 @@ namespace CasaVintage.Services
         UltimoAdministrador
     }
 
-    // Resultado de una operacion de escritura sobre una cuenta: exito y, si fallo, el motivo.
+    // Result of a write operation on an account: success and, if it failed, the reason.
     public sealed record ResultadoUsuario(bool Exito, ErrorUsuario Error = ErrorUsuario.Ninguno, Usuario? Usuario = null)
     {
         public static ResultadoUsuario Ok(Usuario usuario) => new(true, ErrorUsuario.Ninguno, usuario);
         public static ResultadoUsuario Falla(ErrorUsuario error) => new(false, error, null);
     }
 
-    // Contrato del modulo de Usuarios / "Personal de la empresa" (solo Administrador). Concentra
-    // toda la logica de negocio (unicidad de correo, hash de contrasenas, guardas para no dejar el
-    // sistema sin administrador ni permitir que el admin se bloquee a si mismo). Las PageModels
-    // solo orquestan: validan la entrada, llaman aqui y arman el ViewModel.
+    // Contract of the Users / "Company staff" module (Administrator only). It concentrates all the
+    // business logic (email uniqueness, password hashing, guards to not leave the system without an
+    // administrator or let the admin block themselves). The PageModels only orchestrate: they
+    // validate the input, call here and build the ViewModel.
     public interface IUsuarioService
     {
-        // Todas las cuentas, activas primero y luego por nombre, para la vista del personal.
+        // All accounts, active first and then by name, for the staff view.
         Task<IReadOnlyList<Usuario>> ListarAsync();
 
-        // Una cuenta por id (null si no existe).
+        // A single account by id (null if it does not exist).
         Task<Usuario?> ObtenerAsync(int id);
 
-        // Da de alta una cuenta activa con la contrasena hasheada. Falla si el correo ya existe
-        // o el rol no es valido. foto es la ruta web de la imagen ya guardada (o null si no tiene).
+        // Creates an active account with the hashed password. Fails if the email already exists or
+        // the role is not valid. foto is the web path of the already-saved image (or null if none).
         Task<ResultadoUsuario> CrearAsync(string nombre, string correo, string rol, string password, string? foto);
 
-        // Actualiza nombre, correo y rol. Falla si el correo choca con otra cuenta, el rol no es
-        // valido, o el cambio dejaria al sistema sin ningun Administrador activo. Si cambiarFoto es
-        // true, reemplaza la foto por nuevaFoto (null = quitarla) y borra del disco la anterior.
+        // Updates name, email and role. Fails if the email clashes with another account, the role is
+        // not valid, or the change would leave the system without any active Administrator. If
+        // cambiarFoto is true, replaces the photo with nuevaFoto (null = remove it) and deletes the
+        // previous one from disk.
         Task<ResultadoUsuario> EditarAsync(int id, string nombre, string correo, string rol, bool cambiarFoto, string? nuevaFoto);
 
-        // Activa o desactiva la cuenta. No permite que el admin cambie su propio estado ni que se
-        // desactive al ultimo Administrador activo.
+        // Enables or disables the account. It does not let the admin change their own status nor
+        // disable the last active Administrator.
         Task<ResultadoUsuario> CambiarEstadoAsync(int id, bool activar, int idUsuarioActual);
 
-        // Reemplaza la contrasena por una nueva (hasheada). Falla si la cuenta no existe.
+        // Replaces the password with a new (hashed) one. Fails if the account does not exist.
         Task<ResultadoUsuario> RestablecerPasswordAsync(int id, string nuevaPassword);
     }
 }

@@ -1,5 +1,5 @@
-// Comportamientos de la vista "Personal de la empresa".
-// Progresivo: sin JS las tarjetas se ven y las acciones funcionan igual (POST normales).
+// Behaviors for the "Company staff" view.
+// Progressive: without JS the cards still show and the actions still work (normal POSTs).
 
 (function () {
     "use strict";
@@ -11,8 +11,8 @@
         activarVistaPreviaFoto();
     });
 
-    // Previsualiza la imagen elegida antes de enviarla. Funciona para uno o varios campos: cada
-    // input [data-foto-input] muestra su vista previa en el [data-foto-previa] de su mismo grupo.
+    // Previews the chosen image before submitting it. Works for one or several fields: each
+    // [data-foto-input] input shows its preview in the [data-foto-previa] of its own group.
     function activarVistaPreviaFoto() {
         document.querySelectorAll("[data-foto-input]").forEach(function (input) {
             var grupo = input.closest("[data-foto-grupo]") || input.parentElement;
@@ -30,7 +30,7 @@
                 previa.innerHTML = "";
                 var img = document.createElement("img");
                 img.src = url;
-                img.alt = "Vista previa";
+                img.alt = "Preview";
                 img.addEventListener("load", function () {
                     URL.revokeObjectURL(url);
                 });
@@ -39,7 +39,7 @@
         });
     }
 
-    // Panel "Info": expande/colapsa los datos y acciones de cada empleado.
+    // "Info" panel: expands/collapses each employee's data and actions.
     function activarInfo() {
         document.querySelectorAll("[data-info-toggle]").forEach(function (boton) {
             boton.addEventListener("click", function () {
@@ -55,7 +55,7 @@
         });
     }
 
-    // Dialogo unico para restablecer contrasena: un boton por tarjeta lo abre con el id y nombre.
+    // Single dialog to reset a password: a button per card opens it with the id and name.
     function activarDialogoRestablecer() {
         var dialogo = document.getElementById("dlgRestablecer");
         if (!dialogo) {
@@ -83,7 +83,7 @@
                     campoId.value = boton.getAttribute("data-id") || "";
                 }
                 if (nombre) {
-                    nombre.textContent = boton.getAttribute("data-nombre") || "Empleado";
+                    nombre.textContent = boton.getAttribute("data-nombre") || "Employee";
                 }
                 abrir();
             });
@@ -95,14 +95,14 @@
             });
         });
 
-        // Si el servidor pidio reabrir (fallo la validacion), se muestra con los errores.
+        // If the server asked to reopen (validation failed), it is shown with the errors.
         if (window.CasaVintagePersonal && window.CasaVintagePersonal.reabrirRestablecer) {
             abrir();
         }
     }
 
-    // Revelado suave de las tarjetas al hacer scroll. El contenido ya es visible por defecto:
-    // solo si hay JS y el usuario no pidio reducir el movimiento se aplica la animacion.
+    // Soft reveal of the cards on scroll. The content is already visible by default:
+    // the animation is only applied if there is JS and the user did not ask to reduce motion.
     function activarRevelado() {
         var lista = document.querySelector("[data-reveal]");
         if (!lista || !("IntersectionObserver" in window)) {
@@ -139,9 +139,9 @@
             observador.observe(fila);
         });
 
-        // Salvaguarda: si el observador no dispara (pestana en segundo plano o render sin
-        // pintar), se quita el estado oculto para que el contenido NUNCA quede invisible.
-        // Se retira la clase (no se anima) porque las transiciones no avanzan sin pintado.
+        // Safeguard: if the observer does not fire (background tab or render without painting),
+        // the hidden state is removed so the content is NEVER left invisible.
+        // The class is removed (not animated) because transitions do not advance without painting.
         setTimeout(function () {
             filas.forEach(function (fila) {
                 fila.classList.remove("por-revelar");

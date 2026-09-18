@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Ventas
 {
-    // "Mis ventas": el historial de las ventas registradas por el vendedor en sesion.
+    // "My sales": the history of the sales registered by the signed-in salesperson.
     [Authorize(Roles = "Vendedor")]
     public class MisVentasModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace CasaVintage.Pages.Ventas
         public async Task OnGetAsync()
         {
             var idUsuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            // Solo las ventas del vendedor en sesion (filtro por su id de usuario).
+            // Only the sales of the signed-in salesperson (filtered by their user id).
             Ventas = await _reportes.HistorialAsync(new ReporteFiltro { IdVendedor = idUsuario });
             Total = Ventas.Sum(v => v.Total);
         }

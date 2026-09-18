@@ -2,29 +2,29 @@ using CasaVintage.ViewModels;
 
 namespace CasaVintage.Services
 {
-    // Resultado de una operacion sobre el carrito (para responder al AJAX del boton "Agregar").
+    // Result of an operation on the cart (to respond to the "Add" button AJAX).
     public sealed record ResultadoCarrito(bool Exito, int TotalProductos, string? Mensaje = null);
 
-    // Carrito de compra del vendedor, guardado en la sesion del navegador. Cada linea es un producto
-    // con su cantidad; los precios y el stock se leen siempre frescos de la base al mostrar/cobrar.
+    // Salesperson shopping cart, stored in the browser session. Each line is a product with its
+    // quantity; prices and stock are always read fresh from the database when displaying/charging.
     public interface ICarritoService
     {
-        // Agrega (o incrementa) un producto al carrito, sin pasar del stock disponible.
+        // Adds (or increments) a product to the cart, without going over the available stock.
         Task<ResultadoCarrito> AgregarAsync(int idProducto, int cantidad = 1);
 
-        // Fija la cantidad de un producto (0 o menos lo quita).
+        // Sets a product's quantity (0 or less removes it).
         void Actualizar(int idProducto, int cantidad);
 
-        // Quita un producto del carrito.
+        // Removes a product from the cart.
         void Quitar(int idProducto);
 
-        // Vacia el carrito por completo.
+        // Empties the cart completely.
         void Vaciar();
 
-        // Arma el carrito con los datos actuales (precio, stock, foto) y sus totales.
+        // Builds the cart with the current data (price, stock, photo) and its totals.
         Task<CarritoViewModel> ObtenerAsync();
 
-        // Numero total de unidades en el carrito (para el contador del icono). No consulta la base.
+        // Total number of units in the cart (for the icon counter). Does not query the database.
         int Contar();
     }
 }

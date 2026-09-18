@@ -1,20 +1,20 @@
 @page
 @model CasaVintage.Pages.Inventario.CrearModel
 @{
-    ViewData["Title"] = "Nuevo producto";
+    ViewData["Title"] = "New product";
     Layout = "_Layout";
 }
 
 <div class="form-personal form-ancho">
     <a asp-page="Index" class="volver-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
-        Volver al inventario
+        Back to inventory
     </a>
 
     <div class="mb-4">
-        <span class="kicker">Inventario</span>
-        <h1 class="mb-1">Nuevo producto</h1>
-        <p class="text-muted mb-0">Registra un articulo. El codigo (SKU) se genera automaticamente.</p>
+        <span class="kicker">Inventory</span>
+        <h1 class="mb-1">New product</h1>
+        <p class="text-muted mb-0">Register an item. The code (SKU) is generated automatically.</p>
     </div>
 
     <div class="tarjeta-vintage p-4 p-md-5">
@@ -97,14 +97,14 @@
                 <div class="col-md-3 col-6">
                     <label asp-for="Entrada.StockMinimo" class="form-label"></label>
                     <input asp-for="Entrada.StockMinimo" class="form-control" type="number" step="1" min="0" />
-                    <span class="ayuda-campo">0 = sin alerta</span>
+                    <span class="ayuda-campo">0 = no alert</span>
                     <span asp-validation-for="Entrada.StockMinimo" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-8">
                     <label asp-for="Entrada.IdProveedor" class="form-label"></label>
                     <select asp-for="Entrada.IdProveedor" class="form-select">
-                        <option value="">Selecciona un proveedor</option>
+                        <option value="">Select a supplier</option>
                         @foreach (var proveedor in Model.Datos.Proveedores)
                         {
                             <option value="@proveedor.Id">@proveedor.Nombre</option>
@@ -115,12 +115,12 @@
 
                 <div class="col-md-4">
                     <label class="form-label">SKU</label>
-                    <div class="sku-auto">Se genera automaticamente</div>
+                    <div class="sku-auto">Generated automatically</div>
                 </div>
             </div>
 
             <div class="fotos-seccion">
-                <label class="form-label">Fotos del producto (hasta 3, opcionales)</label>
+                <label class="form-label">Product photos (up to 3, optional)</label>
                 <div class="fotos-grid">
                     @for (var i = 1; i <= 3; i++)
                     {
@@ -133,15 +133,15 @@
                         </div>
                     }
                 </div>
-                <p class="ayuda-campo mt-1 mb-0">JPG, PNG o WEBP, hasta 8 MB cada una.</p>
+                <p class="ayuda-campo mt-1 mb-0">JPG, PNG or WEBP, up to 8 MB each.</p>
                 <span asp-validation-for="Entrada.Foto1" class="text-danger d-block"></span>
                 <span asp-validation-for="Entrada.Foto2" class="text-danger d-block"></span>
                 <span asp-validation-for="Entrada.Foto3" class="text-danger d-block"></span>
             </div>
 
             <div class="d-flex flex-wrap gap-2 mt-4">
-                <button type="submit" class="btn-vintage">Registrar producto</button>
-                <a asp-page="Index" class="btn-vintage-outline">Cancelar</a>
+                <button type="submit" class="btn-vintage">Register product</button>
+                <a asp-page="Index" class="btn-vintage-outline">Cancel</a>
             </div>
         </form>
     </div>

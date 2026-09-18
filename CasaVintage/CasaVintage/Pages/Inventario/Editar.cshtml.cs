@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Inventario
 {
-    // Edicion de un producto (incluye reabastecer stock). Admin y Gerente. Cada una de las 3 fotos
-    // se puede mantener, reemplazar o quitar. El SKU no se edita. Sin archivos huerfanos: las fotos
-    // viejas solo se borran tras guardar bien; las recien subidas se borran si el guardado falla.
+    // Product editing (includes restocking). Admin and Manager. Each of the 3 photos can be kept,
+    // replaced or removed. The SKU is not edited. No orphan files: old photos are only deleted after
+    // saving successfully; newly uploaded ones are deleted if saving fails.
     [Authorize(Roles = "Administrador,Gerente")]
     public class EditarModel : PageModel
     {
@@ -70,12 +70,12 @@ namespace CasaVintage.Pages.Inventario
             var actual = await _productos.ObtenerAsync(Entrada.IdProducto);
             if (actual is null)
             {
-                ModelState.AddModelError(string.Empty, "El producto ya no existe.");
+                ModelState.AddModelError(string.Empty, "The product no longer exists.");
                 return Page();
             }
 
-            // Se resuelve cada espacio de foto. "nuevas" se borran si el guardado falla; "aBorrar"
-            // (fotos viejas reemplazadas o quitadas) se borran solo tras guardar bien.
+            // Each photo slot is resolved. "nuevas" are deleted if saving fails; "aBorrar"
+            // (old photos replaced or removed) are deleted only after saving successfully.
             var nuevas = new List<string>();
             var aBorrar = new List<string>();
 
@@ -105,11 +105,11 @@ namespace CasaVintage.Pages.Inventario
             }
 
             aBorrar.ForEach(_archivos.Eliminar);
-            TempData["MensajeInventario"] = $"Producto \"{resultado.Producto!.Nombre}\" actualizado.";
+            TempData["MensajeInventario"] = $"Product \"{resultado.Producto!.Nombre}\" updated.";
             return RedirectToPage("Index");
         }
 
-        // Decide la ruta final de un espacio de foto: quitar (null), reemplazar (nueva) o mantener.
+        // Decides the final path of a photo slot: remove (null), replace (new) or keep.
         private async Task<string?> ResolverFotoAsync(
             IFormFile? nueva, bool quitar, string? actual, string campo, List<string> nuevas, List<string> aBorrar)
         {
@@ -141,7 +141,7 @@ namespace CasaVintage.Pages.Inventario
             return actual;
         }
 
-        // Vuelve a cargar SKU y fotos actuales desde la base para re-renderizar tras un error.
+        // Reloads the SKU and current photos from the database to re-render after an error.
         private async Task RecargarActualesAsync()
         {
             var producto = await _productos.ObtenerAsync(Entrada.IdProducto);
@@ -157,10 +157,10 @@ namespace CasaVintage.Pages.Inventario
 
         private static string MensajeError(ErrorProducto error) => error switch
         {
-            ErrorProducto.ProveedorInvalido => "El proveedor seleccionado no es valido.",
-            ErrorProducto.NoEncontrado => "El producto ya no existe.",
-            ErrorProducto.Conflicto => "Otro usuario modifico este producto. Vuelve a abrirlo e intenta de nuevo.",
-            _ => "No se pudo actualizar el producto. Intenta de nuevo."
+            ErrorProducto.ProveedorInvalido => "The selected supplier is not valid.",
+            ErrorProducto.NoEncontrado => "The product no longer exists.",
+            ErrorProducto.Conflicto => "Another user modified this product. Reopen it and try again.",
+            _ => "The product could not be updated. Try again."
         };
     }
 }

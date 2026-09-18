@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Reportes
 {
-    // Panel de reportes del Contador (y del Administrador): resumen, productos mas/menos vendidos y
-    // ventas por vendedor. Todo respeta el filtro (fechas, vendedor, metodo de pago y categoria),
-    // que se aplica dentro de las consultas de EF Core. Las exportaciones usan el mismo filtro.
+    // Reports panel for the Accountant (and the Administrator): summary, best/least-selling products
+    // and sales by salesperson. Everything respects the filter (dates, salesperson, payment method
+    // and category), applied inside the EF Core queries. The exports use the same filter.
     [Authorize(Roles = "Administrador,Contador")]
     public class IndexModel : PageModel
     {
@@ -26,7 +26,7 @@ namespace CasaVintage.Pages.Reportes
         public IReadOnlyList<ProductoVendidoViewModel> MenosVendidos { get; private set; } = System.Array.Empty<ProductoVendidoViewModel>();
         public IReadOnlyList<VentaPorVendedorViewModel> PorVendedor { get; private set; } = System.Array.Empty<VentaPorVendedorViewModel>();
 
-        // Opciones y valores actuales del filtro (para la barra de filtros y los enlaces de exportar).
+        // Options and current values of the filter (for the filter bar and the export links).
         public IReadOnlyList<VendedorOpcionViewModel> Vendedores { get; private set; } = System.Array.Empty<VendedorOpcionViewModel>();
         public IReadOnlyList<string> Categorias { get; private set; } = System.Array.Empty<string>();
         public ReporteFiltro Filtro { get; private set; } = new();
@@ -47,30 +47,30 @@ namespace CasaVintage.Pages.Reportes
             Categorias = await _reportes.CategoriasAsync();
         }
 
-        // Descarga el reporte en PDF respetando el filtro y guarda una copia en la carpeta de reportes.
+        // Downloads the report as PDF respecting the filter and saves a copy in the reports folder.
         public async Task<IActionResult> OnGetPdfAsync(string? rango, DateTime? desde, DateTime? hasta, int? vendedor, string? metodo, string? categoria)
         {
             var filtro = Preparar(rango, desde, hasta, vendedor, metodo, categoria);
             var bytes = await _reportes.GenerarPdfAsync(filtro);
             await _archivador.GuardarAsync("Reportes", $"reporte-ventas-{DateTime.Now:yyyyMMdd-HHmmss}.pdf", bytes);
-            return File(bytes, "application/pdf", "reporte-ventas.pdf");
+            return File(bytes, "application/pdf", "sales-report.pdf");
         }
 
-        // Descarga el reporte en Excel respetando el filtro y guarda una copia en la carpeta de reportes.
+        // Downloads the report as Excel respecting the filter and saves a copy in the reports folder.
         public async Task<IActionResult> OnGetExcelAsync(string? rango, DateTime? desde, DateTime? hasta, int? vendedor, string? metodo, string? categoria)
         {
             var filtro = Preparar(rango, desde, hasta, vendedor, metodo, categoria);
             var bytes = await _reportes.GenerarExcelAsync(filtro);
             await _archivador.GuardarAsync("Reportes", $"reporte-ventas-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx", bytes);
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "reporte-ventas.xlsx");
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "sales-report.xlsx");
         }
 
-        // Construye el filtro y guarda los valores actuales para la vista.
+        // Builds the filter and stores the current values for the view.
         private ReporteFiltro Preparar(string? rango, DateTime? desde, DateTime? hasta, int? vendedor, string? metodo, string? categoria)
         {
             Filtro = ReporteFiltro.Construir(rango, desde, hasta, vendedor, metodo, categoria);
-            // El resaltado del acceso rapido se calcula segun las fechas resultantes, no segun como
-            // se envio el formulario, para que "Este mes" siga marcado al cambiar otro filtro.
+            // The quick-access highlight is computed from the resulting dates, not from how the form
+            // was submitted, so "This month" stays highlighted when another filter changes.
             Rango = ReporteFiltro.RangoActivo(Filtro.Desde, Filtro.Hasta);
             Vendedor = vendedor;
             Metodo = string.IsNullOrWhiteSpace(metodo) ? null : metodo;

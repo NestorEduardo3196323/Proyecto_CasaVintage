@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Proveedores
 {
-    // Edicion de un proveedor. Admin y Gerente. La PageModel solo orquesta.
+    // Supplier editing. Admin and Manager. The PageModel only orchestrates.
     [Authorize(Roles = "Administrador,Gerente")]
     public class EditarModel : PageModel
     {
@@ -51,13 +51,13 @@ namespace CasaVintage.Pages.Proveedores
             if (!resultado.Exito)
             {
                 var mensaje = resultado.Error == ErrorProveedor.NoEncontrado
-                    ? "El proveedor ya no existe."
-                    : "No se pudo actualizar el proveedor. Intenta de nuevo.";
+                    ? "The supplier no longer exists."
+                    : "The supplier could not be updated. Try again.";
                 ModelState.AddModelError(string.Empty, mensaje);
                 return Page();
             }
 
-            TempData["MensajeProveedor"] = $"Proveedor \"{resultado.Proveedor!.Nombre}\" actualizado.";
+            TempData["MensajeProveedor"] = $"Supplier \"{resultado.Proveedor!.Nombre}\" updated.";
             return RedirectToPage("Index");
         }
     }

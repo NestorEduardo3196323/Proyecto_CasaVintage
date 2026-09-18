@@ -3,7 +3,7 @@ using CasaVintage.ViewModels;
 
 namespace CasaVintage.Services
 {
-    // Motivo por el que una operacion sobre un producto no se pudo completar.
+    // Reason an operation on a product could not be completed.
     public enum ErrorProducto
     {
         Ninguno,
@@ -13,15 +13,15 @@ namespace CasaVintage.Services
         Conflicto
     }
 
-    // Resultado de una operacion de escritura sobre un producto.
+    // Result of a write operation on a product.
     public sealed record ResultadoProducto(bool Exito, ErrorProducto Error = ErrorProducto.Ninguno, Producto? Producto = null)
     {
         public static ResultadoProducto Ok(Producto producto) => new(true, ErrorProducto.Ninguno, producto);
         public static ResultadoProducto Falla(ErrorProducto error) => new(false, error, null);
     }
 
-    // Datos de un producto para crear/editar. Las fotos son rutas ya guardadas en disco (o null).
-    // El SKU no viene aqui: se autogenera al crear y no se modifica al editar.
+    // Product data to create/edit. The photos are paths already saved on disk (or null).
+    // The SKU is not here: it is auto-generated on create and not modified on edit.
     public sealed record ProductoDatos(
         string Nombre,
         string Descripcion,
@@ -37,47 +37,47 @@ namespace CasaVintage.Services
         string? Foto2,
         string? Foto3);
 
-    // Una opcion del <select> de proveedores.
+    // An option of the suppliers <select>.
     public sealed record ProveedorOpcion(int Id, string Nombre);
 
-    // Datos auxiliares para armar el formulario: proveedores y sugerencias (valores ya usados).
+    // Auxiliary data to build the form: suppliers and suggestions (already-used values).
     public sealed record ProductoFormData(
         IReadOnlyList<ProveedorOpcion> Proveedores,
         IReadOnlyList<string> Categorias,
         IReadOnlyList<string> Epocas,
         IReadOnlyList<string> Estados);
 
-    // Contrato del modulo de Inventario/Productos (Admin/Gerente). Concentra: autogeneracion de SKU,
-    // sincronia disponibilidad=(stock>0), validacion de proveedor y guarda de borrado (FK ventas).
+    // Contract of the Inventory/Products module (Admin/Manager). It concentrates: SKU auto-generation,
+    // availability=(stock>0) sync, supplier validation and the delete guard (sales FK).
     public interface IProductoService
     {
-        // Todos los productos para la lista de inventario (con proveedor, miniatura y si es borrable).
+        // All products for the inventory list (with supplier, thumbnail and whether it is deletable).
         Task<IReadOnlyList<ProductoListItemViewModel>> ListarAsync();
 
-        // Productos para el catalogo (vista del vendedor): disponibles primero, con sus fotos.
+        // Products for the catalog (salesperson view): available first, with their photos.
         Task<IReadOnlyList<ProductoCatalogoViewModel>> ListarCatalogoAsync();
 
-        // Ficha de detalle de un producto para el catalogo (con proveedor y las 3 fotos). Null si no existe.
+        // Detail card of a product for the catalog (with supplier and the 3 photos). Null if it does not exist.
         Task<ProductoDetalleViewModel?> ObtenerDetalleAsync(int id);
 
-        // Busqueda del catalogo (buscador en vivo): filtra por texto libre y por categoria/epoca/estado.
+        // Catalog search (live search): filters by free text and by category/era/condition.
         Task<IReadOnlyList<ProductoCatalogoViewModel>> BuscarCatalogoAsync(string? texto, string? categoria, string? epoca, string? estado);
 
-        // Un producto por id (null si no existe).
+        // A single product by id (null if it does not exist).
         Task<Producto?> ObtenerAsync(int id);
 
-        // Proveedores y sugerencias para los formularios de crear/editar.
+        // Suppliers and suggestions for the create/edit forms.
         Task<ProductoFormData> ObtenerDatosFormularioAsync();
 
-        // Crea el producto con SKU autogenerado y disponibilidad sincronizada. Falla si el proveedor
-        // no existe.
+        // Creates the product with an auto-generated SKU and synced availability. Fails if the
+        // supplier does not exist.
         Task<ResultadoProducto> CrearAsync(ProductoDatos datos);
 
-        // Actualiza el producto y resincroniza la disponibilidad. Falla si no existe, el proveedor no
-        // es valido, o hay conflicto de concurrencia.
+        // Updates the product and resyncs availability. Fails if it does not exist, the supplier is
+        // not valid, or there is a concurrency conflict.
         Task<ResultadoProducto> EditarAsync(int id, ProductoDatos datos);
 
-        // Elimina el producto (y sus fotos del disco). Falla si tiene ventas registradas (FK Restrict).
+        // Deletes the product (and its photos from disk). Fails if it has registered sales (FK Restrict).
         Task<ResultadoProducto> EliminarAsync(int id);
     }
 }

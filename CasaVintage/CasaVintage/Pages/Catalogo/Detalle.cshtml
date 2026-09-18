@@ -9,7 +9,7 @@
 
 <a asp-page="Index" class="volver-link">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
-    Volver al catalogo
+    Back to catalog
 </a>
 
 <div class="detalle-grid">
@@ -23,10 +23,10 @@
                 }
                 @if (fotos.Count > 1)
                 {
-                    <button type="button" class="galeria-flecha izq" data-galeria-prev aria-label="Foto anterior">
+                    <button type="button" class="galeria-flecha izq" data-galeria-prev aria-label="Previous photo">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
                     </button>
-                    <button type="button" class="galeria-flecha der" data-galeria-next aria-label="Foto siguiente">
+                    <button type="button" class="galeria-flecha der" data-galeria-next aria-label="Next photo">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
                     </button>
                 }
@@ -44,8 +44,8 @@
             <div class="galeria-miniaturas">
                 @for (var i = 0; i < fotos.Count; i++)
                 {
-                    <button type="button" class="galeria-thumb @(i == 0 ? "activa" : "")" data-galeria-thumb="@fotos[i]" aria-label="Foto @(i + 1)">
-                        <img src="@fotos[i]" alt="Foto @(i + 1) de @p.Nombre" />
+                    <button type="button" class="galeria-thumb @(i == 0 ? "activa" : "")" data-galeria-thumb="@fotos[i]" aria-label="Photo @(i + 1)">
+                        <img src="@fotos[i]" alt="Photo @(i + 1) of @p.Nombre" />
                     </button>
                 }
             </div>
@@ -55,26 +55,26 @@
     <div class="detalle-info">
         @if (p.Disponibilidad)
         {
-            <span class="badge-estado es-activo">@p.Stock en stock</span>
+            <span class="badge-estado es-activo">@p.Stock in stock</span>
         }
         else
         {
-            <span class="badge-estado es-inactivo">Sin stock</span>
+            <span class="badge-estado es-inactivo">Out of stock</span>
         }
 
         <h1 class="detalle-nombre">@p.Nombre</h1>
-        <p class="detalle-linea">SKU @p.Sku &middot; @p.Categoria &middot; Proveedor: @p.ProveedorNombre</p>
+        <p class="detalle-linea">SKU @p.Sku &middot; @p.Categoria &middot; Supplier: @p.ProveedorNombre</p>
 
         <div class="detalle-precio">$@p.Precio.ToString("N2")</div>
 
         <div class="detalle-tags">
             <span class="pill-tag">@p.Categoria</span>
             <span class="pill-tag">@p.Epoca</span>
-            <span class="pill-tag">Estado: @p.Estado</span>
+            <span class="pill-tag">Condition: @p.Estado</span>
         </div>
 
         <div class="detalle-descripcion">
-            <h2 class="h6">Descripcion</h2>
+            <h2 class="h6">Description</h2>
             <p>@p.Descripcion</p>
         </div>
 
@@ -83,14 +83,14 @@
             {
                 if (p.Disponibilidad)
                 {
-                    <button type="button" class="btn-vintage" data-agregar="@p.IdProducto">Agregar al carrito</button>
+                    <button type="button" class="btn-vintage" data-agregar="@p.IdProducto">Add to cart</button>
                 }
                 else
                 {
-                    <button type="button" class="btn-vintage" disabled>Sin stock</button>
+                    <button type="button" class="btn-vintage" disabled>Out of stock</button>
                 }
             }
-            <a asp-page="Index" class="btn-vintage-outline">Volver al catalogo</a>
+            <a asp-page="Index" class="btn-vintage-outline">Back to catalog</a>
         </div>
     </div>
 </div>

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Inventario
 {
-    // Alta de un producto. Admin y Gerente. El SKU se autogenera en el service. Guarda hasta 3
-    // fotos en disco; si el alta o una foto falla, borra las imagenes ya guardadas (sin huerfanos).
+    // Product creation. Admin and Manager. The SKU is auto-generated in the service. It saves up to
+    // 3 photos on disk; if the creation or a photo fails, it deletes the already-saved images (no orphans).
     [Authorize(Roles = "Administrador,Gerente")]
     public class CrearModel : PageModel
     {
@@ -23,7 +23,7 @@ namespace CasaVintage.Pages.Inventario
         [BindProperty]
         public ProductoFormViewModel Entrada { get; set; } = new();
 
-        // Proveedores y sugerencias para el formulario.
+        // Suppliers and suggestions for the form.
         public ProductoFormData Datos { get; private set; } = new(
             Array.Empty<ProveedorOpcion>(), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
 
@@ -41,8 +41,8 @@ namespace CasaVintage.Pages.Inventario
                 return Page();
             }
 
-            // Se guardan las fotos (opcionales) antes de crear. Se lleva una lista para poder
-            // borrarlas si el alta falla despues.
+            // The photos (optional) are saved before creating. A list is kept so they can be
+            // deleted if the creation fails afterwards.
             var guardadas = new List<string>();
             var foto1 = await GuardarFotoAsync(Entrada.Foto1, "Entrada.Foto1", guardadas);
             var foto2 = await GuardarFotoAsync(Entrada.Foto2, "Entrada.Foto2", guardadas);
@@ -64,11 +64,11 @@ namespace CasaVintage.Pages.Inventario
                 return Page();
             }
 
-            TempData["MensajeInventario"] = $"Producto \"{resultado.Producto!.Nombre}\" registrado con SKU {resultado.Producto.Sku}.";
+            TempData["MensajeInventario"] = $"Product \"{resultado.Producto!.Nombre}\" registered with SKU {resultado.Producto.Sku}.";
             return RedirectToPage("Index");
         }
 
-        // Guarda una foto opcional; si falla la validacion, marca el error en su campo y devuelve null.
+        // Saves an optional photo; if validation fails, marks the error in its field and returns null.
         private async Task<string?> GuardarFotoAsync(IFormFile? archivo, string campo, List<string> guardadas)
         {
             if (archivo is null)
@@ -93,8 +93,8 @@ namespace CasaVintage.Pages.Inventario
 
         private static string MensajeError(ErrorProducto error) => error switch
         {
-            ErrorProducto.ProveedorInvalido => "El proveedor seleccionado no es valido.",
-            _ => "No se pudo registrar el producto. Intenta de nuevo."
+            ErrorProducto.ProveedorInvalido => "The selected supplier is not valid.",
+            _ => "The product could not be registered. Try again."
         };
     }
 }

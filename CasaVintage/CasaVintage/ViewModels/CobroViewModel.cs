@@ -3,52 +3,52 @@ using System.Text.RegularExpressions;
 
 namespace CasaVintage.ViewModels
 {
-    // Datos que captura el vendedor para cobrar la venta: cliente y metodo de pago. El nombre y el
-    // correo del cliente se guardan para la factura (se permiten clientes repetidos, no se dedupea).
-    // Si el metodo es Tarjeta, se capturan tambien los datos de la tarjeta: es una SIMULACION, no hay
-    // cobro real. Solo se conservan los ultimos 4 digitos; el numero completo y el CVV nunca se guardan.
+    // Data captured by the salesperson to charge the sale: customer and payment method. The customer
+    // name and email are stored for the invoice (repeated customers are allowed, no dedupe). If the
+    // method is Card, the card data is also captured: it is a SIMULATION, there is no real charge.
+    // Only the last 4 digits are kept; the full number and the CVV are never stored.
     public class CobroViewModel : IValidatableObject
     {
-        [Required(ErrorMessage = "El nombre del cliente es obligatorio.")]
-        [StringLength(100, ErrorMessage = "El nombre no puede superar 100 caracteres.")]
-        [Display(Name = "Nombre del cliente")]
+        [Required(ErrorMessage = "The customer name is required.")]
+        [StringLength(100, ErrorMessage = "The name cannot exceed 100 characters.")]
+        [Display(Name = "Customer name")]
         public string ClienteNombre { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El correo del cliente es obligatorio.")]
-        [EmailAddress(ErrorMessage = "Ingresa un correo valido.")]
-        [StringLength(100, ErrorMessage = "El correo no puede superar 100 caracteres.")]
-        [Display(Name = "Correo del cliente")]
+        [Required(ErrorMessage = "The customer email is required.")]
+        [EmailAddress(ErrorMessage = "Enter a valid email.")]
+        [StringLength(100, ErrorMessage = "The email cannot exceed 100 characters.")]
+        [Display(Name = "Customer email")]
         public string ClienteCorreo { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Selecciona el metodo de pago.")]
-        [Display(Name = "Metodo de pago")]
+        [Required(ErrorMessage = "Select the payment method.")]
+        [Display(Name = "Payment method")]
         public string MetodoPago { get; set; } = string.Empty;
 
-        // ---- Datos de la tarjeta (solo cuando MetodoPago == "Tarjeta") ----
-        [Display(Name = "Numero de tarjeta")]
+        // ---- Card data (only when MetodoPago == "Tarjeta") ----
+        [Display(Name = "Card number")]
         public string? NumeroTarjeta { get; set; }
 
         [StringLength(100)]
-        [Display(Name = "Titular de la tarjeta")]
+        [Display(Name = "Cardholder")]
         public string? TitularTarjeta { get; set; }
 
-        [Display(Name = "Vencimiento (MM/AA)")]
+        [Display(Name = "Expiry (MM/YY)")]
         public string? VencimientoTarjeta { get; set; }
 
         [Display(Name = "CVV")]
         public string? CvvTarjeta { get; set; }
 
-        // Indica si el pago es con tarjeta (para la vista).
+        // Indicates whether the payment is by card (for the view).
         public bool EsTarjeta => string.Equals(MetodoPago, "Tarjeta", StringComparison.Ordinal);
 
-        // Los ultimos 4 digitos del numero capturado (o null). Es lo unico que se persiste.
+        // The last 4 digits of the captured number (or null). This is the only thing persisted.
         public string? Ultimos4()
         {
             var digitos = SoloDigitos(NumeroTarjeta);
             return digitos.Length >= 4 ? digitos[^4..] : null;
         }
 
-        // Validacion del lado del servidor: solo aplica cuando el metodo es Tarjeta.
+        // Server-side validation: only applies when the method is Card.
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (!EsTarjeta)
@@ -59,34 +59,34 @@ namespace CasaVintage.ViewModels
             var numero = SoloDigitos(NumeroTarjeta);
             if (numero.Length != 16)
             {
-                yield return new ValidationResult("El numero de tarjeta debe tener 16 digitos.", new[] { nameof(NumeroTarjeta) });
+                yield return new ValidationResult("The card number must have 16 digits.", new[] { nameof(NumeroTarjeta) });
             }
             else if (!LuhnValido(numero))
             {
-                yield return new ValidationResult("El numero de tarjeta no es valido.", new[] { nameof(NumeroTarjeta) });
+                yield return new ValidationResult("The card number is not valid.", new[] { nameof(NumeroTarjeta) });
             }
 
             if (string.IsNullOrWhiteSpace(TitularTarjeta))
             {
-                yield return new ValidationResult("El titular de la tarjeta es obligatorio.", new[] { nameof(TitularTarjeta) });
+                yield return new ValidationResult("The cardholder is required.", new[] { nameof(TitularTarjeta) });
             }
 
             if (!VencimientoValido(VencimientoTarjeta))
             {
-                yield return new ValidationResult("El vencimiento debe tener formato MM/AA y no estar vencido.", new[] { nameof(VencimientoTarjeta) });
+                yield return new ValidationResult("The expiry must be in MM/YY format and not be expired.", new[] { nameof(VencimientoTarjeta) });
             }
 
             var cvv = SoloDigitos(CvvTarjeta);
             if (cvv.Length is not (3 or 4))
             {
-                yield return new ValidationResult("El CVV debe tener 3 o 4 digitos.", new[] { nameof(CvvTarjeta) });
+                yield return new ValidationResult("The CVV must have 3 or 4 digits.", new[] { nameof(CvvTarjeta) });
             }
         }
 
         private static string SoloDigitos(string? valor) =>
             new string((valor ?? string.Empty).Where(char.IsDigit).ToArray());
 
-        // Algoritmo de Luhn: valida el digito verificador del numero de tarjeta.
+        // Luhn algorithm: validates the check digit of the card number.
         private static bool LuhnValido(string numero)
         {
             var suma = 0;
@@ -108,7 +108,7 @@ namespace CasaVintage.ViewModels
             return suma % 10 == 0;
         }
 
-        // Vencimiento en formato MM/AA, mes valido y no anterior al mes actual.
+        // Expiry in MM/YY format, valid month and not before the current month.
         private static bool VencimientoValido(string? vencimiento)
         {
             if (string.IsNullOrWhiteSpace(vencimiento))

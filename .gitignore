@@ -1,0 +1,17 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache/options
+.vs/
+
+# User-specific files
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# App-generated output (invoices / reports)
+CasaVintage/Facturas/
+CasaVintage/Reportes/

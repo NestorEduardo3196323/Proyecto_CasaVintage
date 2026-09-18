@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Implementacion del modulo de Proveedores. La logica de negocio vive aqui para que las
-    // PageModels solo orquesten. Contacto y telefono vacios se normalizan a null.
+    // Suppliers module implementation. The business logic lives here so the PageModels only
+    // orchestrate. Empty contact and phone are normalized to null.
     public class ProveedorService : IProveedorService
     {
         private readonly CasaVintageContext _db;
@@ -20,7 +20,7 @@ namespace CasaVintage.Services
 
         public async Task<IReadOnlyList<ProveedorListItemViewModel>> ListarAsync()
         {
-            // Proyeccion con el conteo de productos en una sola consulta (evita N+1).
+            // Projection with the product count in a single query (avoids N+1).
             return await _db.Proveedores
                 .AsNoTracking()
                 .OrderBy(p => p.Nombre)
@@ -50,7 +50,7 @@ namespace CasaVintage.Services
             _db.Proveedores.Add(proveedor);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Proveedor creado: {Nombre} (id {Id}).", proveedor.Nombre, proveedor.IdProveedor);
+            _logger.LogInformation("Supplier created: {Nombre} (id {Id}).", proveedor.Nombre, proveedor.IdProveedor);
             return ResultadoProveedor.Ok(proveedor);
         }
 
@@ -67,7 +67,7 @@ namespace CasaVintage.Services
             proveedor.Telefono = Normalizar(telefono);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Proveedor editado: id {Id} ({Nombre}).", proveedor.IdProveedor, proveedor.Nombre);
+            _logger.LogInformation("Supplier edited: id {Id} ({Nombre}).", proveedor.IdProveedor, proveedor.Nombre);
             return ResultadoProveedor.Ok(proveedor);
         }
 
@@ -79,8 +79,8 @@ namespace CasaVintage.Services
                 return ResultadoProveedor.Falla(ErrorProveedor.NoEncontrado);
             }
 
-            // Guarda: no se puede eliminar un proveedor con productos (FK Restrict); romperia el
-            // historial de inventario y ventas. Se bloquea y se sugiere reasignar/quitar productos.
+            // Guard: a supplier with products cannot be deleted (FK Restrict); it would break the
+            // inventory and sales history. It is blocked and reassigning/removing products is suggested.
             var tieneProductos = await _db.Productos.AnyAsync(p => p.IdProveedor == id);
             if (tieneProductos)
             {
@@ -90,11 +90,11 @@ namespace CasaVintage.Services
             _db.Proveedores.Remove(proveedor);
             await _db.SaveChangesAsync();
 
-            _logger.LogInformation("Proveedor eliminado: id {Id} ({Nombre}).", id, proveedor.Nombre);
+            _logger.LogInformation("Supplier deleted: id {Id} ({Nombre}).", id, proveedor.Nombre);
             return ResultadoProveedor.Ok(proveedor);
         }
 
-        // Convierte cadenas vacias o con solo espacios en null (columnas opcionales del esquema).
+        // Converts empty or whitespace-only strings to null (optional columns in the schema).
         private static string? Normalizar(string? valor)
         {
             return string.IsNullOrWhiteSpace(valor) ? null : valor.Trim();

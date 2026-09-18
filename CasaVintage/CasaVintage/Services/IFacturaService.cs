@@ -2,23 +2,23 @@ using CasaVintage.ViewModels;
 
 namespace CasaVintage.Services
 {
-    // Resultado de enviar la factura por correo.
+    // Result of sending the invoice by email.
     public sealed record ResultadoEnvio(bool Exito, string? Correo = null, string? Mensaje = null);
 
-    // Genera el comprobante (factura interna) de una venta: datos para la vista, PDF (QuestPDF) y
-    // envio por correo (SMTP).
+    // Generates the receipt (internal invoice) of a sale: data for the view, PDF (QuestPDF) and
+    // sending by email (SMTP).
     public interface IFacturaService
     {
-        // Datos del comprobante de una venta (empresa, cliente, lineas, desglose de IVA). Null si no existe.
+        // Receipt data of a sale (company, customer, lines, VAT breakdown). Null if it does not exist.
         Task<FacturaViewModel?> ObtenerFacturaAsync(int idVenta);
 
-        // Genera el PDF del comprobante. Null si la venta no existe.
+        // Generates the receipt PDF. Null if the sale does not exist.
         Task<byte[]?> GenerarPdfAsync(int idVenta);
 
-        // Envia el comprobante en PDF al correo del cliente registrado en la venta.
+        // Sends the receipt PDF to the email of the customer registered in the sale.
         Task<ResultadoEnvio> EnviarPorCorreoAsync(int idVenta);
 
-        // Genera el PDF del comprobante y lo guarda en la carpeta de facturas del disco.
+        // Generates the receipt PDF and saves it to the invoices folder on disk.
         Task GuardarEnCarpetaAsync(int idVenta);
     }
 }

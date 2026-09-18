@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Cuenta
 {
-    // Cierre de sesion. Solo por POST (con anti-forgery) para no cerrar sesion por un simple GET.
-    // Borra la cookie de autenticacion y devuelve al login.
+    // Sign-out. Only via POST (with anti-forgery) so a plain GET does not end the session.
+    // Clears the authentication cookie and returns to the login.
     public class LogoutModel : PageModel
     {
         public IActionResult OnGet()
         {
-            // Un GET a /Cuenta/Logout no cierra sesion; redirige al login.
+            // A GET to /Cuenta/Logout does not sign out; it redirects to the login.
             return RedirectToPage("/Cuenta/Login");
         }
 

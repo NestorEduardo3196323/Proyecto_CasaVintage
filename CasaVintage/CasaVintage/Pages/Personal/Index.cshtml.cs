@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Personal
 {
-    // Vista "Personal de la empresa": el showcase del equipo y el centro de gestion de cuentas.
-    // Solo el Administrador. La PageModel orquesta: arma las tarjetas (nunca pasa la entidad cruda),
-    // y expone handlers para cambiar el estado (activar/desactivar) y restablecer la contrasena.
-    // Todos los handlers usan patron POST-redirect-GET para no repetir la accion al refrescar.
+    // "Company staff" view: the team showcase and the account-management hub. Administrator only.
+    // The PageModel orchestrates: it builds the cards (never passes the raw entity), and exposes
+    // handlers to change the status (enable/disable) and reset the password. All handlers use the
+    // POST-redirect-GET pattern so the action is not repeated on refresh.
     [Authorize(Roles = "Administrador")]
     public class IndexModel : PageModel
     {
@@ -21,14 +21,14 @@ namespace CasaVintage.Pages.Personal
             _usuarios = usuarios;
         }
 
-        // Tarjetas del personal para la vista.
+        // Staff cards for the view.
         public IReadOnlyList<UsuarioCardViewModel> Personal { get; private set; } = Array.Empty<UsuarioCardViewModel>();
 
-        // Datos del formulario de restablecer contrasena (dialogo unico reutilizable).
+        // Data for the reset-password form (single reusable dialog).
         [BindProperty]
         public RestablecerPasswordViewModel Restablecer { get; set; } = new();
 
-        // True cuando el restablecimiento fallo la validacion: la vista reabre el dialogo con el error.
+        // True when the reset failed validation: the view reopens the dialog with the error.
         public bool ReabrirRestablecer { get; private set; }
 
         public async Task OnGetAsync()
@@ -43,8 +43,8 @@ namespace CasaVintage.Pages.Personal
             if (resultado.Exito)
             {
                 TempData["MensajePersonal"] = activar
-                    ? $"Cuenta de {resultado.Usuario!.NombreUsuario} activada."
-                    : $"Cuenta de {resultado.Usuario!.NombreUsuario} desactivada.";
+                    ? $"{resultado.Usuario!.NombreUsuario}'s account enabled."
+                    : $"{resultado.Usuario!.NombreUsuario}'s account disabled.";
             }
             else
             {
@@ -56,7 +56,7 @@ namespace CasaVintage.Pages.Personal
 
         public async Task<IActionResult> OnPostRestablecerAsync()
         {
-            // Solo se validan los campos de la contrasena; si fallan, se reabre el dialogo con el error.
+            // Only the password fields are validated; if they fail, the dialog reopens with the error.
             if (!ModelState.IsValid)
             {
                 await CargarAsync();
@@ -68,7 +68,7 @@ namespace CasaVintage.Pages.Personal
 
             if (resultado.Exito)
             {
-                TempData["MensajePersonal"] = $"Contrasena restablecida para {resultado.Usuario!.NombreUsuario}.";
+                TempData["MensajePersonal"] = $"Password reset for {resultado.Usuario!.NombreUsuario}.";
             }
             else
             {
@@ -95,7 +95,7 @@ namespace CasaVintage.Pages.Personal
                 u.Foto)).ToList();
         }
 
-        // Id del administrador en sesion (para las guardas de "no cambiar tu propio estado").
+        // Id of the signed-in administrator (for the "cannot change your own status" guards).
         private int IdUsuarioActual()
         {
             return int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var id) ? id : 0;
@@ -103,10 +103,10 @@ namespace CasaVintage.Pages.Personal
 
         private static string MensajeError(ErrorUsuario error) => error switch
         {
-            ErrorUsuario.NoPuedeCambiarPropioEstado => "No puedes cambiar el estado de tu propia cuenta.",
-            ErrorUsuario.UltimoAdministrador => "No se puede: es el unico Administrador activo del sistema.",
-            ErrorUsuario.NoEncontrado => "La cuenta ya no existe.",
-            _ => "No se pudo completar la accion. Intenta de nuevo."
+            ErrorUsuario.NoPuedeCambiarPropioEstado => "You cannot change the status of your own account.",
+            ErrorUsuario.UltimoAdministrador => "Cannot do this: it is the only active Administrator in the system.",
+            ErrorUsuario.NoEncontrado => "The account no longer exists.",
+            _ => "The action could not be completed. Try again."
         };
     }
 }

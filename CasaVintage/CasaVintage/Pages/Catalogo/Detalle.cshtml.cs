@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Catalogo
 {
-    // Ficha de detalle de un producto del catalogo: galeria manual (flechas/miniaturas), toda la
-    // informacion y la descripcion completa. Admin y Vendedor. El carrito se habilita en el Inc. 7.
+    // Detail card of a catalog product: manual gallery (arrows/thumbnails), all the information
+    // and the full description. Admin and Salesperson. The cart is enabled in Increment 7.
     [Authorize(Roles = "Administrador,Gerente,Vendedor")]
     public class DetalleModel : PageModel
     {

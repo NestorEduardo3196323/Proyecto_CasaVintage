@@ -1,11 +1,11 @@
 @page
 @model CasaVintage.Pages.Personal.IndexModel
 @{
-    ViewData["Title"] = "Personal de la empresa";
+    ViewData["Title"] = "Company staff";
     Layout = "_Layout";
     var mensaje = TempData["MensajePersonal"] as string;
     var mensajeError = TempData["MensajePersonalError"] as string;
-    // Al reabrir el dialogo tras un error de validacion, se recupera el nombre del empleado.
+    // When the dialog is reopened after a validation error, the employee's name is recovered.
     var nombreRestablecer = Model.ReabrirRestablecer
         ? Model.Personal.FirstOrDefault(p => p.IdUsuario == Model.Restablecer.IdUsuario)?.NombreUsuario
         : null;
@@ -13,13 +13,13 @@
 
 <div class="personal-cabecera">
     <div>
-        <span class="kicker">Gestion</span>
-        <h1 class="mb-1">Personal de la empresa</h1>
-        <p class="text-muted mb-0">El equipo de La Casa Vintage. Administra las cuentas, los roles y el acceso.</p>
+        <span class="kicker">Management</span>
+        <h1 class="mb-1">Company staff</h1>
+        <p class="text-muted mb-0">The La Casa Vintage team. Manage the accounts, the roles and the access.</p>
     </div>
     <a asp-page="Crear" class="btn-vintage">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /><path d="M5 12h14" /></svg>
-        Nueva cuenta
+        New account
     </a>
 </div>
 
@@ -39,7 +39,7 @@
             <div class="personal-retrato">
                 @if (!string.IsNullOrEmpty(persona.Foto))
                 {
-                    <img src="@persona.Foto" alt="Foto de @persona.NombreUsuario" class="personal-foto" loading="lazy" />
+                    <img src="@persona.Foto" alt="Photo of @persona.NombreUsuario" class="personal-foto" loading="lazy" />
                 }
                 else
                 {
@@ -52,11 +52,11 @@
                 <div class="personal-titulo">
                     <h2 class="mb-0">@persona.NombreUsuario</h2>
                     <span class="badge-estado @(persona.Activo ? "es-activo" : "es-inactivo")">
-                        @(persona.Activo ? "Activa" : "Inactiva")
+                        @(persona.Activo ? "Active" : "Inactive")
                     </span>
                     @if (persona.EsUsuarioActual)
                     {
-                        <span class="badge-tu">Tu cuenta</span>
+                        <span class="badge-tu">Your account</span>
                     }
                 </div>
 
@@ -70,25 +70,25 @@
                 <div class="personal-detalle" id="detalle-@persona.IdUsuario" hidden>
                     <dl class="detalle-datos">
                         <div>
-                            <dt>Correo</dt>
+                            <dt>Email</dt>
                             <dd>@persona.Correo</dd>
                         </div>
                         <div>
-                            <dt>Fecha de ingreso</dt>
+                            <dt>Join date</dt>
                             <dd>@persona.FechaCreado.ToString("dd/MM/yyyy")</dd>
                         </div>
                         <div>
-                            <dt>Contrasena</dt>
-                            <dd class="dato-oculto">Protegida (hasheada)</dd>
+                            <dt>Password</dt>
+                            <dd class="dato-oculto">Protected (hashed)</dd>
                         </div>
                     </dl>
 
                     <div class="detalle-acciones">
-                        <a asp-page="Editar" asp-route-id="@persona.IdUsuario" class="btn-vintage-outline btn-sm">Editar</a>
+                        <a asp-page="Editar" asp-route-id="@persona.IdUsuario" class="btn-vintage-outline btn-sm">Edit</a>
 
                         <button type="button" class="btn-vintage-outline btn-sm" data-restablecer
                                 data-id="@persona.IdUsuario" data-nombre="@persona.NombreUsuario">
-                            Restablecer contrasena
+                            Reset password
                         </button>
 
                         @if (!persona.EsUsuarioActual)
@@ -98,11 +98,11 @@
                                 <input type="hidden" name="activar" value="@((!persona.Activo).ToString().ToLower())" />
                                 @if (persona.Activo)
                                 {
-                                    <button type="submit" class="btn-desactivar btn-sm" data-confirmar="Desactivar la cuenta de @persona.NombreUsuario? No podra iniciar sesion hasta reactivarla.">Desactivar</button>
+                                    <button type="submit" class="btn-desactivar btn-sm" data-confirmar="Disable @persona.NombreUsuario's account? They will not be able to sign in until it is re-enabled.">Disable</button>
                                 }
                                 else
                                 {
-                                    <button type="submit" class="btn-activar btn-sm">Activar</button>
+                                    <button type="submit" class="btn-activar btn-sm">Enable</button>
                                 }
                             </form>
                         }
@@ -117,13 +117,13 @@
     <form method="post" asp-page-handler="Restablecer">
         <div class="dialogo-encabezado">
             <div>
-                <span class="kicker">Restablecer contrasena</span>
-                <h2 class="h4 mb-0" id="dlgRestablecerNombre">@(nombreRestablecer ?? "Empleado")</h2>
+                <span class="kicker">Reset password</span>
+                <h2 class="h4 mb-0" id="dlgRestablecerNombre">@(nombreRestablecer ?? "Employee")</h2>
             </div>
-            <button type="button" class="dialogo-cerrar" data-cerrar-dialogo aria-label="Cerrar">&times;</button>
+            <button type="button" class="dialogo-cerrar" data-cerrar-dialogo aria-label="Close">&times;</button>
         </div>
 
-        <p class="text-muted dialogo-texto">Escribe la nueva contrasena. La anterior no se puede recuperar. Comunicasela al empleado por un medio seguro.</p>
+        <p class="text-muted dialogo-texto">Type the new password. The previous one cannot be recovered. Share it with the employee through a secure channel.</p>
 
         <div asp-validation-summary="ModelOnly" class="alerta-vintage alerta-error mb-3" role="alert"></div>
         <input type="hidden" asp-for="Restablecer.IdUsuario" />
@@ -140,11 +140,11 @@
             <span asp-validation-for="Restablecer.ConfirmarPassword" class="text-danger"></span>
         </div>
 
-        <p class="ayuda-campo mb-4">Al menos 8 caracteres, con una letra y un numero.</p>
+        <p class="ayuda-campo mb-4">At least 8 characters, with a letter and a number.</p>
 
         <div class="d-flex flex-wrap gap-2 justify-content-end">
-            <button type="button" class="btn-vintage-outline" data-cerrar-dialogo>Cancelar</button>
-            <button type="submit" class="btn-vintage">Restablecer</button>
+            <button type="button" class="btn-vintage-outline" data-cerrar-dialogo>Cancel</button>
+            <button type="submit" class="btn-vintage">Reset</button>
         </div>
     </form>
 </dialog>

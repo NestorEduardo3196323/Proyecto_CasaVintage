@@ -1,8 +1,8 @@
 namespace CasaVintage.ViewModels
 {
-    // Datos completos del comprobante (factura interna) de una venta: empresa, cliente, lineas y el
-    // desglose de IVA. Los precios de venta se consideran con IVA incluido (13%, El Salvador), asi
-    // que el subtotal y el IVA se calculan a partir del total, sin cambiar lo que pago el cliente.
+    // Complete data for the receipt (internal invoice) of a sale: company, customer, lines and the
+    // VAT breakdown. Sale prices are considered VAT-inclusive (13%, El Salvador), so the subtotal
+    // and the VAT are computed from the total, without changing what the customer paid.
     public sealed record FacturaViewModel(
         int NumeroVenta,
         DateTime Fecha,
@@ -20,12 +20,15 @@ namespace CasaVintage.ViewModels
         decimal Total,
         string? TarjetaUltimos4 = null)
     {
-        // Tasa de IVA usada para el desglose (13%).
+        // VAT rate used for the breakdown (13%).
         public const decimal TasaIva = 0.13m;
 
-        // Metodo de pago para mostrar (incluye los ultimos 4 digitos si fue con tarjeta).
-        public string MetodoPagoTexto => MetodoPago == "Tarjeta" && !string.IsNullOrEmpty(TarjetaUltimos4)
-            ? $"Tarjeta terminada en {TarjetaUltimos4}"
-            : MetodoPago;
+        // Payment method for display (includes the last 4 digits if it was by card).
+        public string MetodoPagoTexto => MetodoPago switch
+        {
+            "Tarjeta" => !string.IsNullOrEmpty(TarjetaUltimos4) ? $"Card ending in {TarjetaUltimos4}" : "Card",
+            "Efectivo" => "Cash",
+            _ => MetodoPago
+        };
     }
 }

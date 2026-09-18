@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Implementacion del carrito sobre la sesion. Se guarda solo (idProducto, cantidad); el precio,
-    // el stock y la foto se leen frescos de la base al armar el carrito o al cobrar, para no cobrar
-    // precios viejos ni vender mas de lo que hay.
+    // Session-based cart implementation. Only (idProducto, cantidad) is stored; the price, stock and
+    // photo are read fresh from the database when building the cart or checking out, so old prices
+    // are not charged and more than what is in stock is not sold.
     public class CarritoService : ICarritoService
     {
         private const string Clave = "Carrito";
@@ -21,7 +21,7 @@ namespace CasaVintage.Services
             _db = db;
         }
 
-        // Una linea guardada en la sesion.
+        // A line stored in the session.
         private sealed record Linea(int IdProducto, int Cantidad);
 
         public async Task<ResultadoCarrito> AgregarAsync(int idProducto, int cantidad = 1)
@@ -38,11 +38,11 @@ namespace CasaVintage.Services
 
             if (producto is null)
             {
-                return new ResultadoCarrito(false, Contar(), "El producto ya no existe.");
+                return new ResultadoCarrito(false, Contar(), "The product no longer exists.");
             }
             if (producto.Stock <= 0)
             {
-                return new ResultadoCarrito(false, Contar(), "Ese producto esta sin stock.");
+                return new ResultadoCarrito(false, Contar(), "That product is out of stock.");
             }
 
             var lineas = Leer();
@@ -54,8 +54,8 @@ namespace CasaVintage.Services
             Guardar(lineas);
 
             var mensaje = nueva == actual
-                ? $"Ya tienes el maximo disponible de \"{producto.Nombre}\" ({producto.Stock})."
-                : $"\"{producto.Nombre}\" agregado al carrito.";
+                ? $"You already have the maximum available of \"{producto.Nombre}\" ({producto.Stock})."
+                : $"\"{producto.Nombre}\" added to the cart.";
             return new ResultadoCarrito(true, lineas.Sum(l => l.Cantidad), mensaje);
         }
 
@@ -102,7 +102,7 @@ namespace CasaVintage.Services
                 var p = productos.FirstOrDefault(x => x.IdProducto == linea.IdProducto);
                 if (p is null)
                 {
-                    continue; // el producto se elimino; se ignora esa linea
+                    continue; // the product was deleted; that line is ignored
                 }
                 items.Add(new CarritoItemViewModel(
                     p.IdProducto, p.Sku, p.Nombre, p.Foto1, p.Precio, linea.Cantidad, p.Stock));
@@ -116,7 +116,7 @@ namespace CasaVintage.Services
             return Leer().Sum(l => l.Cantidad);
         }
 
-        // ---- Lectura/escritura de la sesion ----
+        // ---- Reading/writing the session ----
         private List<Linea> Leer()
         {
             var json = _http.HttpContext?.Session.GetString(Clave);

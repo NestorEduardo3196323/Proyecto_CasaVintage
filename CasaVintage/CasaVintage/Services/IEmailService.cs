@@ -1,11 +1,11 @@
 namespace CasaVintage.Services
 {
-    // Envio de correos por SMTP (configurado en appsettings). Aisla el SMTP para que la
-    // facturacion solo pida "envia este PDF a este correo".
+    // Sending of emails over SMTP (configured in appsettings). It isolates SMTP so that billing
+    // only has to ask "send this PDF to this email".
     public interface IEmailService
     {
-        // Envia un correo con un archivo adjunto. Devuelve true si se envio, false si fallo (el
-        // motivo queda en el log). No lanza excepciones al llamador.
+        // Sends an email with an attached file. Returns true if it was sent, false if it failed (the
+        // reason is left in the log). It does not throw exceptions to the caller.
         Task<bool> EnviarConAdjuntoAsync(string destino, string asunto, string cuerpoHtml, byte[] adjunto, string nombreAdjunto);
     }
 }

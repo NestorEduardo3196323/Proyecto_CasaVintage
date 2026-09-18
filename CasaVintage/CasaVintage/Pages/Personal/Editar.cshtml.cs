@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Personal
 {
-    // Edicion de los datos de una cuenta (nombre, correo, rol). Solo el Administrador. La contrasena
-    // y el estado activo no se tocan aqui: cada uno tiene su propia accion con sus guardas.
+    // Editing an account's data (name, email, role). Administrator only. The password and the active
+    // status are not touched here: each one has its own action with its guards.
     [Authorize(Roles = "Administrador")]
     public class EditarModel : PageModel
     {
@@ -52,7 +52,7 @@ namespace CasaVintage.Pages.Personal
                 return Page();
             }
 
-            // Se decide el cambio de foto: quitar, reemplazar por una nueva, o dejar la actual.
+            // The photo change is decided: remove, replace with a new one, or keep the current one.
             var cambiarFoto = false;
             string? nuevaFoto = null;
 
@@ -79,7 +79,7 @@ namespace CasaVintage.Pages.Personal
 
             if (!resultado.Exito)
             {
-                // La edicion fallo: se borra la imagen recien subida para no dejar archivos huerfanos.
+                // The edit failed: the just-uploaded image is deleted so no orphan files are left.
                 if (cambiarFoto)
                 {
                     _archivos.Eliminar(nuevaFoto);
@@ -89,11 +89,11 @@ namespace CasaVintage.Pages.Personal
                 return Page();
             }
 
-            TempData["MensajePersonal"] = $"Cuenta de {resultado.Usuario!.NombreUsuario} actualizada.";
+            TempData["MensajePersonal"] = $"{resultado.Usuario!.NombreUsuario}'s account updated.";
             return RedirectToPage("Index");
         }
 
-        // Vuelve a leer la foto actual desde la base para mostrarla al re-renderizar tras un error.
+        // Re-reads the current photo from the database to show it when re-rendering after an error.
         private async Task RecargarFotoActualAsync()
         {
             var usuario = await _usuarios.ObtenerAsync(Entrada.IdUsuario);
@@ -105,19 +105,19 @@ namespace CasaVintage.Pages.Personal
             switch (error)
             {
                 case ErrorUsuario.CorreoDuplicado:
-                    ModelState.AddModelError("Entrada.Correo", "Ya existe otra cuenta con ese correo.");
+                    ModelState.AddModelError("Entrada.Correo", "Another account with that email already exists.");
                     break;
                 case ErrorUsuario.RolInvalido:
-                    ModelState.AddModelError("Entrada.Rol", "Selecciona un rol valido.");
+                    ModelState.AddModelError("Entrada.Rol", "Select a valid role.");
                     break;
                 case ErrorUsuario.UltimoAdministrador:
-                    ModelState.AddModelError(string.Empty, "No puedes quitar el rol de Administrador: es el unico administrador activo del sistema.");
+                    ModelState.AddModelError(string.Empty, "You cannot remove the Administrator role: it is the only active administrator in the system.");
                     break;
                 case ErrorUsuario.NoEncontrado:
-                    ModelState.AddModelError(string.Empty, "La cuenta ya no existe.");
+                    ModelState.AddModelError(string.Empty, "The account no longer exists.");
                     break;
                 default:
-                    ModelState.AddModelError(string.Empty, "No se pudo actualizar la cuenta. Intenta de nuevo.");
+                    ModelState.AddModelError(string.Empty, "The account could not be updated. Try again.");
                     break;
             }
         }

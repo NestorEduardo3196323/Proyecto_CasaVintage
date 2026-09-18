@@ -1,7 +1,7 @@
 namespace CasaVintage.ViewModels
 {
-    // Proyeccion de un producto para las tarjetas del catalogo (lo que ve el vendedor al vender).
-    // Incluye las 3 fotos (para el hover que se agrega despues) y los datos de la tarjeta.
+    // Projection of a product for the catalog cards (what the salesperson sees when selling).
+    // Includes the 3 photos (for the hover) and the card data.
     public sealed record ProductoCatalogoViewModel(
         int IdProducto,
         string Sku,

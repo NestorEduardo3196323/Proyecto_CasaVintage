@@ -1,6 +1,6 @@
 namespace CasaVintage.ViewModels
 {
-    // Una linea de la venta (para la confirmacion / comprobante).
+    // A line of the sale (for the confirmation / receipt).
     public sealed record VentaLineaViewModel(
         string Sku,
         string Nombre,
@@ -10,7 +10,7 @@ namespace CasaVintage.ViewModels
         public decimal Subtotal => PrecioUnitario * Cantidad;
     }
 
-    // Resumen de una venta ya registrada, para la pantalla de confirmacion.
+    // Summary of an already-registered sale, for the confirmation screen.
     public sealed record VentaConfirmacionViewModel(
         int IdVenta,
         DateTime Fecha,
@@ -22,9 +22,12 @@ namespace CasaVintage.ViewModels
         IReadOnlyList<VentaLineaViewModel> Lineas,
         string? TarjetaUltimos4 = null)
     {
-        // Texto del metodo de pago para mostrar (incluye los ultimos 4 digitos si fue con tarjeta).
-        public string MetodoPagoTexto => MetodoPago == "Tarjeta" && !string.IsNullOrEmpty(TarjetaUltimos4)
-            ? $"Tarjeta terminada en {TarjetaUltimos4}"
-            : MetodoPago;
+        // Payment method text for display (includes the last 4 digits if it was by card).
+        public string MetodoPagoTexto => MetodoPago switch
+        {
+            "Tarjeta" => !string.IsNullOrEmpty(TarjetaUltimos4) ? $"Card ending in {TarjetaUltimos4}" : "Card",
+            "Efectivo" => "Cash",
+            _ => MetodoPago
+        };
     }
 }

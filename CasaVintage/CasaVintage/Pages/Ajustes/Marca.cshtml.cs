@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Ajustes
 {
-    // Identidad visual de la empresa: el Administrador sube o quita el logo que se muestra en la app.
-    // Solo el Administrador (dueno) gestiona la marca. La PageModel orquesta y delega en IMarcaService.
+    // Company visual identity: the Administrator uploads or removes the logo shown in the app.
+    // Only the Administrator (owner) manages the brand. The PageModel orchestrates and delegates to
+    // IMarcaService.
     [Authorize(Roles = "Administrador")]
     public class MarcaModel : PageModel
     {
@@ -17,7 +18,7 @@ namespace CasaVintage.Pages.Ajustes
             _marca = marca;
         }
 
-        // Ruta web del logo actual (null si aun no hay logo cargado).
+        // Web path of the current logo (null if no logo has been uploaded yet).
         public string? LogoActual { get; private set; }
 
         [BindProperty]
@@ -41,14 +42,14 @@ namespace CasaVintage.Pages.Ajustes
                 return Page();
             }
 
-            Mensaje = "Logo actualizado.";
+            Mensaje = "Logo updated.";
             return RedirectToPage();
         }
 
         public IActionResult OnPostQuitar()
         {
             _marca.QuitarLogo();
-            Mensaje = "Se quito el logo. La app usa el monograma por defecto.";
+            Mensaje = "The logo was removed. The app uses the default monogram.";
             return RedirectToPage();
         }
     }

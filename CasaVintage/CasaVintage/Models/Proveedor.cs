@@ -1,20 +1,20 @@
 namespace CasaVintage.Models
 {
-    // Entidad que representa a un proveedor de la tienda. Mapea a la tabla "proveedores".
+    // Entity representing a store supplier. Maps to the "proveedores" table.
     public class Proveedor
     {
         public int IdProveedor { get; set; }
 
-        // Nombre comercial del proveedor (obligatorio).
+        // Commercial name of the supplier (required).
         public string Nombre { get; set; } = string.Empty;
 
-        // Persona o medio de contacto (opcional).
+        // Contact person or channel (optional).
         public string? Contacto { get; set; }
 
-        // Telefono de contacto (opcional).
+        // Contact phone (optional).
         public string? Telefono { get; set; }
 
-        // Productos suministrados por este proveedor.
+        // Products supplied by this supplier.
         public ICollection<Producto> Productos { get; set; } = new List<Producto>();
     }
 }

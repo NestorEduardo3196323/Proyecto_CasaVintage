@@ -2,7 +2,7 @@
 @model CasaVintage.Pages.Cuenta.LoginModel
 @inject CasaVintage.Services.IMarcaService Marca
 @{
-    ViewData["Title"] = "Iniciar sesion";
+    ViewData["Title"] = "Sign in";
     Layout = "_Layout";
     var logoLogin = Marca.RutaLogo();
 }
@@ -24,7 +24,7 @@
                 <span class="marca-logo mx-auto d-inline-flex" style="width:64px;height:64px;font-size:2rem;">V</span>
             }
             <h1 class="h3 mt-3 mb-1">La Casa Vintage</h1>
-            <p class="text-muted mb-0">Sistema interno de inventario y ventas</p>
+            <p class="text-muted mb-0">Internal inventory and sales system</p>
         </div>
 
         <form method="post">
@@ -44,7 +44,7 @@
 
             <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
 
-            <button type="submit" class="btn-vintage w-100 mt-2">Ingresar</button>
+            <button type="submit" class="btn-vintage w-100 mt-2">Sign in</button>
         </form>
     </div>
 </div>
@@ -52,9 +52,9 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Al llegar al login (por ejemplo tras cerrar sesion) se limpia la preferencia
-        // del catalogo para que cada usuario arranque con los agotados visibles y no
-        // herede el estado del "ojito" de la sesion anterior.
+        // On reaching the login (for example after signing out) the catalog preference is
+        // cleared so every user starts with out-of-stock items visible and does not inherit
+        // the previous session's "eye toggle" state.
         try { localStorage.removeItem("catalogoOcultarAgotados"); } catch (e) { }
     </script>
 }

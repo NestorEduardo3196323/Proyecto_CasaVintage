@@ -1,31 +1,31 @@
 /* ============================================================
-   La Casa de Vintage - Sistema visual (estilo STAP)
-   Sidebar fijo, encabezados serif, tarjetas calidas sobre crema.
-   Paleta OTONAL: cocoa + vino especiado + caramelo + oliva + crema.
-   Los nombres de variable se conservan (verde-* = ahora tonos calidos)
-   para no romper referencias; todo se controla aqui: cambiar propaga.
+   La Casa de Vintage - Visual system (STAP style)
+   Fixed sidebar, serif headings, warm cards over cream.
+   AUTUMNAL palette: cocoa + spiced wine + caramel + olive + cream.
+   The variable names are kept (verde-* = now warm tones) so as not
+   to break references; everything is controlled here: a change propagates.
    ============================================================ */
 :root {
-    --verde-oscuro: #6d3f1c;   /* PRINCIPAL: marron calido (botones, activo, enlaces) */
-    --verde-hover: #522d12;    /* mas oscuro al pasar el mouse */
-    --verde-oliva: #9d9167;    /* Olive Harvest: acento verde apagado */
-    --verde-suave: #ece3cd;    /* tinte claro calido: nav activo, badges */
-    --verde-texto: #5c3a1c;    /* texto (marron) sobre el tinte claro */
+    --verde-oscuro: #6d3f1c;   /* MAIN: warm brown (buttons, active, links) */
+    --verde-hover: #522d12;    /* darker on hover */
+    --verde-oliva: #9d9167;    /* Olive Harvest: muted green accent */
+    --verde-suave: #ece3cd;    /* light warm tint: active nav, badges */
+    --verde-texto: #5c3a1c;    /* text (brown) over the light tint */
 
-    --cafe-oscuro: #3a2817;    /* Cowhide Cocoa profundo: titulos y texto fuerte */
-    --cafe-claro: #8a6a2b;     /* Toasted Caramel: acento */
+    --cafe-oscuro: #3a2817;    /* deep Cowhide Cocoa: headings and strong text */
+    --cafe-claro: #8a6a2b;     /* Toasted Caramel: accent */
 
-    --crema: #f6efe1;          /* fondo general (crema calida) */
-    --beige: #efe6d3;          /* superficie tenue (hover, chips) */
-    --laton: #a67c34;          /* dorado/caramelo apagado, acento */
+    --crema: #f6efe1;          /* general background (warm cream) */
+    --beige: #efe6d3;          /* subtle surface (hover, chips) */
+    --laton: #a67c34;          /* muted gold/caramel, accent */
 
-    --vino: #7a2e1c;           /* Spiced Wine: acento fuerte (enfasis, peligro) */
+    --vino: #7a2e1c;           /* Spiced Wine: strong accent (emphasis, danger) */
 
-    --tinta: #33281b;          /* texto principal (marron muy oscuro) */
-    --tinta-suave: #7c6c52;    /* texto secundario (taupe calido) */
+    --tinta: #33281b;          /* main text (very dark brown) */
+    --tinta-suave: #7c6c52;    /* secondary text (warm taupe) */
 
-    --superficie: #fffdf7;     /* tarjetas (blanco calido) */
-    --borde: #e7dcc4;          /* bordes suaves calidos */
+    --superficie: #fffdf7;     /* cards (warm white) */
+    --borde: #e7dcc4;          /* soft warm borders */
 
     --sombra-suave: 0 1px 2px rgba(28, 28, 24, 0.04), 0 1px 3px rgba(28, 28, 24, 0.04);
     --sombra-media: 0 6px 22px rgba(28, 28, 24, 0.09);
@@ -65,7 +65,7 @@ h1 { font-size: 2.4rem; line-height: 1.1; }
 
 a { color: var(--verde-oscuro); }
 
-/* Kicker: texto pequeno en mayusculas (estilo editorial STAP) */
+/* Kicker: small uppercase text (STAP editorial style) */
 .kicker {
     text-transform: uppercase;
     letter-spacing: 0.16em;
@@ -75,7 +75,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Shell: sidebar fijo + barra superior + contenido
+   Shell: fixed sidebar + top bar + content
    ============================================================ */
 .app-shell {
     display: flex;
@@ -123,8 +123,8 @@ a { color: var(--verde-oscuro); }
     color: var(--cafe-oscuro);
 }
 
-/* Logo de la empresa en el menu lateral (cuando el Admin sube uno). Sin recuadro ni fondo:
-   se funde con el sidebar. Se dimensiona por alto y conserva su proporcion. */
+/* Company logo in the side menu (when the Admin uploads one). No box or background:
+   it blends with the sidebar. It is sized by height and keeps its proportion. */
 .marca-logo-img {
     height: 46px;
     width: auto;
@@ -133,20 +133,20 @@ a { color: var(--verde-oscuro); }
     display: block;
 }
 
-/* Mismo logo, mas grande y centrado, para la pantalla de inicio de sesion. */
+/* Same logo, larger and centered, for the login screen. */
 .marca-logo-login {
     height: 96px;
     max-width: 230px;
     margin: 0 auto;
 }
 
-/* Logo pequeno para la tarjeta del pie del menu lateral. */
+/* Small logo for the footer card of the side menu. */
 .marca-logo-pie {
     height: 32px;
     max-width: 60px;
 }
 
-/* Pagina de identidad visual (Ajustes/Marca): vista previa + carga del logo. */
+/* Visual identity page (Settings/Brand): preview + logo upload. */
 .marca-preview-fila {
     display: flex;
     flex-wrap: wrap;
@@ -282,7 +282,7 @@ a { color: var(--verde-oscuro); }
     color: var(--tinta-suave);
 }
 
-/* Zona principal */
+/* Main area */
 .app-main {
     flex: 1 1 auto;
     min-width: 0;
@@ -361,7 +361,7 @@ a { color: var(--verde-oscuro); }
     z-index: 40;
 }
 
-/* ---------- Pantallas de autenticacion (sin sidebar) ---------- */
+/* ---------- Authentication screens (no sidebar) ---------- */
 .auth-wrap {
     min-height: 100vh;
     display: flex;
@@ -378,9 +378,9 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ------------------------------------------------------------
-   Login con video de fondo
+   Login with background video
    ------------------------------------------------------------ */
-/* Video a pantalla completa detras del formulario de acceso. */
+/* Full-screen video behind the login form. */
 .login-video-fondo {
     position: fixed;
     inset: 0;
@@ -390,7 +390,7 @@ a { color: var(--verde-oscuro); }
     z-index: -2;
 }
 
-/* Velo con tono vintage para dar contraste al texto sobre el video. */
+/* Vintage-toned veil to give the text contrast over the video. */
 .login-video-overlay {
     position: fixed;
     inset: 0;
@@ -398,15 +398,15 @@ a { color: var(--verde-oscuro); }
     z-index: -1;
 }
 
-/* La tarjeta del login queda con fondo transparente para ver el video.
-   Se usa doble clase para ganarle en especificidad a .tarjeta-vintage. */
+/* The login card is left with a transparent background to see the video.
+   A double class is used to beat .tarjeta-vintage in specificity. */
 .tarjeta-vintage.tarjeta-login {
     background-color: transparent;
     border: none;
     box-shadow: none;
 }
 
-/* Texto claro y con sombra para que sea legible sobre el video. */
+/* Light text with a shadow so it is legible over the video. */
 .tarjeta-login h1,
 .tarjeta-login .h3 {
     color: #f6efe3;
@@ -423,7 +423,7 @@ a { color: var(--verde-oscuro); }
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 }
 
-/* Campos con leve efecto vidrio: siguen siendo legibles al escribir. */
+/* Fields with a slight glass effect: still legible while typing. */
 .tarjeta-login .form-control {
     background-color: rgba(255, 255, 255, 0.9);
     border-color: rgba(255, 255, 255, 0.55);
@@ -434,7 +434,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Botones
+   Buttons
    ============================================================ */
 .btn-vintage {
     display: inline-flex;
@@ -485,7 +485,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Tarjetas
+   Cards
    ============================================================ */
 .tarjeta-vintage {
     background-color: var(--superficie);
@@ -495,7 +495,7 @@ a { color: var(--verde-oscuro); }
     transition: box-shadow 0.18s ease;
 }
 
-/* Tarjetas de estadistica (icono + numero + etiqueta), estilo STAP */
+/* Stat cards (icon + number + label), STAP style */
 .stat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -544,7 +544,7 @@ a { color: var(--verde-oscuro); }
     margin-top: 0.2rem;
 }
 
-/* ---------- Barra de herramientas de tabla (busqueda) ---------- */
+/* ---------- Table toolbar (search) ---------- */
 .tabla-toolbar {
     padding: 1rem 1.1rem;
     border-bottom: 1px solid var(--borde);
@@ -568,7 +568,7 @@ a { color: var(--verde-oscuro); }
     padding-left: 2.3rem;
 }
 
-/* Barra de filtros del historial (busqueda + ano + vendedor + articulos) */
+/* History filter bar (search + year + salesperson + items) */
 .historial-filtros {
     display: flex;
     flex-wrap: wrap;
@@ -608,7 +608,7 @@ a { color: var(--verde-oscuro); }
     align-self: flex-end;
 }
 
-/* Barra de filtros de los reportes (rango de fechas + accesos rapidos, vendedor, metodo, categoria) */
+/* Reports filter bar (date range + quick access, salesperson, method, category) */
 .reportes-filtros {
     display: flex;
     flex-wrap: wrap;
@@ -650,7 +650,7 @@ a { color: var(--verde-oscuro); }
     margin-left: auto;
 }
 
-/* Avatar de iniciales dentro de una fila de tabla */
+/* Initials avatar inside a table row */
 .celda-con-avatar {
     display: flex;
     align-items: center;
@@ -671,7 +671,7 @@ a { color: var(--verde-oscuro); }
     font-size: 0.9rem;
 }
 
-/* Reportes: dos tablas lado a lado */
+/* Reports: two tables side by side */
 .reportes-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -692,7 +692,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Avatares (iniciales y foto)
+   Avatars (initials and photo)
    ============================================================ */
 .avatar-iniciales {
     width: 40px;
@@ -728,7 +728,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Formularios
+   Forms
    ============================================================ */
 .form-label {
     font-size: 0.85rem;
@@ -781,7 +781,7 @@ a { color: var(--verde-oscuro); }
 
 .volver-link:hover { color: var(--cafe-oscuro); }
 
-/* Campo con prefijo de moneda ($) */
+/* Field with a currency prefix ($) */
 .input-moneda { position: relative; }
 
 .input-moneda > span {
@@ -795,7 +795,7 @@ a { color: var(--verde-oscuro); }
 
 .input-moneda .form-control { padding-left: 1.7rem; }
 
-/* Caja del SKU */
+/* SKU box */
 .sku-auto {
     border: 1px dashed var(--borde);
     border-radius: var(--radio-sm);
@@ -813,7 +813,7 @@ a { color: var(--verde-oscuro); }
     font-weight: 600;
 }
 
-/* Subida de foto (una) */
+/* Photo upload (single) */
 .foto-campo {
     display: flex;
     align-items: flex-start;
@@ -845,7 +845,7 @@ a { color: var(--verde-oscuro); }
     object-fit: cover;
 }
 
-/* Seccion de las 3 fotos del producto */
+/* Section of the 3 product photos */
 .fotos-seccion { margin-top: 1.5rem; }
 
 .fotos-grid {
@@ -868,7 +868,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Alertas (paleta vintage, sin rojos)
+   Alerts (vintage palette, no reds)
    ============================================================ */
 .alerta-vintage {
     border-radius: var(--radio-sm);
@@ -880,7 +880,7 @@ a { color: var(--verde-oscuro); }
 
 .alerta-vintage:empty { display: none; }
 
-/* Cuando el resumen de validacion no tiene errores, no dibujar la caja de alerta. */
+/* When the validation summary has no errors, do not draw the alert box. */
 .validation-summary-valid { display: none; }
 
 .alerta-ok {
@@ -898,7 +898,7 @@ a { color: var(--verde-oscuro); }
 .alerta-error ul { margin: 0; padding-left: 1.1rem; }
 
 /* ============================================================
-   Encabezado de pagina (titulo + accion)
+   Page header (title + action)
    ============================================================ */
 .personal-cabecera {
     display: flex;
@@ -910,7 +910,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Tablas de gestion
+   Management tables
    ============================================================ */
 .estado-vacio {
     text-align: center;
@@ -1020,7 +1020,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Etiquetas de estado
+   Status labels
    ============================================================ */
 .badge-estado, .badge-tu {
     font-size: 0.68rem;
@@ -1053,7 +1053,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Personal de la empresa (showcase)
+   Company personnel (showcase)
    ============================================================ */
 .personal-lista {
     display: flex;
@@ -1212,7 +1212,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Dialogo nativo (restablecer contrasena)
+   Native dialog (reset password)
    ============================================================ */
 .dialogo-vintage {
     border: 1px solid var(--borde);
@@ -1255,7 +1255,7 @@ a { color: var(--verde-oscuro); }
 .dialogo-cerrar:hover { color: var(--cafe-oscuro); }
 
 /* ============================================================
-   Tarjeta de bienvenida (overlay) + aterrizaje
+   Welcome card (overlay) + landing
    ============================================================ */
 .bienvenida-overlay {
     position: fixed;
@@ -1316,7 +1316,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Revelado suave al hacer scroll (progresivo)
+   Soft reveal on scroll (progressive)
    ============================================================ */
 .con-revelado .por-revelar {
     opacity: 0;
@@ -1330,7 +1330,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Accesibilidad: foco visible
+   Accessibility: visible focus
    ============================================================ */
 .btn:focus-visible, .form-control:focus-visible, .form-select:focus-visible,
 .nav-item:focus-visible, .btn-vintage:focus-visible, .btn-vintage-outline:focus-visible,
@@ -1340,7 +1340,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Catalogo (cuadricula de tarjetas de producto)
+   Catalog (grid of product cards)
    ============================================================ */
 .btn-vintage:disabled, .btn-vintage[disabled],
 .btn-vintage-outline:disabled, .btn-vintage-outline[disabled] {
@@ -1376,7 +1376,7 @@ a { color: var(--verde-oscuro); }
     opacity: 0.78;
 }
 
-/* Boton "ojito": cuando esta activo, oculta los productos agotados (stock 0) del catalogo. */
+/* "Eye" button: when active, it hides the sold-out products (stock 0) from the catalog. */
 [data-catalogo].ocultar-agotados .producto-card.agotado {
     display: none;
 }
@@ -1503,7 +1503,7 @@ a { color: var(--verde-oscuro); }
     gap: 0.4rem;
 }
 
-/* Fotos apiladas para el hover (solo la .activa se ve) */
+/* Stacked photos for hover (only .activa is shown) */
 .producto-img {
     position: absolute;
     inset: 0;
@@ -1526,7 +1526,7 @@ a { color: var(--verde-oscuro); }
     border-radius: 999px;
 }
 
-/* ---------- Hero del catalogo ---------- */
+/* ---------- Catalog hero ---------- */
 .catalogo-hero {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
@@ -1618,7 +1618,7 @@ a { color: var(--verde-oscuro); }
     background-color: var(--verde-oscuro);
 }
 
-/* ---------- Filtros del catalogo ---------- */
+/* ---------- Catalog filters ---------- */
 .catalogo-filtros {
     display: flex;
     flex-wrap: wrap;
@@ -1679,7 +1679,7 @@ a { color: var(--verde-oscuro); }
     margin-bottom: 1.25rem;
 }
 
-/* ---------- Detalle del producto + galeria manual ---------- */
+/* ---------- Product detail + manual gallery ---------- */
 .detalle-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1705,7 +1705,7 @@ a { color: var(--verde-oscuro); }
     object-fit: cover;
 }
 
-/* Imagenes apiladas de la galeria: solo la .activa se ve, con desvanecido al cambiar */
+/* Stacked gallery images: only .activa is shown, with a fade on change */
 .galeria-img {
     position: absolute;
     inset: 0;
@@ -1828,7 +1828,7 @@ a { color: var(--verde-oscuro); }
     gap: 0.6rem;
 }
 
-/* Toque: entrada suave y escalonada de las tarjetas del catalogo (respeta reduce-motion) */
+/* Touch: soft, staggered entrance of the catalog cards (respects reduce-motion) */
 @keyframes aparecer-tarjeta {
     from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: none; }
@@ -1845,7 +1845,7 @@ a { color: var(--verde-oscuro); }
 .catalogo-grid .producto-card:nth-child(6) { animation-delay: 0.25s; }
 .catalogo-grid .producto-card:nth-child(n+7) { animation-delay: 0.3s; }
 
-/* Toque: zoom leve de la imagen del detalle al pasar el mouse */
+/* Touch: slight zoom of the detail image on hover */
 .galeria-img {
     transition: opacity 0.45s ease, transform 0.5s ease;
 }
@@ -1870,7 +1870,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Incremento 7 - Carrito, aviso flotante (toast) y contador
+   Increment 7 - Cart, floating notice (toast) and counter
    ============================================================ */
 .nav-badge {
     margin-left: auto;
@@ -2022,7 +2022,7 @@ a { color: var(--verde-oscuro); }
     align-items: center;
 }
 
-/* Resumen de la venta (lista de items) */
+/* Sale summary (item list) */
 .resumen-items {
     list-style: none;
     margin: 0 0 0.5rem;
@@ -2043,7 +2043,7 @@ a { color: var(--verde-oscuro); }
     border-bottom: none;
 }
 
-/* Metodo de pago (tarjetas seleccionables) */
+/* Payment method (selectable cards) */
 .pago-opciones {
     display: flex;
     gap: 0.75rem;
@@ -2086,14 +2086,14 @@ a { color: var(--verde-oscuro); }
     outline-offset: 2px;
 }
 
-/* Bloque de datos de la tarjeta (pago simulado), aparece solo con metodo Tarjeta */
+/* Card data block (simulated payment), appears only with the Tarjeta method */
 .tarjeta-datos-pago {
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--borde);
 }
 
-/* Overlay de "Procesando pago..." de la simulacion de tarjeta */
+/* "Processing payment..." overlay of the card simulation */
 .pago-overlay {
     position: fixed;
     inset: 0;
@@ -2136,7 +2136,7 @@ a { color: var(--verde-oscuro); }
     to { transform: rotate(360deg); }
 }
 
-/* Confirmacion de la venta */
+/* Sale confirmation */
 .confirmacion {
     max-width: 720px;
     margin: 0 auto;
@@ -2190,7 +2190,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Responsivo
+   Responsive
    ============================================================ */
 @media (max-width: 991.98px) {
     .sidebar {
@@ -2238,7 +2238,7 @@ a { color: var(--verde-oscuro); }
     .detalle-datos { text-align: left; }
 }
 
-/* Tabla apilada como tarjetas en pantallas pequenas */
+/* Table stacked as cards on small screens */
 @media (max-width: 640px) {
     .tabla-vintage thead {
         position: absolute;
@@ -2282,7 +2282,7 @@ a { color: var(--verde-oscuro); }
 }
 
 /* ============================================================
-   Incremento 8 - Factura / comprobante
+   Increment 8 - Invoice / receipt
    ============================================================ */
 .factura-acciones {
     display: flex;
@@ -2332,7 +2332,7 @@ a { color: var(--verde-oscuro); }
     flex: 0 0 auto;
 }
 
-/* Logo real de la empresa en el comprobante (sin recuadro, se funde con la hoja). */
+/* Real company logo on the receipt (no box, blends with the sheet). */
 .factura-logo-img {
     height: 72px;
     width: auto;
@@ -2465,7 +2465,7 @@ a { color: var(--verde-oscuro); }
     letter-spacing: 0.05em;
 }
 
-/* Impresion: solo el comprobante, sin sidebar/topbar/botones */
+/* Print: only the receipt, without sidebar/topbar/buttons */
 @media print {
     .sidebar, .topbar, .no-print, .app-footer, .toast-cont, .bienvenida-overlay {
         display: none !important;

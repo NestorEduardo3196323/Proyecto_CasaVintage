@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Proveedores
 {
-    // Alta de un proveedor. Admin y Gerente. La PageModel solo orquesta.
+    // Supplier creation. Admin and Manager. The PageModel only orchestrates.
     [Authorize(Roles = "Administrador,Gerente")]
     public class CrearModel : PageModel
     {
@@ -34,11 +34,11 @@ namespace CasaVintage.Pages.Proveedores
             var resultado = await _proveedores.CrearAsync(Entrada.Nombre, Entrada.Contacto, Entrada.Telefono);
             if (!resultado.Exito)
             {
-                ModelState.AddModelError(string.Empty, "No se pudo crear el proveedor. Intenta de nuevo.");
+                ModelState.AddModelError(string.Empty, "The supplier could not be created. Try again.");
                 return Page();
             }
 
-            TempData["MensajeProveedor"] = $"Proveedor \"{resultado.Proveedor!.Nombre}\" agregado.";
+            TempData["MensajeProveedor"] = $"Supplier \"{resultado.Proveedor!.Nombre}\" added.";
             return RedirectToPage("Index");
         }
     }

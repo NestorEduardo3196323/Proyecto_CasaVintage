@@ -1,6 +1,6 @@
 namespace CasaVintage.Services
 {
-    // Motivo por el que una imagen no se pudo guardar (para mostrar un mensaje claro al usuario).
+    // Reason an image could not be saved (to show a clear message to the user).
     public enum ErrorArchivo
     {
         Ninguno,
@@ -9,31 +9,31 @@ namespace CasaVintage.Services
         DemasiadoGrande
     }
 
-    // Resultado de guardar una imagen: la ruta web relativa (p. ej. /uploads/usuarios/xxx.jpg)
-    // cuando tuvo exito, o el motivo de la falla.
+    // Result of saving an image: the relative web path (e.g. /uploads/usuarios/xxx.jpg) on success,
+    // or the reason for the failure.
     public sealed record ResultadoArchivo(bool Exito, string? RutaWeb = null, ErrorArchivo Error = ErrorArchivo.Ninguno);
 
-    // Traduce el motivo de una imagen rechazada a un mensaje para el usuario (compartido por los
-    // modulos que suben imagenes: personal, inventario).
+    // Translates the reason of a rejected image into a message for the user (shared by the modules
+    // that upload images: personnel, inventory).
     public static class MensajeArchivo
     {
         public static string Para(ErrorArchivo error) => error switch
         {
-            ErrorArchivo.FormatoNoValido => "La imagen debe ser JPG, PNG o WEBP.",
-            ErrorArchivo.DemasiadoGrande => "La imagen no puede superar los 8 MB.",
-            _ => "No se pudo guardar la imagen. Intenta con otra."
+            ErrorArchivo.FormatoNoValido => "The image must be JPG, PNG or WEBP.",
+            ErrorArchivo.DemasiadoGrande => "The image cannot exceed 8 MB.",
+            _ => "The image could not be saved. Try another one."
         };
     }
 
-    // Guarda y elimina imagenes en disco bajo wwwroot. Se guarda SIEMPRE la ruta del archivo,
-    // nunca el binario en la base (igual que las fotos de productos). Reutilizable por otros modulos.
+    // Saves and deletes images on disk under wwwroot. The file path is ALWAYS stored, never the
+    // binary in the database (same as product photos). Reusable by other modules.
     public interface IAlmacenArchivos
     {
-        // Guarda la imagen validada (tipo y tamano) dentro de wwwroot/<subcarpeta>. Devuelve la
-        // ruta web relativa para persistir en la base y usar en <img src="...">.
+        // Saves the validated image (type and size) inside wwwroot/<subfolder>. Returns the relative
+        // web path to persist in the database and use in <img src="...">.
         Task<ResultadoArchivo> GuardarImagenAsync(IFormFile archivo, string subcarpeta);
 
-        // Elimina del disco el archivo indicado por su ruta web relativa. No falla si no existe.
+        // Deletes from disk the file indicated by its relative web path. Does not fail if it does not exist.
         void Eliminar(string? rutaWeb);
     }
 }

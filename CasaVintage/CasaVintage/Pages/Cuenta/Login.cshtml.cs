@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Cuenta
 {
-    // Pantalla de inicio de sesion. La PageModel solo orquesta: valida la entrada, delega la
-    // verificacion al IAuthService, arma la cookie con los claims (incluido el rol) y redirige
-    // al panel correspondiente. Accesible sin autenticar.
+    // Sign-in screen. The PageModel only orchestrates: it validates the input, delegates the
+    // verification to IAuthService, builds the cookie with the claims (including the role) and
+    // redirects to the matching panel. Accessible without authentication.
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
@@ -25,12 +25,12 @@ namespace CasaVintage.Pages.Cuenta
         [BindProperty]
         public LoginViewModel Entrada { get; set; } = new();
 
-        // A donde volver despues de iniciar sesion (cuando el usuario fue redirigido al login).
+        // Where to return after signing in (when the user was redirected to the login).
         public string? ReturnUrl { get; set; }
 
         public IActionResult OnGet(string? returnUrl = null)
         {
-            // Si ya hay sesion activa, no mostrar el login: ir directo a su panel.
+            // If there is already an active session, do not show the login: go straight to the panel.
             if (User.Identity?.IsAuthenticated == true)
             {
                 return RedirectToPage(RolRutas.LandingPara(User.FindFirstValue(ClaimTypes.Role)));
@@ -53,19 +53,19 @@ namespace CasaVintage.Pages.Cuenta
 
             if (!resultado.Exito)
             {
-                // Cuenta desactivada: mensaje especifico. Credenciales malas: mensaje generico
-                // (no se distingue correo inexistente de contrasena incorrecta).
+                // Deactivated account: specific message. Bad credentials: generic message
+                // (a non-existent email is not distinguished from a wrong password).
                 var mensaje = resultado.Estado == ResultadoAutenticacion.Inactivo
-                    ? "Tu cuenta esta desactivada. Contacta al administrador."
-                    : "Correo o contrasena incorrectos.";
+                    ? "Your account is disabled. Contact the administrator."
+                    : "Incorrect email or password.";
                 ModelState.AddModelError(string.Empty, mensaje);
                 return Page();
             }
 
             var usuario = resultado.Usuario!;
 
-            // Claims que viajan en la cookie; el rol habilita [Authorize(Roles=...)] en servidor.
-            // FechaCreado se usa para la tarjeta de bienvenida (el esquema la tiene como fecha_creado).
+            // Claims that travel in the cookie; the role enables [Authorize(Roles=...)] on the server.
+            // CreatedAt is used for the welcome card (the schema stores it as fecha_creado).
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
@@ -75,7 +75,7 @@ namespace CasaVintage.Pages.Cuenta
                 new(PerfilUsuario.ClaimFechaCreado, usuario.FechaCreado.ToString("o"))
             };
 
-            // Foto de perfil (si tiene): permite mostrarla en el menu y la tarjeta de bienvenida.
+            // Profile photo (if any): lets it show in the menu and the welcome card.
             if (!string.IsNullOrEmpty(usuario.Foto))
             {
                 claims.Add(new Claim(PerfilUsuario.ClaimFoto, usuario.Foto));
@@ -89,10 +89,10 @@ namespace CasaVintage.Pages.Cuenta
                 principal,
                 new AuthenticationProperties { IsPersistent = false });
 
-            // Marca para mostrar la tarjeta de bienvenida una sola vez, al aterrizar en el panel.
+            // Flag to show the welcome card once, when landing on the panel.
             TempData["MostrarBienvenida"] = "1";
 
-            // Respeta el returnUrl solo si es local (evita redirecciones abiertas); si no, al panel del rol.
+            // Respect the returnUrl only if it is local (avoids open redirects); otherwise, the role panel.
             if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
             {
                 return LocalRedirect(ReturnUrl);

@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Carrito
 {
-    // Comprobante (factura interna) de una venta: se puede ver e imprimir aqui, descargar en PDF o
-    // enviar por correo. Admin, Vendedor y Contador pueden VER/imprimir/descargar (consulta), pero
-    // solo el Vendedor puede ENVIARLO por correo al cliente (accion hacia afuera).
+    // Receipt (internal invoice) of a sale: it can be viewed and printed here, downloaded as PDF or
+    // sent by email. Admin, Salesperson and Accountant can VIEW/print/download (read-only), but only
+    // the Salesperson can SEND it by email to the customer (outward action).
     [Authorize(Roles = "Administrador,Vendedor,Contador,Gerente")]
     public class FacturaModel : PageModel
     {
@@ -34,7 +34,7 @@ namespace CasaVintage.Pages.Carrito
             return Page();
         }
 
-        // Descarga del comprobante en PDF y guarda ademas una copia en la carpeta de Facturas.
+        // Downloads the receipt as PDF and also saves a copy in the Invoices folder.
         public async Task<IActionResult> OnGetPdfAsync(int id)
         {
             var pdf = await _facturas.GenerarPdfAsync(id);
@@ -46,19 +46,19 @@ namespace CasaVintage.Pages.Carrito
             return File(pdf, "application/pdf", $"factura-{id:D7}.pdf");
         }
 
-        // Envia el comprobante al correo del cliente. Solo el Vendedor (blindaje del lado servidor).
+        // Sends the receipt to the customer's email. Only the Salesperson (server-side lockdown).
         public async Task<IActionResult> OnPostEnviarAsync(int id)
         {
             if (!User.IsInRole("Vendedor"))
             {
-                TempData["FacturaError"] = "Solo el vendedor puede enviar el comprobante por correo.";
+                TempData["FacturaError"] = "Only the salesperson can send the receipt by email.";
                 return RedirectToPage(new { id });
             }
 
             var resultado = await _facturas.EnviarPorCorreoAsync(id);
             TempData[resultado.Exito ? "FacturaOk" : "FacturaError"] = resultado.Exito
-                ? $"Comprobante enviado a {resultado.Correo}."
-                : (resultado.Mensaje ?? "No se pudo enviar el comprobante.");
+                ? $"Receipt sent to {resultado.Correo}."
+                : (resultado.Mensaje ?? "The receipt could not be sent.");
             return RedirectToPage(new { id });
         }
     }

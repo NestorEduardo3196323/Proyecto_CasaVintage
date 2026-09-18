@@ -1,9 +1,9 @@
-// Comportamientos del catalogo: hero que rota, filtros y hover que cambia las fotos solo.
+// Catalog behaviors: rotating hero, filters and hover that cycles the photos on its own.
 
 (function () {
     "use strict";
 
-    // Si el usuario puede vender (Vendedor). El Administrador ve el catalogo pero no agrega al carrito.
+    // Whether the user can sell (Salesperson). The Administrator sees the catalog but cannot add to cart.
     var puedeAgregar = true;
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -17,10 +17,11 @@
         activarOcultarAgotados();
     });
 
-    // Boton "ojito": oculta/muestra los productos agotados (stock 0). La preferencia se guarda en el
-    // navegador (localStorage), asi sigue activa entre ventas y al ir a otra seccion y volver; solo
-    // cambia cuando se vuelve a pulsar el boton. La clase va en el contenedor de la cuadricula, que
-    // se conserva al reconstruir las tarjetas con el buscador, asi tambien oculta los nuevos agotados.
+    // "Eye" button: hides/shows out-of-stock products (stock 0). The preference is saved in the
+    // browser (localStorage), so it stays active between sales and when leaving to another section and
+    // coming back; it only changes when the button is pressed again. The class goes on the grid
+    // container, which is preserved when the cards are rebuilt by the search, so it also hides new
+    // out-of-stock items.
     function activarOcultarAgotados() {
         var boton = document.querySelector("[data-toggle-agotados]");
         var grid = document.querySelector("[data-catalogo]");
@@ -35,9 +36,9 @@
             boton.classList.toggle("activo", ocultar);
             boton.setAttribute("aria-pressed", ocultar ? "true" : "false");
             if (texto) {
-                texto.textContent = ocultar ? "Mostrar agotados" : "Ocultar agotados";
+                texto.textContent = ocultar ? "Show out of stock" : "Hide out of stock";
             }
-            boton.title = ocultar ? "Mostrar los productos sin stock" : "Ocultar los productos sin stock";
+            boton.title = ocultar ? "Show out-of-stock products" : "Hide out-of-stock products";
         }
 
         aplicar(localStorage.getItem(CLAVE) === "1");
@@ -49,8 +50,8 @@
         });
     }
 
-    // "Agregar al carrito" (AJAX). Delegado en el documento porque las tarjetas se reconstruyen
-    // al buscar. Envia el token anti-forgery y actualiza el contador del icono + un aviso (toast).
+    // "Add to cart" (AJAX). Delegated on the document because the cards are rebuilt when searching.
+    // Sends the anti-forgery token and updates the icon counter + a notice (toast).
     function activarAgregarCarrito() {
         document.addEventListener("click", function (evento) {
             var boton = evento.target.closest("[data-agregar]");
@@ -75,20 +76,20 @@
                         window.actualizarCarritoBadge(res.totalProductos);
                     }
                     if (window.mostrarToast) {
-                        window.mostrarToast(res.mensaje || "Agregado al carrito.", res.exito ? "ok" : "error");
+                        window.mostrarToast(res.mensaje || "Added to cart.", res.exito ? "ok" : "error");
                     }
                 })
                 .catch(function () {
                     if (window.mostrarToast) {
-                        window.mostrarToast("No se pudo agregar. Intenta de nuevo.", "error");
+                        window.mostrarToast("Could not add. Try again.", "error");
                     }
                 })
                 .finally(function () { boton.disabled = false; });
         });
     }
 
-    // Galeria del detalle: cambio MANUAL de foto con flechas y miniaturas (no automatico).
-    // Las imagenes estan apiladas y se funden (crossfade) al cambiar.
+    // Detail gallery: MANUAL photo change with arrows and thumbnails (not automatic).
+    // The images are stacked and crossfade when switching.
     function activarGaleria() {
         var galeria = document.querySelector("[data-galeria]");
         if (!galeria) {
@@ -132,7 +133,7 @@
         }
     }
 
-    // Hero: muestra una pieza destacada a la vez y va cambiando sola cada pocos segundos.
+    // Hero: shows one featured piece at a time and cycles on its own every few seconds.
     function activarHero() {
         var hero = document.querySelector("[data-hero]");
         if (!hero) {
@@ -159,13 +160,13 @@
             }
         }
 
-        // Puntos de navegacion (uno por pieza).
+        // Navigation dots (one per piece).
         if (dotsCont) {
             slides.forEach(function (_, i) {
                 var punto = document.createElement("button");
                 punto.type = "button";
                 punto.className = "hero-dot" + (i === 0 ? " activo" : "");
-                punto.setAttribute("aria-label", "Pieza " + (i + 1));
+                punto.setAttribute("aria-label", "Piece " + (i + 1));
                 punto.addEventListener("click", function () {
                     mostrar(i);
                     reiniciar();
@@ -187,8 +188,8 @@
         reiniciar();
     }
 
-    // Buscador en vivo (AJAX): texto + categoria + epoca + estado. Pide al servidor los productos
-    // que coinciden (handler ?handler=Buscar que devuelve JSON) y reconstruye la cuadricula.
+    // Live search (AJAX): text + category + era + condition. Asks the server for the matching
+    // products (handler ?handler=Buscar that returns JSON) and rebuilds the grid.
     function activarBusqueda() {
         var grid = document.querySelector("[data-catalogo]");
         if (!grid) {
@@ -228,10 +229,10 @@
                     }
                     activarHoverFotos();
                 })
-                .catch(function () { /* si la peticion falla, se deja la cuadricula como esta */ });
+                .catch(function () { /* if the request fails, the grid is left as it is */ });
         }
 
-        // La busqueda por texto se retrasa un poco (debounce) para no pedir en cada tecla.
+        // The text search is delayed a little (debounce) so it does not query on every keystroke.
         if (input) {
             input.addEventListener("input", function () {
                 if (temporizador) {
@@ -260,7 +261,7 @@
         }
     }
 
-    // Escapa texto para insertarlo con seguridad dentro del HTML de una tarjeta.
+    // Escapes text to safely insert it inside a card's HTML.
     function esc(valor) {
         return String(valor == null ? "" : valor)
             .replace(/&/g, "&amp;")
@@ -271,7 +272,7 @@
 
     var ICONO_SIN_FOTO = '<span class="producto-sin-foto" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>';
 
-    // Construye el HTML de una tarjeta a partir de un producto (respuesta JSON del buscador).
+    // Builds a card's HTML from a product (JSON response of the search).
     function crearTarjeta(p) {
         var fotos = [p.foto1, p.foto2, p.foto3].filter(Boolean);
         var desc = p.descripcion && p.descripcion.length > 90
@@ -285,15 +286,15 @@
             }).join("")
             : ICONO_SIN_FOTO;
 
-        var conteo = fotos.length > 1 ? '<span class="producto-conteo-fotos">' + fotos.length + ' fotos</span>' : "";
+        var conteo = fotos.length > 1 ? '<span class="producto-conteo-fotos">' + fotos.length + ' photos</span>' : "";
         var stock = p.disponibilidad
-            ? '<span class="badge-estado es-activo">' + p.stock + ' en stock</span>'
-            : '<span class="badge-estado es-inactivo">Sin stock</span>';
+            ? '<span class="badge-estado es-activo">' + p.stock + ' in stock</span>'
+            : '<span class="badge-estado es-inactivo">Out of stock</span>';
         var botonAgregar = "";
         if (puedeAgregar) {
             botonAgregar = p.disponibilidad
-                ? '<button type="button" class="btn-vintage btn-sm" data-agregar="' + p.idProducto + '">Agregar</button>'
-                : '<button type="button" class="btn-vintage btn-sm" disabled>Agotado</button>';
+                ? '<button type="button" class="btn-vintage btn-sm" data-agregar="' + p.idProducto + '">Add</button>'
+                : '<button type="button" class="btn-vintage btn-sm" disabled>Out of stock</button>';
         }
 
         return '<article class="producto-card ' + (p.disponibilidad ? "" : "agotado") + '"' +
@@ -308,12 +309,12 @@
             '<div class="producto-pie">' +
             '<span class="producto-precio">$' + precio + '</span>' +
             '<div class="producto-acciones">' +
-            '<a href="/Catalogo/Detalle/' + p.idProducto + '" class="btn-vintage-outline btn-sm">Detalles</a>' +
+            '<a href="/Catalogo/Detalle/' + p.idProducto + '" class="btn-vintage-outline btn-sm">Details</a>' +
             botonAgregar +
             '</div></div></div></article>';
     }
 
-    // Hover: al pasar el mouse sobre una tarjeta con varias fotos, las va mostrando en secuencia.
+    // Hover: hovering over a card with several photos cycles through them in sequence.
     function activarHoverFotos() {
         document.querySelectorAll(".producto-imagen[data-fotos]").forEach(function (contenedor) {
             var fotos = Array.prototype.slice.call(contenedor.querySelectorAll(".producto-img"));

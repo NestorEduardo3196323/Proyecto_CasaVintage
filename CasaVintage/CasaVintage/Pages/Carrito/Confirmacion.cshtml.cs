@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Carrito
 {
-    // Confirmacion de una venta ya registrada: numero de venta, cliente, productos, total y metodo.
-    // El comprobante (imprimir / PDF / correo) es el Incremento 8.
+    // Confirmation of an already-registered sale: sale number, customer, products, total and method.
+    // The receipt (print / PDF / email) is Increment 8.
     [Authorize(Roles = "Vendedor")]
     public class ConfirmacionModel : PageModel
     {

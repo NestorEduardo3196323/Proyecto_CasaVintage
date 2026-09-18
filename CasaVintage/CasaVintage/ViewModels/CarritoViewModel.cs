@@ -1,6 +1,6 @@
 namespace CasaVintage.ViewModels
 {
-    // Una linea del carrito, con los datos actuales del producto para mostrarla y cobrar.
+    // A cart line, with the current product data to display and charge it.
     public sealed record CarritoItemViewModel(
         int IdProducto,
         string Sku,
@@ -10,25 +10,25 @@ namespace CasaVintage.ViewModels
         int Cantidad,
         int StockDisponible)
     {
-        // Total de esta linea (precio x cantidad).
+        // Total of this line (price x quantity).
         public decimal Subtotal => PrecioUnitario * Cantidad;
 
-        // True si la cantidad pedida supera el stock disponible (aviso al vendedor).
+        // True if the requested quantity exceeds the available stock (warning to the salesperson).
         public bool ExcedeStock => Cantidad > StockDisponible;
     }
 
-    // El carrito completo: sus lineas y los totales.
+    // The whole cart: its lines and the totals.
     public sealed record CarritoViewModel(IReadOnlyList<CarritoItemViewModel> Items)
     {
-        // Suma de las cantidades (para el contador del icono del carrito).
+        // Sum of the quantities (for the cart icon counter).
         public int TotalProductos => Items.Sum(i => i.Cantidad);
 
-        // Suma de los subtotales (total a cobrar).
+        // Sum of the subtotals (total to charge).
         public decimal TotalPrecio => Items.Sum(i => i.Subtotal);
 
         public bool Vacio => Items.Count == 0;
 
-        // True si alguna linea excede el stock (bloquea el cobro hasta corregir).
+        // True if any line exceeds the stock (blocks the checkout until fixed).
         public bool HayExcesoStock => Items.Any(i => i.ExcedeStock);
     }
 }

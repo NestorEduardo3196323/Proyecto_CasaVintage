@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Procesa la venta en UNA sola transaccion: inserta cliente, venta y detalle, descuenta el stock
-    // y sincroniza la disponibilidad. Usa concurrencia optimista (row_version de productos): si otro
-    // vendedor cambio el stock entre que se cargo y se guardo, la actualizacion falla y se revierte
-    // todo (nadie vende la ultima unidad dos veces). Al terminar bien, vacia el carrito.
+    // Processes the sale in a SINGLE transaction: inserts customer, sale and detail, decrements the
+    // stock and syncs availability. It uses optimistic concurrency (products' row_version): if another
+    // salesperson changed the stock between loading and saving, the update fails and everything is
+    // rolled back (nobody sells the last unit twice). On success, it empties the cart.
     public class VentaService : IVentaService
     {
         private readonly CasaVintageContext _db;
@@ -30,7 +30,7 @@ namespace CasaVintage.Services
                 return new ResultadoVenta(false, 0, ErrorVenta.DatosInvalidos);
             }
 
-            // Solo se conservan los ultimos 4 digitos y unicamente cuando el pago es con tarjeta.
+            // Only the last 4 digits are kept, and only when the payment is by card.
             tarjetaUltimos4 = metodoPago == "Tarjeta" ? tarjetaUltimos4 : null;
 
             var carrito = await _carrito.ObtenerAsync();
@@ -45,16 +45,16 @@ namespace CasaVintage.Services
             await using var tx = await _db.Database.BeginTransactionAsync();
             try
             {
-                // Productos con seguimiento (para descontar stock y comparar row_version al guardar).
+                // Tracked products (to decrement stock and compare row_version when saving).
                 var productos = await _db.Productos.Where(p => ids.Contains(p.IdProducto)).ToListAsync();
 
-                // Validacion con el stock actual (fresco de la base).
+                // Validation against the current stock (fresh from the database).
                 foreach (var par in cantidades)
                 {
                     var producto = productos.FirstOrDefault(p => p.IdProducto == par.Key);
                     if (producto is null)
                     {
-                        return new ResultadoVenta(false, 0, ErrorVenta.StockInsuficiente, "Un producto del carrito ya no existe.");
+                        return new ResultadoVenta(false, 0, ErrorVenta.StockInsuficiente, "A cart product no longer exists.");
                     }
                     if (producto.Stock < par.Value)
                     {
@@ -62,7 +62,7 @@ namespace CasaVintage.Services
                     }
                 }
 
-                // Cliente nuevo por cada venta (no se dedupea por correo, RN del proyecto).
+                // A new customer for each sale (no dedupe by email, project business rule).
                 var cliente = new Cliente
                 {
                     Nombre = clienteNombre.Trim(),
@@ -89,7 +89,7 @@ namespace CasaVintage.Services
                     });
                     total += producto.Precio * par.Value;
 
-                    // Descontar stock y sincronizar disponibilidad dentro de la misma transaccion.
+                    // Decrement stock and sync availability within the same transaction.
                     producto.Stock -= par.Value;
                     producto.Disponibilidad = producto.Stock > 0;
                 }
@@ -100,19 +100,19 @@ namespace CasaVintage.Services
                 await tx.CommitAsync();
 
                 _carrito.Vaciar();
-                _logger.LogInformation("Venta {Id} registrada por usuario {Usuario} (total {Total}).", venta.IdVenta, idUsuario, total);
+                _logger.LogInformation("Sale {Id} registered by user {Usuario} (total {Total}).", venta.IdVenta, idUsuario, total);
                 return new ResultadoVenta(true, venta.IdVenta);
             }
             catch (DbUpdateConcurrencyException)
             {
                 await tx.RollbackAsync();
-                _logger.LogWarning("Conflicto de concurrencia al procesar la venta (usuario {Usuario}).", idUsuario);
+                _logger.LogWarning("Concurrency conflict while processing the sale (user {Usuario}).", idUsuario);
                 return new ResultadoVenta(false, 0, ErrorVenta.Conflicto);
             }
             catch (Exception ex)
             {
                 await tx.RollbackAsync();
-                _logger.LogError(ex, "Error al procesar la venta (usuario {Usuario}).", idUsuario);
+                _logger.LogError(ex, "Error while processing the sale (user {Usuario}).", idUsuario);
                 return new ResultadoVenta(false, 0, ErrorVenta.Error);
             }
         }

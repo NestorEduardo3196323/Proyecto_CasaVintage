@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Servicio de autenticacion. Valida el correo y la contrasena contra la base de datos usando
-    // IPasswordHasher (nunca compara texto plano) y aplica la regla de negocio de bloquear cuentas
-    // inactivas. No maneja la cookie de sesion; de eso se encarga la PageModel del login.
+    // Authentication service. Validates the email and password against the database using
+    // IPasswordHasher (never compares plain text) and applies the business rule of blocking inactive
+    // accounts. It does not handle the session cookie; the login PageModel takes care of that.
     public class AuthService : IAuthService
     {
         private readonly CasaVintageContext _db;
@@ -33,15 +33,15 @@ namespace CasaVintage.Services
                 return new AuthResultado(ResultadoAutenticacion.PasswordIncorrecta, null);
             }
 
-            // Si el hash quedo con un formato viejo, se vuelve a calcular y se guarda al vuelo.
+            // If the hash was left in an old format, it is recomputed and saved on the fly.
             if (verificacion == PasswordVerificationResult.SuccessRehashNeeded)
             {
                 usuario.Password = _hasher.HashPassword(usuario, password);
                 await _db.SaveChangesAsync();
             }
 
-            // La contrasena es correcta: recien aqui se aplica el bloqueo de cuentas inactivas,
-            // para no revelar el estado de la cuenta ante una contrasena equivocada.
+            // The password is correct: only now is the inactive-account block applied, so the
+            // account status is not revealed when the password is wrong.
             if (!usuario.Activo)
             {
                 return new AuthResultado(ResultadoAutenticacion.Inactivo, null);

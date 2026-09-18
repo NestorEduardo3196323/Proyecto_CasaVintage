@@ -1,15 +1,15 @@
 @page
 @model CasaVintage.Pages.Ventas.MisVentasModel
 @{
-    ViewData["Title"] = "Mis ventas";
+    ViewData["Title"] = "My sales";
     Layout = "_Layout";
 }
 
 <div class="personal-cabecera">
     <div>
-        <span class="kicker">Operacion</span>
-        <h1 class="mb-1">Mis ventas</h1>
-        <p class="text-muted mb-0">Las ventas que has registrado.</p>
+        <span class="kicker">Operation</span>
+        <h1 class="mb-1">My sales</h1>
+        <p class="text-muted mb-0">The sales you have registered.</p>
     </div>
     @if (Model.Ventas.Count > 0)
     {
@@ -18,7 +18,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
             </span>
             <div>
-                <div class="etiqueta">@Model.Ventas.Count ventas</div>
+                <div class="etiqueta">@Model.Ventas.Count sales</div>
                 <div class="valor">$@Model.Total.ToString("N2")</div>
             </div>
         </div>
@@ -28,9 +28,9 @@
 @if (Model.Ventas.Count == 0)
 {
     <div class="tarjeta-vintage estado-vacio">
-        <h2 class="h5 mb-2">Aun no tienes ventas</h2>
-        <p class="text-muted mb-3">Cuando registres una venta desde el catalogo, aparecera aqui.</p>
-        <a asp-page="/Catalogo/Index" class="btn-vintage">Ir al catalogo</a>
+        <h2 class="h5 mb-2">You have no sales yet</h2>
+        <p class="text-muted mb-3">When you register a sale from the catalog, it will appear here.</p>
+        <a asp-page="/Catalogo/Index" class="btn-vintage">Go to the catalog</a>
     </div>
 }
 else
@@ -39,40 +39,40 @@ else
         <div class="tabla-toolbar">
             <div class="buscador-tabla">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                <input type="search" class="form-control" placeholder="Buscar por cliente o numero..." data-tabla-buscar="#tablaMisVentas" data-sin-resultados="#sinResultadosMv" aria-label="Buscar venta" />
+                <input type="search" class="form-control" placeholder="Search by customer or number..." data-tabla-buscar="#tablaMisVentas" data-sin-resultados="#sinResultadosMv" aria-label="Search sale" />
             </div>
         </div>
         <div class="tabla-vintage-envoltura">
             <table id="tablaMisVentas" class="tabla-vintage">
                 <thead>
                     <tr>
-                        <th scope="col">Venta</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Pago</th>
-                        <th scope="col" class="col-numero">Articulos</th>
+                        <th scope="col">Sale</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col" class="col-numero">Items</th>
                         <th scope="col" class="col-numero">Total</th>
-                        <th scope="col" class="col-acciones">Comprobante</th>
+                        <th scope="col" class="col-acciones">Receipt</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var v in Model.Ventas)
                     {
                         <tr>
-                            <td data-etiqueta="Venta"><span class="sku-chip">#@v.IdVenta.ToString("D7")</span></td>
-                            <td data-etiqueta="Fecha">@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td data-etiqueta="Cliente"><span class="celda-nombre">@v.Cliente</span></td>
-                            <td data-etiqueta="Pago">@v.MetodoPago</td>
-                            <td data-etiqueta="Articulos" class="col-numero"><span class="chip-conteo">@v.Articulos</span></td>
+                            <td data-etiqueta="Sale"><span class="sku-chip">#@v.IdVenta.ToString("D7")</span></td>
+                            <td data-etiqueta="Date">@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td data-etiqueta="Customer"><span class="celda-nombre">@v.Cliente</span></td>
+                            <td data-etiqueta="Payment">@v.MetodoPago</td>
+                            <td data-etiqueta="Items" class="col-numero"><span class="chip-conteo">@v.Articulos</span></td>
                             <td data-etiqueta="Total" class="col-numero">$@v.Total.ToString("N2")</td>
-                            <td data-etiqueta="Comprobante" class="col-acciones">
-                                <a asp-page="/Carrito/Factura" asp-route-id="@v.IdVenta" class="btn-vintage-outline btn-sm">Ver</a>
+                            <td data-etiqueta="Receipt" class="col-acciones">
+                                <a asp-page="/Carrito/Factura" asp-route-id="@v.IdVenta" class="btn-vintage-outline btn-sm">View</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <p id="sinResultadosMv" class="sin-resultados" hidden>No se encontraron ventas con esa busqueda.</p>
+            <p id="sinResultadosMv" class="sin-resultados" hidden>No sales found for that search.</p>
         </div>
     </div>
 }

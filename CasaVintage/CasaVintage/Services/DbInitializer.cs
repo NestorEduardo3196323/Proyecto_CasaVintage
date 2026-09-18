@@ -5,27 +5,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaVintage.Services
 {
-    // Siembra datos iniciales de prueba: un usuario por cada rol (contrasena hasheada), proveedores
-    // y productos. Es idempotente: los usuarios se insertan si no existe su correo, y proveedores/
-    // productos solo cuando su tabla esta vacia. Puede ejecutarse en cada arranque sin duplicar.
+    // Seeds initial test data: one user per role (hashed password), suppliers and products. It is
+    // idempotent: users are inserted if their email does not exist, and suppliers/products only when
+    // their table is empty. It can run on every startup without duplicating.
     //
-    // CREDENCIALES DE PRUEBA (cambiar en produccion). Contrasenas guardadas hasheadas:
-    //   Administrador -> admin@casavintage.local     / Admin123*
-    //   Gerente       -> gerente@casavintage.local   / Gerente123*
-    //   Vendedor      -> vendedor@casavintage.local  / Vendedor123*
-    //   Contador      -> contador@casavintage.local  / Contador123*
+    // TEST CREDENTIALS (change in production). Passwords stored hashed:
+    //   Administrador -> admin@casavintage.local     / CasaVintage#Admin2026!
+    //   Gerente       -> gerente@casavintage.local   / CasaVintage#Gerente2026!
+    //   Vendedor      -> vendedor@casavintage.local  / CasaVintage#Vendedor2026!
+    //   Contador      -> contador@casavintage.local  / CasaVintage#Contador2026!
     public static class DbInitializer
     {
-        // Definicion de un usuario de prueba (correo, contrasena en claro solo para el seed inicial).
+        // Definition of a test user (email, plain password only for the initial seed).
         private sealed record UsuarioSemilla(string Nombre, string Correo, string Rol, string Password);
 
-        // Un usuario por rol. La contrasena se hashea antes de guardar; nunca se persiste en claro.
+        // One user per role. The password is hashed before saving; it is never persisted in plain text.
         private static readonly UsuarioSemilla[] UsuariosPrueba =
         {
-            new("Administrador General", "admin@casavintage.local", "Administrador", "Admin123*"),
-            new("Gerente de Tienda", "gerente@casavintage.local", "Gerente", "Gerente123*"),
-            new("Vendedor de Mostrador", "vendedor@casavintage.local", "Vendedor", "Vendedor123*"),
-            new("Contador de la Empresa", "contador@casavintage.local", "Contador", "Contador123*")
+            new("Administrador General", "admin@casavintage.local", "Administrador", "CasaVintage#Admin2026!"),
+            new("Gerente de Tienda", "gerente@casavintage.local", "Gerente", "CasaVintage#Gerente2026!"),
+            new("Vendedor de Mostrador", "vendedor@casavintage.local", "Vendedor", "CasaVintage#Vendedor2026!"),
+            new("Contador de la Empresa", "contador@casavintage.local", "Contador", "CasaVintage#Contador2026!")
         };
 
         public static async Task SeedAsync(CasaVintageContext db, IPasswordHasher<Usuario> hasher)
@@ -52,7 +52,7 @@ namespace CasaVintage.Services
 
         private static async Task SeedUsuariosAsync(CasaVintageContext db, IPasswordHasher<Usuario> hasher)
         {
-            // Correos ya existentes, para no duplicar al reejecutar el seed.
+            // Already-existing emails, so as not to duplicate when re-running the seed.
             var existentes = await db.Usuarios.Select(u => u.Correo).ToListAsync();
 
             var nuevos = false;
@@ -70,7 +70,7 @@ namespace CasaVintage.Services
                     Rol = semilla.Rol,
                     Activo = true
                 };
-                // El hash se calcula con IPasswordHasher; nunca se guarda la contrasena en texto plano.
+                // The hash is computed with IPasswordHasher; the password is never stored in plain text.
                 usuario.Password = hasher.HashPassword(usuario, semilla.Password);
 
                 db.Usuarios.Add(usuario);
@@ -85,22 +85,22 @@ namespace CasaVintage.Services
 
         private static async Task SeedProductosAsync(CasaVintageContext db)
         {
-            // Solo se siembra cuando la tabla esta VACIA (base nueva). Asi, si el usuario elimina un
-            // producto, NO se vuelve a insertar al reiniciar: la eliminacion es permanente.
+            // It is only seeded when the table is EMPTY (new database). This way, if the user deletes a
+            // product, it is NOT re-inserted on restart: the deletion is permanent.
             if (await db.Productos.AnyAsync())
             {
                 return;
             }
 
-            // Se asocian a proveedores ya sembrados (por orden de insercion).
+            // They are associated with already-seeded suppliers (by insertion order).
             var proveedores = await db.Proveedores.OrderBy(p => p.IdProveedor).ToListAsync();
             if (proveedores.Count == 0)
             {
                 return;
             }
 
-            // Imagenes ilustradas (SVG) que viven en wwwroot/uploads/productos. Se pueden reemplazar
-            // por fotos reales desde el modulo de Inventario.
+            // Illustrated images (SVG) that live in wwwroot/uploads/productos. They can be replaced
+            // by real photos from the Inventory module.
             static string[] Fotos(string slug) => new[]
             {
                 $"/uploads/productos/seed-{slug}-1.svg",
@@ -140,7 +140,7 @@ namespace CasaVintage.Services
             await db.SaveChangesAsync();
         }
 
-        // Construye un producto de prueba y sincroniza disponibilidad = (stock > 0).
+        // Builds a test product and syncs availability = (stock > 0).
         private static Producto Crear(string sku, string nombre, string descripcion, string epoca,
             string estado, decimal precio, decimal costo, int stock, string categoria, int idProveedor, string[]? fotos = null)
         {

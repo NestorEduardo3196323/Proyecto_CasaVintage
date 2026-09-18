@@ -1,35 +1,35 @@
 @page
 @model CasaVintage.Pages.Reportes.HistorialModel
 @{
-    ViewData["Title"] = "Historial de ventas";
+    ViewData["Title"] = "Sales history";
     Layout = "_Layout";
 }
 
 <div class="mb-4">
-    <span class="kicker">Analisis</span>
-    <h1 class="mb-1">Historial de ventas</h1>
-    <p class="text-muted mb-0">Todas las ventas registradas, de la mas reciente a la mas antigua.</p>
+    <span class="kicker">Analysis</span>
+    <h1 class="mb-1">Sales history</h1>
+    <p class="text-muted mb-0">All registered sales, from the most recent to the oldest.</p>
 </div>
 
 <form method="get" class="reportes-filtros tarjeta-vintage mb-3">
     <div class="filtro-rapidos">
-        <button type="submit" name="rango" value="hoy" class="pill @(Model.Rango == "hoy" ? "activo" : "")">Hoy</button>
-        <button type="submit" name="rango" value="semana" class="pill @(Model.Rango == "semana" ? "activo" : "")">Esta semana</button>
-        <button type="submit" name="rango" value="mes" class="pill @(Model.Rango == "mes" ? "activo" : "")">Este mes</button>
-        <button type="submit" name="rango" value="anio" class="pill @(Model.Rango == "anio" ? "activo" : "")">Este año</button>
+        <button type="submit" name="rango" value="hoy" class="pill @(Model.Rango == "hoy" ? "activo" : "")">Today</button>
+        <button type="submit" name="rango" value="semana" class="pill @(Model.Rango == "semana" ? "activo" : "")">This week</button>
+        <button type="submit" name="rango" value="mes" class="pill @(Model.Rango == "mes" ? "activo" : "")">This month</button>
+        <button type="submit" name="rango" value="anio" class="pill @(Model.Rango == "anio" ? "activo" : "")">This year</button>
     </div>
     <div class="filtro-campo">
-        <label for="fDesde">Desde</label>
+        <label for="fDesde">From</label>
         <input type="date" id="fDesde" name="desde" class="form-control form-control-sm" value="@(Model.Filtro.Desde?.ToString("yyyy-MM-dd"))" />
     </div>
     <div class="filtro-campo">
-        <label for="fHasta">Hasta</label>
+        <label for="fHasta">To</label>
         <input type="date" id="fHasta" name="hasta" class="form-control form-control-sm" value="@(Model.Filtro.Hasta?.ToString("yyyy-MM-dd"))" />
     </div>
     <div class="filtro-campo">
-        <label for="fVendedor">Vendedor</label>
+        <label for="fVendedor">Salesperson</label>
         <select id="fVendedor" name="vendedor" class="form-select form-select-sm">
-            <option value="">Todos</option>
+            <option value="">All</option>
             @foreach (var v in Model.Vendedores)
             {
                 <option value="@v.Id" selected="@(Model.Vendedor == v.Id)">@v.Nombre</option>
@@ -37,17 +37,17 @@
         </select>
     </div>
     <div class="filtro-campo">
-        <label for="fMetodo">Metodo de pago</label>
+        <label for="fMetodo">Payment method</label>
         <select id="fMetodo" name="metodo" class="form-select form-select-sm">
-            <option value="">Todos</option>
-            <option value="Efectivo" selected="@(Model.Metodo == "Efectivo")">Efectivo</option>
-            <option value="Tarjeta" selected="@(Model.Metodo == "Tarjeta")">Tarjeta</option>
+            <option value="">All</option>
+            <option value="Efectivo" selected="@(Model.Metodo == "Efectivo")">Cash</option>
+            <option value="Tarjeta" selected="@(Model.Metodo == "Tarjeta")">Card</option>
         </select>
     </div>
     <div class="filtro-campo">
-        <label for="fCategoria">Categoria</label>
+        <label for="fCategoria">Category</label>
         <select id="fCategoria" name="categoria" class="form-select form-select-sm">
-            <option value="">Todas</option>
+            <option value="">All</option>
             @foreach (var c in Model.Categorias)
             {
                 <option value="@c" selected="@(Model.Categoria == c)">@c</option>
@@ -55,16 +55,16 @@
         </select>
     </div>
     <div class="filtro-acciones">
-        <button type="submit" name="rango" value="personalizado" class="btn-vintage btn-sm">Filtrar</button>
-        <a asp-page="Historial" class="btn-vintage-outline btn-sm">Limpiar</a>
+        <button type="submit" name="rango" value="personalizado" class="btn-vintage btn-sm">Filter</button>
+        <a asp-page="Historial" class="btn-vintage-outline btn-sm">Clear</a>
     </div>
 </form>
 
 @if (Model.Ventas.Count == 0)
 {
     <div class="tarjeta-vintage estado-vacio">
-        <h2 class="h5 mb-2">No hay ventas para ese filtro</h2>
-        <p class="text-muted mb-0">Ajusta el rango de fechas u otros filtros, o pulsa Limpiar.</p>
+        <h2 class="h5 mb-2">There are no sales for that filter</h2>
+        <p class="text-muted mb-0">Adjust the date range or other filters, or press Clear.</p>
     </div>
 }
 else
@@ -73,48 +73,48 @@ else
         <div class="tabla-toolbar">
             <div class="buscador-tabla">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
-                <input type="search" id="histBuscar" class="form-control" placeholder="Buscar por cliente, vendedor o numero..." aria-label="Buscar venta" />
+                <input type="search" id="histBuscar" class="form-control" placeholder="Search by customer, salesperson or number..." aria-label="Search sale" />
             </div>
         </div>
         <div class="tabla-vintage-envoltura">
             <table id="tablaHistorial" class="tabla-vintage">
                 <thead>
                     <tr>
-                        <th scope="col">Venta</th>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Vendedor</th>
-                        <th scope="col">Pago</th>
-                        <th scope="col" class="col-numero">Articulos</th>
+                        <th scope="col">Sale</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Salesperson</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col" class="col-numero">Items</th>
                         <th scope="col" class="col-numero">Total</th>
-                        <th scope="col" class="col-acciones">Comprobante</th>
+                        <th scope="col" class="col-acciones">Receipt</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var v in Model.Ventas)
                     {
                         <tr data-buscar="@($"#{v.IdVenta:D7} {v.Cliente} {v.Vendedor} {v.MetodoPago}".ToLowerInvariant())">
-                            <td data-etiqueta="Venta"><span class="sku-chip">#@v.IdVenta.ToString("D7")</span></td>
-                            <td data-etiqueta="Fecha">@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td data-etiqueta="Cliente"><span class="celda-nombre">@v.Cliente</span></td>
-                            <td data-etiqueta="Vendedor">@v.Vendedor</td>
-                            <td data-etiqueta="Pago">@v.MetodoPago</td>
-                            <td data-etiqueta="Articulos" class="col-numero"><span class="chip-conteo">@v.Articulos</span></td>
+                            <td data-etiqueta="Sale"><span class="sku-chip">#@v.IdVenta.ToString("D7")</span></td>
+                            <td data-etiqueta="Date">@v.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td data-etiqueta="Customer"><span class="celda-nombre">@v.Cliente</span></td>
+                            <td data-etiqueta="Salesperson">@v.Vendedor</td>
+                            <td data-etiqueta="Payment">@v.MetodoPago</td>
+                            <td data-etiqueta="Items" class="col-numero"><span class="chip-conteo">@v.Articulos</span></td>
                             <td data-etiqueta="Total" class="col-numero">$@v.Total.ToString("N2")</td>
-                            <td data-etiqueta="Comprobante" class="col-acciones">
-                                <a asp-page="/Carrito/Factura" asp-route-id="@v.IdVenta" class="btn-vintage-outline btn-sm">Ver</a>
+                            <td data-etiqueta="Receipt" class="col-acciones">
+                                <a asp-page="/Carrito/Factura" asp-route-id="@v.IdVenta" class="btn-vintage-outline btn-sm">View</a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <p id="sinResultadosHist" class="sin-resultados" hidden>No se encontraron ventas con esa busqueda.</p>
+            <p id="sinResultadosHist" class="sin-resultados" hidden>No sales found for that search.</p>
         </div>
     </div>
 
     @section Scripts {
         <script>
-            // Busqueda de texto en vivo sobre las ventas ya filtradas por el servidor.
+            // Live text search over the sales already filtered by the server.
             (function () {
                 var tabla = document.getElementById("tablaHistorial");
                 if (!tabla) { return; }

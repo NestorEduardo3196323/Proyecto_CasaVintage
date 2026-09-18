@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages.Proveedores
 {
-    // Lista de proveedores (Admin/Gerente). Tabla de gestion con acciones. El borrado usa
-    // POST-redirect-GET y esta protegido en el service (no se borra un proveedor con productos).
+    // Suppliers list (Admin/Manager). Management table with actions. Deletion uses
+    // POST-redirect-GET and is protected in the service (a supplier with products is not deleted).
     [Authorize(Roles = "Administrador,Gerente")]
     public class IndexModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace CasaVintage.Pages.Proveedores
 
         public IReadOnlyList<ProveedorListItemViewModel> Proveedores { get; private set; } = Array.Empty<ProveedorListItemViewModel>();
 
-        // Metricas para las tarjetas de resumen (se calculan de la misma lista, sin consultas extra).
+        // Metrics for the summary cards (computed from the same list, no extra queries).
         public int Total { get; private set; }
         public int ConProductos { get; private set; }
         public int SinProductos { get; private set; }
@@ -42,15 +42,15 @@ namespace CasaVintage.Pages.Proveedores
 
             if (resultado.Exito)
             {
-                TempData["MensajeProveedor"] = $"Proveedor \"{resultado.Proveedor!.Nombre}\" eliminado.";
+                TempData["MensajeProveedor"] = $"Supplier \"{resultado.Proveedor!.Nombre}\" deleted.";
             }
             else
             {
                 TempData["MensajeProveedorError"] = resultado.Error switch
                 {
-                    ErrorProveedor.TieneProductos => "No se puede eliminar: el proveedor tiene productos asociados. Reasigna o quita esos productos primero.",
-                    ErrorProveedor.NoEncontrado => "El proveedor ya no existe.",
-                    _ => "No se pudo eliminar el proveedor. Intenta de nuevo."
+                    ErrorProveedor.TieneProductos => "Cannot delete: the supplier has associated products. Reassign or remove those products first.",
+                    ErrorProveedor.NoEncontrado => "The supplier no longer exists.",
+                    _ => "The supplier could not be deleted. Try again."
                 };
             }
 

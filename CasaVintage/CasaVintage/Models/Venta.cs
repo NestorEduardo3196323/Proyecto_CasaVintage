@@ -1,33 +1,33 @@
 namespace CasaVintage.Models
 {
-    // Entidad que representa la cabecera de una venta. Mapea a "ventas".
-    // Cada venta se procesa como una sola transaccion (ver Services de Ventas).
+    // Entity representing the header of a sale. Maps to "ventas".
+    // Each sale is processed as a single transaction (see the Sales Services).
     public class Venta
     {
         public int IdVenta { get; set; }
 
-        // Fecha y hora de la venta.
+        // Date and time of the sale.
         public DateTime Fecha { get; set; }
 
-        // Cliente al que se le factura.
+        // Customer being invoiced.
         public int IdCliente { get; set; }
         public Cliente? Cliente { get; set; }
 
-        // Vendedor que registro la venta.
+        // Salesperson who registered the sale.
         public int IdUsuario { get; set; }
         public Usuario? Usuario { get; set; }
 
-        // Total cobrado en la venta.
+        // Total charged in the sale.
         public decimal TotalPagado { get; set; }
 
-        // Metodo de pago: Efectivo | Tarjeta (validado por CHECK en la BD).
+        // Payment method: Efectivo | Tarjeta (validated by a CHECK in the DB).
         public string MetodoPago { get; set; } = string.Empty;
 
-        // Solo los ultimos 4 digitos de la tarjeta (pago con tarjeta simulado). Nunca se guarda el
-        // numero completo ni el CVV. Null cuando el pago fue en efectivo.
+        // Only the last 4 digits of the card (simulated card payment). The full number and the CVV
+        // are never stored. Null when the payment was in cash.
         public string? TarjetaUltimos4 { get; set; }
 
-        // Lineas de detalle de la venta.
+        // Detail lines of the sale.
         public ICollection<DetalleVenta> Detalles { get; set; } = new List<DetalleVenta>();
     }
 }

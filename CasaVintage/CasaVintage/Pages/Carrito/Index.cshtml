@@ -1,16 +1,16 @@
 @page
 @model CasaVintage.Pages.Carrito.IndexModel
 @{
-    ViewData["Title"] = "Carrito";
+    ViewData["Title"] = "Cart";
     Layout = "_Layout";
     var carrito = Model.Carrito;
     var mensaje = TempData["MensajeCarrito"] as string;
 }
 
 <div class="mb-4">
-    <span class="kicker">Ventas</span>
-    <h1 class="mb-1">Carrito</h1>
-    <p class="text-muted mb-0">Revisa los productos antes de cobrar la venta.</p>
+    <span class="kicker">Sales</span>
+    <h1 class="mb-1">Cart</h1>
+    <p class="text-muted mb-0">Review the products before charging the sale.</p>
 </div>
 
 @if (mensaje is not null)
@@ -21,16 +21,16 @@
 @if (carrito.Vacio)
 {
     <div class="tarjeta-vintage estado-vacio">
-        <h2 class="h5 mb-2">Tu carrito esta vacio</h2>
-        <p class="text-muted mb-3">Agrega productos desde el catalogo para armar la venta.</p>
-        <a asp-page="/Catalogo/Index" class="btn-vintage">Ir al catalogo</a>
+        <h2 class="h5 mb-2">Your cart is empty</h2>
+        <p class="text-muted mb-3">Add products from the catalog to build the sale.</p>
+        <a asp-page="/Catalogo/Index" class="btn-vintage">Go to the catalog</a>
     </div>
 }
 else
 {
     @if (carrito.HayExcesoStock)
     {
-        <div class="alerta-vintage alerta-error" role="alert">Hay productos con una cantidad mayor al stock disponible. Ajustalos antes de cobrar.</div>
+        <div class="alerta-vintage alerta-error" role="alert">Some products have a quantity greater than the available stock. Adjust them before charging.</div>
     }
 
     <div class="carrito-grid">
@@ -50,18 +50,18 @@ else
                     </div>
                     <div class="carrito-info">
                         <span class="celda-nombre">@item.Nombre</span>
-                        <span class="celda-sub">@item.Sku &middot; $@item.PrecioUnitario.ToString("N2") c/u &middot; @item.StockDisponible en stock</span>
+                        <span class="celda-sub">@item.Sku &middot; $@item.PrecioUnitario.ToString("N2") each &middot; @item.StockDisponible in stock</span>
                         @if (item.ExcedeStock)
                         {
-                            <span class="nota-bloqueo">Supera el stock disponible</span>
+                            <span class="nota-bloqueo">Exceeds the available stock</span>
                         }
                     </div>
                     <form method="post" asp-page-handler="Actualizar" class="carrito-cantidad">
                         <input type="hidden" name="id" value="@item.IdProducto" />
-                        <label class="ayuda-campo" for="cant-@item.IdProducto">Cantidad</label>
+                        <label class="ayuda-campo" for="cant-@item.IdProducto">Quantity</label>
                         <div class="d-flex gap-2">
                             <input id="cant-@item.IdProducto" type="number" name="cantidad" value="@item.Cantidad" min="1" max="@item.StockDisponible" class="form-control form-control-sm" style="width:5rem;" />
-                            <button type="submit" class="btn-vintage-outline btn-sm">Actualizar</button>
+                            <button type="submit" class="btn-vintage-outline btn-sm">Update</button>
                         </div>
                     </form>
                     <div class="carrito-subtotal">
@@ -69,21 +69,21 @@ else
                         <span class="producto-precio">$@item.Subtotal.ToString("N2")</span>
                         <form method="post" asp-page-handler="Quitar" class="m-0">
                             <input type="hidden" name="id" value="@item.IdProducto" />
-                            <button type="submit" class="btn-quitar" title="Quitar del carrito" aria-label="Quitar @item.Nombre">Quitar</button>
+                            <button type="submit" class="btn-quitar" title="Remove from cart" aria-label="Remove @item.Nombre">Remove</button>
                         </form>
                     </div>
                 </div>
             }
 
             <form method="post" asp-page-handler="Vaciar" class="mt-2">
-                <button type="submit" class="btn-desactivar btn-sm" data-confirmar="Vaciar todo el carrito?">Vaciar carrito</button>
+                <button type="submit" class="btn-desactivar btn-sm" data-confirmar="Empty the whole cart?">Empty cart</button>
             </form>
         </div>
 
         <aside class="carrito-resumen tarjeta-vintage">
-            <h2 class="h6 mb-3">Resumen</h2>
+            <h2 class="h6 mb-3">Summary</h2>
             <div class="resumen-linea">
-                <span>Productos</span>
+                <span>Products</span>
                 <span>@carrito.TotalProductos</span>
             </div>
             <div class="resumen-linea total">
@@ -92,12 +92,12 @@ else
             </div>
             @if (carrito.HayExcesoStock)
             {
-                <button type="button" class="btn-vintage w-100 mt-3" disabled>Proceder al cobro</button>
-                <p class="ayuda-campo mt-2 mb-0">Ajusta las cantidades que superan el stock para poder cobrar.</p>
+                <button type="button" class="btn-vintage w-100 mt-3" disabled>Proceed to checkout</button>
+                <p class="ayuda-campo mt-2 mb-0">Adjust the quantities that exceed the stock in order to charge.</p>
             }
             else
             {
-                <a asp-page="Pagar" class="btn-vintage w-100 mt-3">Proceder al cobro</a>
+                <a asp-page="Pagar" class="btn-vintage w-100 mt-3">Proceed to checkout</a>
             }
         </aside>
     </div>

@@ -2,24 +2,24 @@ using System.Security.Claims;
 
 namespace CasaVintage.Services
 {
-    // Utilidades de presentacion del usuario en sesion (shell). El esquema usuarios no guarda
-    // foto de perfil, asi que se muestra un avatar con iniciales calculadas del nombre.
+    // Presentation helpers for the signed-in user (shell). When the user has no profile photo,
+    // an avatar with initials computed from the name is shown.
     public static class PerfilUsuario
     {
-        // Claim personalizado con la fecha de ingreso (fecha_creado) para la tarjeta de bienvenida.
+        // Custom claim with the join date (fecha_creado) for the welcome card.
         public const string ClaimFechaCreado = "FechaCreado";
 
-        // Claim con la ruta de la foto de perfil (si la tiene); el menu y la bienvenida la usan.
+        // Claim with the profile photo path (if any); the menu and the welcome card use it.
         public const string ClaimFoto = "Foto";
 
-        // Ruta de la foto de perfil del usuario en sesion, o null si no tiene (se usan iniciales).
+        // Profile photo path of the signed-in user, or null if none (initials are used instead).
         public static string? Foto(ClaimsPrincipal usuario)
         {
             var valor = usuario.FindFirstValue(ClaimFoto);
             return string.IsNullOrWhiteSpace(valor) ? null : valor;
         }
 
-        // Devuelve hasta dos iniciales a partir del nombre completo. "Gerente de Tienda" -> "GT".
+        // Returns up to two initials from the full name. "Store Manager" -> "SM".
         public static string Iniciales(string? nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre))
@@ -36,7 +36,7 @@ namespace CasaVintage.Services
             return (partes[0].Substring(0, 1) + partes[^1].Substring(0, 1)).ToUpperInvariant();
         }
 
-        // Lee la fecha de ingreso desde los claims; null si no esta presente o no es valida.
+        // Reads the join date from the claims; null if not present or not valid.
         public static DateTime? FechaIngreso(ClaimsPrincipal usuario)
         {
             var valor = usuario.FindFirstValue(ClaimFechaCreado);

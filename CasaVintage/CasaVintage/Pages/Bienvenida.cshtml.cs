@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CasaVintage.Pages
 {
-    // Aterrizaje provisional para roles cuya seccion de trabajo aun no se construye. No es un
-    // dashboard de modulos: solo un saludo. En cuanto el rol tenga una seccion habilitada,
-    // RolRutas.LandingPara lo lleva directo ahi y esta pagina deja de usarse para ese rol.
+    // Provisional landing for roles whose work section is not built yet. It is not a module
+    // dashboard: just a greeting. As soon as the role has an enabled section, RolRutas.LandingPara
+    // takes it straight there and this page is no longer used for that role.
     public class BienvenidaModel : PageModel
     {
-        // Rol del usuario en sesion (para personalizar el mensaje).
+        // Role of the signed-in user (to personalize the message).
         public string? Rol { get; private set; }
 
-        // True si el rol ya tiene alguna seccion disponible (por si llega aqui por escribir la URL).
+        // True if the role already has any available section (in case it arrives here by typing the URL).
         public bool TieneSeccion { get; private set; }
 
         public void OnGet()
