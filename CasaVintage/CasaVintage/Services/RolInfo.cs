@@ -14,6 +14,17 @@ namespace CasaVintage.Services
         // True if the role is one of the allowed ones (avoids values that would break the DB CHECK).
         public static bool EsValido(string? rol) => rol is not null && Todos.Contains(rol);
 
+        // English label shown in the UI. The stored value stays in Spanish (used by the security
+        // attributes and the DB CHECK); only the visible text is translated.
+        public static string Etiqueta(string? rol) => rol switch
+        {
+            "Administrador" => "Administrator",
+            "Gerente" => "Manager",
+            "Vendedor" => "Salesperson",
+            "Contador" => "Accountant",
+            _ => rol ?? string.Empty
+        };
+
         // Human-readable description of the role for the staff cards (what each employee does).
         public static string Descripcion(string? rol) => rol switch
         {

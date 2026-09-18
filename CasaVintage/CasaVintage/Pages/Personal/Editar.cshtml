@@ -41,7 +41,7 @@
                     <select asp-for="Entrada.Rol" class="form-select">
                         @foreach (var rol in Model.Roles)
                         {
-                            <option value="@rol">@rol</option>
+                            <option value="@rol">@RolInfo.Etiqueta(rol)</option>
                         }
                     </select>
                     <span asp-validation-for="Entrada.Rol" class="text-danger"></span>

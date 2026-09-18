@@ -34,7 +34,7 @@
             }
         </div>
 
-        <p class="bienvenida-dato mb-1"><strong>Role:</strong> @rol</p>
+        <p class="bienvenida-dato mb-1"><strong>Role:</strong> @RolInfo.Etiqueta(rol)</p>
         <p class="bienvenida-dato mb-4">
             <strong>Join date:</strong>
             @(fecha.HasValue ? fecha.Value.ToString("dd/MM/yyyy") : "Not available")
