@@ -22,10 +22,10 @@ namespace CasaVintage.Services
         // One user per role. The password is hashed before saving; it is never persisted in plain text.
         private static readonly UsuarioSemilla[] UsuariosPrueba =
         {
-            new("Administrador General", "admin@casavintage.local", "Administrador", "CasaVintage#Admin2026!"),
-            new("Gerente de Tienda", "gerente@casavintage.local", "Gerente", "CasaVintage#Gerente2026!"),
-            new("Vendedor de Mostrador", "vendedor@casavintage.local", "Vendedor", "CasaVintage#Vendedor2026!"),
-            new("Contador de la Empresa", "contador@casavintage.local", "Contador", "CasaVintage#Contador2026!")
+            new("General Administrator", "admin@casavintage.local", "Administrador", "CasaVintage#Admin2026!"),
+            new("Store Manager", "gerente@casavintage.local", "Gerente", "CasaVintage#Gerente2026!"),
+            new("Counter Salesperson", "vendedor@casavintage.local", "Vendedor", "CasaVintage#Vendedor2026!"),
+            new("Company Accountant", "contador@casavintage.local", "Contador", "CasaVintage#Contador2026!")
         };
 
         public static async Task SeedAsync(CasaVintageContext db, IPasswordHasher<Usuario> hasher)
@@ -43,9 +43,9 @@ namespace CasaVintage.Services
             }
 
             db.Proveedores.AddRange(
-                new Proveedor { Nombre = "Antiguedades del Valle", Contacto = "Maria Reyes", Telefono = "2211-3344" },
-                new Proveedor { Nombre = "Reliquias Lourdes", Contacto = "Jose Menjivar", Telefono = "2255-6677" },
-                new Proveedor { Nombre = "Herencia Colonial", Contacto = "Ana Portillo", Telefono = "2299-1010" });
+                new Proveedor { Nombre = "Valley Antiques", Contacto = "Maria Reyes", Telefono = "2211-3344" },
+                new Proveedor { Nombre = "Lourdes Relics", Contacto = "Jose Menjivar", Telefono = "2255-6677" },
+                new Proveedor { Nombre = "Colonial Heritage", Contacto = "Ana Portillo", Telefono = "2299-1010" });
 
             await db.SaveChangesAsync();
         }

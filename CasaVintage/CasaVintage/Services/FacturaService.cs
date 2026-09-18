@@ -98,7 +98,7 @@ namespace CasaVintage.Services
                 $"Purchase receipt #{factura.NumeroVenta:D7} - La Casa de Vintage",
                 cuerpo,
                 pdf,
-                $"factura-{factura.NumeroVenta:D7}.pdf");
+                $"invoice-{factura.NumeroVenta:D7}.pdf");
 
             return enviado
                 ? new ResultadoEnvio(true, factura.ClienteCorreo)
@@ -112,7 +112,7 @@ namespace CasaVintage.Services
             {
                 return;
             }
-            await _archivador.GuardarAsync("Facturas", $"factura-{idVenta:D7}.pdf", pdf);
+            await _archivador.GuardarAsync("Facturas", $"invoice-{idVenta:D7}.pdf", pdf);
         }
 
         // ---- PDF drawing ----

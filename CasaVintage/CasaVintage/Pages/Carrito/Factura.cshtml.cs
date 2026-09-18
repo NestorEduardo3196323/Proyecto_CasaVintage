@@ -42,8 +42,8 @@ namespace CasaVintage.Pages.Carrito
             {
                 return NotFound();
             }
-            await _archivador.GuardarAsync("Facturas", $"factura-{id:D7}.pdf", pdf);
-            return File(pdf, "application/pdf", $"factura-{id:D7}.pdf");
+            await _archivador.GuardarAsync("Facturas", $"invoice-{id:D7}.pdf", pdf);
+            return File(pdf, "application/pdf", $"invoice-{id:D7}.pdf");
         }
 
         // Sends the receipt to the customer's email. Only the Salesperson (server-side lockdown).

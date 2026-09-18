@@ -52,7 +52,7 @@ namespace CasaVintage.Pages.Reportes
         {
             var filtro = Preparar(rango, desde, hasta, vendedor, metodo, categoria);
             var bytes = await _reportes.GenerarPdfAsync(filtro);
-            await _archivador.GuardarAsync("Reportes", $"reporte-ventas-{DateTime.Now:yyyyMMdd-HHmmss}.pdf", bytes);
+            await _archivador.GuardarAsync("Reportes", $"sales-report-{DateTime.Now:yyyyMMdd-HHmmss}.pdf", bytes);
             return File(bytes, "application/pdf", "sales-report.pdf");
         }
 
@@ -61,7 +61,7 @@ namespace CasaVintage.Pages.Reportes
         {
             var filtro = Preparar(rango, desde, hasta, vendedor, metodo, categoria);
             var bytes = await _reportes.GenerarExcelAsync(filtro);
-            await _archivador.GuardarAsync("Reportes", $"reporte-ventas-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx", bytes);
+            await _archivador.GuardarAsync("Reportes", $"sales-report-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx", bytes);
             return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "sales-report.xlsx");
         }
 
