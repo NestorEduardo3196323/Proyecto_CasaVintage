@@ -51,7 +51,7 @@ namespace CasaVintage.Services
             return new FacturaViewModel(
                 venta.IdVenta,
                 venta.Fecha,
-                empresa["Nombre"] ?? "La Casa de Vintage",
+                empresa["Nombre"] ?? "The Vintage House",
                 empresa["Direccion"] ?? "",
                 empresa["Telefono"] ?? "",
                 empresa["Correo"] ?? "",
@@ -90,12 +90,12 @@ namespace CasaVintage.Services
             var pdf = ConstruirPdf(factura);
             var cuerpo =
                 $"<p>Hello {factura.ClienteNombre},</p>" +
-                $"<p>Attached is the receipt for your purchase at La Casa de Vintage (sale #{factura.NumeroVenta:D7}).</p>" +
+                $"<p>Attached is the receipt for your purchase at The Vintage House (sale #{factura.NumeroVenta:D7}).</p>" +
                 "<p>Thank you for your purchase.</p>";
 
             var enviado = await _email.EnviarConAdjuntoAsync(
                 factura.ClienteCorreo,
-                $"Purchase receipt #{factura.NumeroVenta:D7} - La Casa de Vintage",
+                $"Purchase receipt #{factura.NumeroVenta:D7} - The Vintage House",
                 cuerpo,
                 pdf,
                 $"invoice-{factura.NumeroVenta:D7}.pdf");
@@ -129,7 +129,7 @@ namespace CasaVintage.Services
 
                     page.Header().Element(e => Encabezado(e, f, logo));
                     page.Content().Element(e => Cuerpo(e, f));
-                    page.Footer().AlignCenter().Text("La Casa de Vintage - Internal receipt").FontSize(8).FontColor(TintaSuave);
+                    page.Footer().AlignCenter().Text("The Vintage House - Internal receipt").FontSize(8).FontColor(TintaSuave);
                 });
             });
 

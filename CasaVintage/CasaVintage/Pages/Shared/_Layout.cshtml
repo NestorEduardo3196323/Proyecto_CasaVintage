@@ -29,7 +29,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - La Casa Vintage</title>
+    <title>@ViewData["Title"] - The Vintage House</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -48,13 +48,13 @@
                 <a class="sidebar-marca" asp-page="/Index">
                     @if (logoMarca is not null)
                     {
-                        <img src="@logoMarca" alt="La Casa Vintage" class="marca-logo-img" />
+                        <img src="@logoMarca" alt="The Vintage House" class="marca-logo-img" />
                     }
                     else
                     {
                         <span class="marca-logo">V</span>
                     }
-                    <span class="marca-nombre">La Casa Vintage</span>
+                    <span class="marca-nombre">The Vintage House</span>
                 </a>
 
                 <nav class="sidebar-nav">
@@ -91,14 +91,14 @@
                     <div class="sidebar-tarjeta">
                         @if (logoMarca is not null)
                         {
-                            <img src="@logoMarca" alt="La Casa Vintage" class="marca-logo-img marca-logo-pie" />
+                            <img src="@logoMarca" alt="The Vintage House" class="marca-logo-img marca-logo-pie" />
                         }
                         else
                         {
                             <span class="marca-logo" style="width:30px;height:30px;">V</span>
                         }
                         <div>
-                            <div class="titulo">La Casa Vintage</div>
+                            <div class="titulo">The Vintage House</div>
                             <div class="sub">Internal panel</div>
                         </div>
                     </div>

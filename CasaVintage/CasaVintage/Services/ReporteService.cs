@@ -243,7 +243,7 @@ namespace CasaVintage.Services
                         }
                         fila.RelativeItem().AlignMiddle().Column(col =>
                         {
-                            col.Item().Text("La Casa de Vintage").FontSize(18).Bold().FontColor(Cafe);
+                            col.Item().Text("The Vintage House").FontSize(18).Bold().FontColor(Cafe);
                             col.Item().Text("General sales report").FontSize(11).FontColor(TintaSuave);
                             col.Item().Text(descripcion).FontSize(8).FontColor(TintaSuave);
                         });
@@ -297,7 +297,7 @@ namespace CasaVintage.Services
                         });
                     });
 
-                    page.Footer().AlignCenter().Text("La Casa de Vintage - Sales report").FontSize(8).FontColor(TintaSuave);
+                    page.Footer().AlignCenter().Text("The Vintage House - Sales report").FontSize(8).FontColor(TintaSuave);
                 });
             });
 

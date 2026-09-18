@@ -1,4 +1,4 @@
-// Client behaviors for La Casa Vintage.
+// Client behaviors for The Vintage House.
 
 document.addEventListener("DOMContentLoaded", function () {
     // Welcome card: the "Enter" button only closes the overlay to reveal the panel.
